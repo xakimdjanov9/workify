@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
-import { useTheme } from "../src/Context/ThemeContext.jsx"; 
+import { useTheme } from "../src/Context/ThemeContext.jsx";
 
 import MainLayout from "./components/MainLayout";
 import Dashboard from "./components/Dashbord/Dashbord";
@@ -20,6 +20,7 @@ import VerifyAccount from "./pages/VerifyAccount/VerifyAccount";
 import Setting from "./pages/Setting/Setting";
 import ForgotPassword from "./pages/ResetPassword/ResetPassword";
 import HomeJob from "./pages/HomeJob/HomeJob.jsx";
+import Congratulations from "./components/Congratulations/Congratulations.jsx";
 
 const ProtectedRoute = () => {
   const token = localStorage.getItem("token");
@@ -31,7 +32,6 @@ function App() {
   const { settings } = useTheme();
 
   return (
-  
     <div
       className={`min-h-screen transition-colors duration-500 ${settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"}`}
     >
@@ -48,9 +48,9 @@ function App() {
           element={<RegistrationFormStepThree />}
         />
         <Route path="/verify-account" element={<VerifyAccount />} />
-        <Route path="/forgot-password" element={<ForgotPassword/>}/>
-        <Route path="/jobs" element={<HomeJob/>}/>
-        
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/jobs" element={<HomeJob />} />
+
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -59,6 +59,7 @@ function App() {
             <Route path="/matches" element={<JobMatches />} />
             <Route path="/job-post/:id" element={<JobDetail />} />
             <Route path="/job-details/:id" element={<CompanyDetail />} />
+            <Route path="/sss" element={<Congratulations />} />
             <Route path="/settings" element={<Setting />} />
             <Route path="/faq" element={<Faq />} />
             <Route path="/contacts" element={<Contact />} />
