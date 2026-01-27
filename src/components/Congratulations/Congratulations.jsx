@@ -1,35 +1,81 @@
-import React from "react";
-// Rasmni import qilyapmiz
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import CongratulationBg from "../../assets/Congratulations-img.png";
 
 const Congratulations = () => {
+  const navigate = useNavigate();
+
+  // 1. Setting'dagi holatni localStorage'dan o'qiymiz
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("user-settings");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return parsed.darkMode; // true yoki false qaytaradi
+    }
+    return false;
+  });
+
+  // 2. Agar foydalanuvchi boshqa oynada settingsni o'zgartirsa, bu yerda ham yangilanishi uchun
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }, [isDark]);
+
   return (
-    // UMUMIY FON VA JOYLASHTIRISH
-    // flex-col va gap-5: Header va Pastki karta orasida joy ochish uchun
-    <div className="min-h-screen w-full bg-[#f0f2f5] p-4 flex flex-col items-center gap-5 font-sans">
-      {/* 1-QISM: TEPADAGI HEADER (Sening koding) */}
-      <div className="w-full max-w-4xl bg-white rounded-[20px] py-4 px-8 shadow-sm z-10">
-        <h1 className="text-[#4b5563] text-lg md:text-xl font-semibold tracking-tight">
+    // isDark holatiga qarab ranglarni tanlaymiz
+    <div
+      className={`min-h-screen w-full p-4 flex flex-col items-center gap-5 font-sans transition-colors duration-500 ${
+        isDark ? "bg-[#121212] text-white" : "bg-[#f0f2f5] text-gray-800"
+      }`}
+    >
+      {/* 1-QISM: TEPADAGI HEADER */}
+      <div
+        className={`w-full max-w-4xl rounded-[20px] py-4 px-8 shadow-sm border transition-colors duration-500 ${
+          isDark
+            ? "bg-[#1E1E1E] border-gray-800"
+            : "bg-white border-transparent"
+        }`}
+      >
+        <h1
+          className={`text-lg md:text-xl font-semibold tracking-tight ${
+            isDark ? "text-gray-200" : "text-[#4b5563]"
+          }`}
+        >
           Job Matches
         </h1>
       </div>
 
-      {/* 2-QISM: PASTKI KARTA (Rasm va Tabrik) */}
-      {/* Bu qism headerdan alohida, pastda turadi */}
-      <div className="w-full max-w-4xl bg-white rounded-[30px] shadow-sm overflow-hidden relative h-[600px] md:h-[750px]">
+      {/* 2-QISM: PASTKI KARTA */}
+      <div
+        className={`w-full max-w-4xl rounded-[30px] shadow-sm overflow-hidden relative h-[600px] md:h-[750px] border transition-colors duration-500 ${
+          isDark
+            ? "bg-[#1E1E1E] border-gray-800"
+            : "bg-white border-transparent"
+        }`}
+      >
         {/* Orqa fon rasmi */}
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${CongratulationBg})` }}
         >
+          {/* Rasm ustidagi qora qatlam - dark mode'da kuchliroq bo'ladi */}
+          <div
+            className={`absolute inset-0 transition-colors duration-500 ${
+              isDark ? "bg-black/40" : "bg-black/10"
+            }`}
+          ></div>
+
           {/* Ustidagi yozuvlar */}
-          {/* pt-16: Tepadan joy tashlash */}
-          <div className="flex flex-col items-center pt-16 md:pt-20 px-4 text-center">
-            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-md tracking-wide">
+          <div className="relative flex flex-col items-center pt-16 md:pt-20 px-4 text-center z-10">
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg tracking-wide">
               Congratulations !
             </h2>
 
-            <p className="text-white text-base md:text-lg opacity-95 font-medium leading-relaxed drop-shadow-sm">
+            <p className="text-white text-base md:text-lg opacity-95 font-medium leading-relaxed drop-shadow-md">
               You have submitted a successful application.
               <br className="hidden md:block" />
               Keep up the good work!
@@ -37,19 +83,21 @@ const Congratulations = () => {
           </div>
         </div>
 
-        {/* Pastki tugma (Button) */}
-        {/* absolute bottom-10: Rasm ustida, eng pastda joylashadi */}
-        <div className="absolute bottom-8 w-full flex justify-center z-10">
+        {/* Pastki tugma */}
+        <div className="absolute bottom-8 w-full flex justify-center z-20">
           <button
-            className="
-      bg-white 
-      border-[1.5px] border-[#6b7280] text-[#4b5563]
-      hover:bg-[#f9fafb] hover:text-black
-      font-semibold rounded-full 
-      px-6 py-1.5 md:px-8 md:py-2 
-      text-xs md:text-sm
-      transition-all duration-300 ease-in-out shadow-sm
-    "
+            onClick={() => navigate("/matches")}
+            className={`
+              font-semibold rounded-full 
+              px-6 py-1.5 md:px-8 md:py-2 
+              text-xs md:text-sm
+              transition-all duration-300 ease-in-out shadow-sm border-[1.5px]
+              ${
+                isDark
+                  ? "bg-[#2A2A2A] border-gray-600 text-gray-200 hover:bg-[#333333] hover:text-white"
+                  : "bg-white border-[#6b7280] text-[#4b5563] hover:bg-[#f9fafb] hover:text-black"
+              }
+            `}
           >
             Back to Job matches
           </button>

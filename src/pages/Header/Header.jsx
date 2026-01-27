@@ -15,6 +15,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,10 +38,15 @@ const Header = () => {
     fetchUser();
   }, []);
 
-  const handleLogout = () => {
+  const handleLogoutClick = () => {
+    setOpen(false);
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
     localStorage.removeItem("token");
     setUser(null);
-    setOpen(false);
+    setShowLogoutModal(false);
     navigate("/signin");
   };
 
@@ -125,7 +131,9 @@ const Header = () => {
       </nav>
 
       <div
-        className={`fixed top-0 left-0 w-full h-screen bg-white z-[70] transform transition-transform duration-500 ease-in-out ${open ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed top-0 left-0 w-full h-screen bg-white z-[70] transform transition-transform duration-500 ease-in-out ${
+          open ? "translate-x-0" : "translate-x-full"
+        }`}
       >
         <div className="flex items-center justify-between p-6 border-b">
           <span className="font-bold text-xl">Menu</span>
@@ -166,7 +174,7 @@ const Header = () => {
                   <FiUser className="text-[#163D5C]" /> My Profile
                 </Link>
                 <button
-                  onClick={handleLogout}
+                  onClick={handleLogoutClick}
                   className="w-full flex items-center justify-center gap-2 p-4 mt-4 text-red-500 font-bold border border-red-100 rounded-2xl bg-red-50"
                 >
                   <FiLogOut /> Log Out
@@ -209,6 +217,38 @@ const Header = () => {
           )}
         </div>
       </div>
+
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl transform transition-all scale-100">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FiLogOut className="text-3xl text-red-500" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 mb-2">
+                Chiqib ketishni xohlaysizmi?
+              </h3>
+              <p className="text-gray-500 text-sm mb-6">
+                Hisobingizdan chiqib ketsangiz, qayta kirishingiz kerak bo'ladi.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowLogoutModal(false)}
+                  className="flex-1 py-3 bg-gray-100 text-slate-700 font-bold rounded-xl hover:bg-gray-200 transition"
+                >
+                  Yo'q
+                </button>
+                <button
+                  onClick={confirmLogout}
+                  className="flex-1 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition shadow-lg shadow-red-500/30"
+                >
+                  Ha, chiqish
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
