@@ -106,7 +106,7 @@ const Header = () => {
                   Sign in
                 </Link>
                 <Link
-                  to="/signup"
+                  to="/registration/step-1"
                   className="hidden min-[850px]:block px-5 py-2.5 bg-[#163D5C] text-white text-sm rounded-xl font-bold hover:opacity-90 transition"
                 >
                   Join Now
