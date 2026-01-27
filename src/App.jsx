@@ -19,6 +19,7 @@ import Contact from "./pages/Contact/Contact";
 import VerifyAccount from "./pages/VerifyAccount/VerifyAccount";
 import Setting from "./pages/Setting/Setting";
 import ForgotPassword from "./pages/ResetPassword/ResetPassword";
+import HomeJob from "./pages/HomeJob/HomeJob.jsx";
 
 const ProtectedRoute = () => {
   const token = localStorage.getItem("token");
@@ -48,6 +49,7 @@ function App() {
         />
         <Route path="/verify-account" element={<VerifyAccount />} />
         <Route path="/forgot-password" element={<ForgotPassword/>}/>
+        <Route path="/jobs" element={<HomeJob/>}/>
         
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
