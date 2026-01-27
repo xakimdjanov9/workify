@@ -92,7 +92,7 @@ const Sidebar = () => {
           ) : (
             <>
               <img
-                src={user?.image || "https://via.placeholder.com/150"}
+                src={user?.image || "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"}
                 alt="avatar"
                 className={`w-11 h-11 rounded-full object-cover border shadow-sm ${isDark ? "border-gray-700" : "border-gray-100"}`}
               />

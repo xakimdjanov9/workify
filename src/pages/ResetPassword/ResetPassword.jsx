@@ -16,7 +16,7 @@ export default function ForgotPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 daqiqa
+  const [timeLeft, setTimeLeft] = useState(300); 
   const [isError, setIsError] = useState(false);
 
   const inputRefs = useRef([]);
@@ -29,13 +29,12 @@ export default function ForgotPassword() {
     return () => clearInterval(timer);
   }, [step, timeLeft]);
 
-  // Kodni qayta yuborish funksiyasi
   const handleResendCode = async () => {
     setLoading(true);
     try {
       await talentApi.sendResetCode(email);
-      setTimeLeft(300); // Taymerni qayta boshlash
-      setCode(Array(6).fill("")); // Inputlarni tozalash
+      setTimeLeft(300);
+      setCode(Array(6).fill(""));
       setIsError(false);
       toast.success("Kod qayta yuborildi!");
     } catch (err) {
@@ -77,7 +76,8 @@ export default function ForgotPassword() {
 
     const newCode = pasteData.split("").concat(Array(6).fill("")).slice(0, 6);
     setCode(newCode);
-    inputRefs.current[Math.min(pasteData.length - 1, 5)].focus();
+    const focusIndex = Math.min(pasteData.length - 1, 5);
+    inputRefs.current[focusIndex]?.focus();
   };
 
   const handleNext = async () => {
@@ -135,7 +135,8 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    // bg-white orqali fon oqligi ta'minlandi
+    <div className="flex flex-col min-h-screen bg-white">
       <Header />
       <main className="flex-grow flex items-center justify-center p-4">
         <Toaster position="top-right" />
@@ -154,7 +155,7 @@ export default function ForgotPassword() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email"
-                  className="w-full pl-10 pr-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-[#163D5C]"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#163D5C] bg-white text-black"
                 />
               </div>
             </div>
@@ -166,7 +167,7 @@ export default function ForgotPassword() {
               <p className="text-gray-600">Start our Telegram bot to get reset code</p>
               <button 
                 onClick={() => window.open("https://t.me/Workify1_bot", "_blank")}
-                className="bg-[#61C491] text-white px-8 py-2 rounded-lg font-semibold"
+                className="bg-[#61C491] text-white px-8 py-2 rounded-lg font-semibold hover:bg-[#4fb17f] transition-colors"
               >
                 Click here!
               </button>
@@ -188,9 +189,9 @@ export default function ForgotPassword() {
                     onChange={(e) => handleChange(e, i)}
                     onKeyDown={(e) => handleKeyDown(e, i)}
                     disabled={timeLeft === 0}
-                    className={`w-12 h-14 text-center text-xl border-2 rounded-xl outline-none 
+                    className={`w-12 h-14 text-center text-xl border-2 rounded-xl outline-none bg-white text-black
                       ${isError ? "border-red-500 bg-red-50" : "border-gray-200 focus:border-[#163D5C]"}
-                      ${timeLeft === 0 ? "opacity-50 cursor-not-allowed" : ""}
+                      ${timeLeft === 0 ? "opacity-50 cursor-not-allowed bg-gray-50" : ""}
                     `}
                   />
                 ))}
@@ -204,7 +205,7 @@ export default function ForgotPassword() {
                     <p className="text-red-500 font-semibold">Vaqt tugadi!</p>
                     <button 
                       onClick={handleResendCode}
-                      className="text-blue-600 underline font-medium hover:text-blue-800"
+                      className="text-blue-600 underline font-medium hover:text-blue-800 bg-transparent"
                     >
                       Kodni qayta jo'natish
                     </button>
@@ -224,10 +225,13 @@ export default function ForgotPassword() {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Yangi parol"
-                  className="w-full pl-10 pr-12 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-[#163D5C]"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#163D5C] bg-white text-black"
                 />
-                <button onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2">
-                  {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                <button 
+                  onClick={() => setShowPassword(!showPassword)} 
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+                >
+                  {showPassword ? <FaRegEyeSlash size={20} /> : <FaRegEye size={20} />}
                 </button>
               </div>
             </div>
@@ -237,7 +241,7 @@ export default function ForgotPassword() {
             <button
               onClick={handleNext}
               disabled={loading || (step === 3 && timeLeft === 0)}
-              className="bg-[#163D5C] text-white px-12 py-2 rounded-xl font-bold disabled:opacity-50"
+              className="bg-[#163D5C] text-white px-12 py-2 rounded-xl font-bold disabled:opacity-50 hover:opacity-90 transition-opacity"
             >
               {loading ? "Yuklanmoqda..." : "Next"}
             </button>
