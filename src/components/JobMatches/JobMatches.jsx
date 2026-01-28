@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { jobApi, talentApi } from "../../services/api";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useJobReactions } from "../../Context/JobReactionsContext.jsx";
 import {
   FaBriefcase,
   FaClock,
@@ -15,6 +16,7 @@ import {
   FaCity,
   FaDollarSign,
   FaThumbsDown,
+  FaThumbsUp,
 } from "react-icons/fa";
 import { useTheme } from "../../Context/ThemeContext.jsx"; // Context ulandi
 import nonImg from '../../assets/img.jpg'
@@ -34,6 +36,7 @@ export default function JobMatches() {
   const [minSalary, setMinSalary] = useState("");
   const [city, setCity] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const { getReaction, toggleLike, toggleDislike } = useJobReactions();
 
   const navigate = useNavigate();
 
@@ -274,6 +277,7 @@ export default function JobMatches() {
             </div>
           ) : (
             filteredJobs.map((job) => {
+              const reaction = getReaction(job.id);
               const isMatch =
                 userSkills.length > 0 &&
                 userSkills.some(
@@ -404,7 +408,24 @@ export default function JobMatches() {
                   <div
                     className={`flex items-center justify-end gap-4 pt-6 border-t ${isDark ? "border-gray-800" : "border-gray-50"}`}
                   >
-                    <button className="text-gray-500 hover:text-red-400 transition-colors mr-auto">
+                    <button
+                      onClick={() => toggleLike(job.id)}
+                      className={`transition-colors mr-3 ${
+                        reaction === "like"
+                          ? "text-green-500"
+                          : "text-gray-500 hover:text-green-400"
+                      }`}
+                    >
+                      <FaThumbsUp size={22} />
+                    </button>
+                    <button
+                      onClick={() => toggleDislike(job.id)}
+                      className={`transition-colors mr-auto ${
+                        reaction === "dislike"
+                          ? "text-red-500"
+                          : "text-gray-500 hover:text-red-400"
+                      }`}
+                    >
                       <FaThumbsDown size={22} />
                     </button>
 

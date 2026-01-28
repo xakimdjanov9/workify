@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { talentApi } from "../../services/api";
 import { jwtDecode } from "jwt-decode";
 import {
@@ -39,6 +40,7 @@ const ProfilePage = () => {
   const [activeModal, setActiveModal] = useState(null);
   const [formData, setFormData] = useState({});
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   const fetchProfile = async () => {
     try {
@@ -49,8 +51,14 @@ const ProfilePage = () => {
       const res = await talentApi.getById(decoded.id);
       const data = res.data;
 
-      data.skils = typeof data.skils === "string" ? JSON.parse(data.skils) : data.skils || [];
-      data.language = typeof data.language === "string" ? JSON.parse(data.language) : data.language || [];
+      data.skils =
+        typeof data.skils === "string"
+          ? JSON.parse(data.skils)
+          : data.skils || [];
+      data.language =
+        typeof data.language === "string"
+          ? JSON.parse(data.language)
+          : data.language || [];
 
       setUser(data);
       setFormData({ ...data });
@@ -74,7 +82,7 @@ const ProfilePage = () => {
     try {
       const fd = new FormData();
       fd.append("image", file);
-      
+
       await talentApi.update(user.id, fd);
       await fetchProfile(); // Serverdan yangi rasm URLini olish
     } catch (err) {
@@ -91,9 +99,20 @@ const ProfilePage = () => {
     try {
       const fd = new FormData();
       const fields = [
-        "first_name", "last_name", "gender", "date_of_birth", "country",
-        "city", "location", "phone", "occupation", "specialty",
-        "work_type", "workplace_type", "minimum_salary", "about",
+        "first_name",
+        "last_name",
+        "gender",
+        "date_of_birth",
+        "country",
+        "city",
+        "location",
+        "phone",
+        "occupation",
+        "specialty",
+        "work_type",
+        "workplace_type",
+        "minimum_salary",
+        "about",
       ];
 
       fields.forEach((key) => {
@@ -116,32 +135,70 @@ const ProfilePage = () => {
   };
 
   // Skill & Language Logic
-  const addSkill = () => setFormData({ ...formData, skils: [...formData.skils, { skill: "", experience_years: "" }] });
+  const addSkill = () =>
+    setFormData({
+      ...formData,
+      skils: [...formData.skils, { skill: "", experience_years: "" }],
+    });
   const updateSkill = (index, field, value) => {
     const newSkills = [...formData.skils];
     newSkills[index][field] = value;
     setFormData({ ...formData, skils: newSkills });
   };
-  const removeSkill = (index) => setFormData({ ...formData, skils: formData.skils.filter((_, i) => i !== index) });
+  const removeSkill = (index) =>
+    setFormData({
+      ...formData,
+      skils: formData.skils.filter((_, i) => i !== index),
+    });
 
-  const addLanguage = () => setFormData({ ...formData, language: [...formData.language, { language: "", level: "Beginner" }] });
+  const addLanguage = () =>
+    setFormData({
+      ...formData,
+      language: [...formData.language, { language: "", level: "Beginner" }],
+    });
   const updateLanguage = (index, field, value) => {
     const newLang = [...formData.language];
     newLang[index][field] = value;
     setFormData({ ...formData, language: newLang });
   };
-  const removeLanguage = (index) => setFormData({ ...formData, language: formData.language.filter((_, i) => i !== index) });
+  const removeLanguage = (index) =>
+    setFormData({
+      ...formData,
+      language: formData.language.filter((_, i) => i !== index),
+    });
+
+  const formatEmail = (email, max = 13) => {
+    if (!email || typeof email !== "string") return "—";
+    const atIndex = email.indexOf("@");
+    if (atIndex === -1) return email;
+
+    const name = email.slice(0, atIndex);
+    const domain = email.slice(atIndex);
+
+    const shortName = name.length > max ? name.slice(0, max) + "..." : name;
+    return shortName + domain;
+  };
 
   if (loading) {
     return (
-      <div className={`min-h-screen p-8 max-w-6xl mx-auto animate-pulse-custom ${isDark ? "bg-[#121212]" : "bg-[#F8F9FB]"}`}>
+      <div
+        className={`min-h-screen p-8 max-w-6xl mx-auto animate-pulse-custom ${isDark ? "bg-[#121212]" : "bg-[#F8F9FB]"}`}
+      >
         <style>{spinnerStyle}</style>
-        <div className={`h-16 rounded-xl mb-6 ${isDark ? "bg-[#1E1E1E]" : "bg-white"}`}></div>
+        <div
+          className={`h-16 rounded-xl mb-6 ${isDark ? "bg-[#1E1E1E]" : "bg-white"}`}
+        ></div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className={`h-[500px] rounded-[24px] ${isDark ? "bg-[#1E1E1E]" : "bg-white"}`}></div>
+          <div
+            className={`h-[500px] rounded-[24px] ${isDark ? "bg-[#1E1E1E]" : "bg-white"}`}
+          ></div>
           <div className="lg:col-span-2 space-y-6">
-            <div className={`h-[250px] rounded-[24px] ${isDark ? "bg-[#1E1E1E]" : "bg-white"}`}></div>
-            <div className={`h-[300px] rounded-[24px] ${isDark ? "bg-[#1E1E1E]" : "bg-white"}`}></div>
+            <div
+              className={`h-[250px] rounded-[24px] ${isDark ? "bg-[#1E1E1E]" : "bg-white"}`}
+            ></div>
+            <div
+              className={`h-[300px] rounded-[24px] ${isDark ? "bg-[#1E1E1E]" : "bg-white"}`}
+            ></div>
           </div>
         </div>
       </div>
@@ -149,101 +206,211 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className={`min-h-screen p-4 md:p-8 font-sans transition-colors duration-500 ${isDark ? "bg-[#121212] text-white" : "bg-[#F8F9FB] text-[#333]"}`}>
+    <div
+      className={`min-h-screen p-4 md:p-8 font-sans transition-colors duration-500 ${isDark ? "bg-[#121212] text-white" : "bg-[#F8F9FB] text-[#333]"}`}
+    >
       <style>{spinnerStyle}</style>
       <div className="max-w-6xl mx-auto">
-        <div className={`rounded-xl p-4 mb-6 shadow-sm flex justify-between items-center border ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"}`}>
-          <h1 className={`text-xl font-bold ${isDark ? "text-gray-200" : "text-gray-800"}`}>My profile</h1>
+        <div
+          className={`rounded-xl p-4 mb-6 shadow-sm flex justify-between items-center border ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"}`}
+        >
+          <h1
+            className={`text-xl font-bold ${isDark ? "text-gray-200" : "text-gray-800"}`}
+          >
+            My profile
+          </h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* LEFT SIDE */}
           <div className="lg:col-span-1">
-            <div className={`rounded-[24px] p-6 shadow-sm relative border text-center transition-all ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"}`}>
-              <button onClick={() => setActiveModal("personal")} className={`absolute top-4 right-4 transition ${isDark ? "text-gray-600 hover:text-blue-400" : "text-gray-300 hover:text-blue-500"}`}>
+            <div
+              className={`rounded-[24px] p-6 shadow-sm relative border text-center transition-all ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"}`}
+            >
+              <button
+                onClick={() => setActiveModal("personal")}
+                className={`absolute top-4 right-4 transition ${isDark ? "text-gray-600 hover:text-blue-400" : "text-gray-300 hover:text-blue-500"}`}
+              >
                 <FiEdit2 size={18} />
               </button>
 
               <div className="relative inline-block mt-4">
-                <div className={`w-28 h-28 rounded-full overflow-hidden border-4 shadow-lg mx-auto flex items-center justify-center ${isDark ? "border-gray-800 bg-gray-900" : "border-white bg-gray-50"}`}>
+                <div
+                  className={`w-28 h-28 rounded-full overflow-hidden border-4 shadow-lg mx-auto flex items-center justify-center ${isDark ? "border-gray-800 bg-gray-900" : "border-white bg-gray-50"}`}
+                >
                   {imgUploading ? (
                     <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin-fast"></div>
                   ) : (
-                    <img src={user?.image || "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"} alt="Avatar" className="w-full h-full object-cover" />
+                    <img
+                      src={
+                        user?.image ||
+                        "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+                      }
+                      alt="Avatar"
+                      className="w-full h-full object-cover"
+                    />
                   )}
                 </div>
-                <button onClick={() => fileInputRef.current.click()} className={`absolute bottom-1 right-1 p-2 rounded-full shadow-md border transition ${isDark ? "bg-[#252525] border-gray-700 text-gray-400 hover:bg-blue-600 hover:text-white" : "bg-white border-gray-100 text-gray-500 hover:bg-blue-500 hover:text-white"}`}>
+                <button
+                  onClick={() => fileInputRef.current.click()}
+                  className={`absolute bottom-1 right-1 p-2 rounded-full shadow-md border transition ${isDark ? "bg-[#252525] border-gray-700 text-gray-400 hover:bg-blue-600 hover:text-white" : "bg-white border-gray-100 text-gray-500 hover:bg-blue-500 hover:text-white"}`}
+                >
                   <FiCamera size={14} />
                 </button>
-                <input type="file" ref={fileInputRef} hidden onChange={handleImageChange} accept="image/*" />
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  hidden
+                  onChange={handleImageChange}
+                  accept="image/*"
+                />
               </div>
 
               <h2 className="mt-4 text-xl font-bold flex items-center justify-center gap-2">
                 {user?.first_name} {user?.last_name}
                 <FiCheckCircle className="text-blue-500" size={18} />
               </h2>
-              <p className="text-gray-500 font-medium text-sm mt-1">{user?.occupation} {user?.specialty}</p>
-              <div className={`mt-1 font-bold text-lg ${isDark ? "text-blue-400" : "text-gray-800"}`}>
+              <p className="text-gray-500 font-medium text-sm mt-1">
+                {user?.occupation} {user?.specialty}
+              </p>
+              <div
+                className={`mt-1 font-bold text-lg ${isDark ? "text-blue-400" : "text-gray-800"}`}
+              >
                 ${user?.minimum_salary?.toLocaleString()}.00
               </div>
 
               <div className="flex items-center justify-center gap-1 mt-2 text-yellow-400">
-                {[1, 2, 3, 4].map((star) => <span key={star}>★</span>)}
-                <span className={isDark ? "text-gray-700" : "text-gray-300"}>★</span>
-                <span className="text-gray-400 text-sm ml-1">(4.0) | 1K reviews</span>
+                {[1, 2, 3, 4].map((star) => (
+                  <span key={star}>★</span>
+                ))}
+                <span className={isDark ? "text-gray-700" : "text-gray-300"}>
+                  ★
+                </span>
+                <span className="text-gray-400 text-sm ml-1">
+                  (4.0) | 1K reviews
+                </span>
               </div>
 
-              <div className={`mt-8 pt-6 border-t space-y-3 text-left ${isDark ? "border-gray-800" : "border-gray-100"}`}>
-                <h3 className={`font-bold text-sm mb-4 ${isDark ? "text-gray-400" : "text-gray-800"}`}>Personal info:</h3>
-                <InfoRow label="Age" value={user?.date_of_birth} isDark={isDark} />
+              <div
+                className={`mt-8 pt-6 border-t space-y-3 text-left ${isDark ? "border-gray-800" : "border-gray-100"}`}
+              >
+                <h3
+                  className={`font-bold text-sm mb-4 ${isDark ? "text-gray-400" : "text-gray-800"}`}
+                >
+                  Personal info:
+                </h3>
+                <InfoRow
+                  label="Age"
+                  value={user?.date_of_birth}
+                  isDark={isDark}
+                />
                 <InfoRow label="City" value={user?.city} isDark={isDark} />
-                <InfoRow label="Country" value={user?.country} isDark={isDark} />
+                <InfoRow
+                  label="Country"
+                  value={user?.country}
+                  isDark={isDark}
+                />
                 <InfoRow label="Phone" value={user?.phone} isDark={isDark} />
-                <InfoRow label="Email" value={user?.email} isDark={isDark} />
-                <InfoRow label="Workplace" value={user?.workplace_type || "Remote"} isDark={isDark} />
-                <InfoRow label="Employment" value={user?.work_type === "fulltime" ? "Full-time" : "On-site"} isDark={isDark} />
+                <InfoRow label="Email" value={formatEmail(user?.email, 13)} isDark={isDark} />
+                <InfoRow
+                  label="Workplace"
+                  value={user?.workplace_type || "Remote"}
+                  isDark={isDark}
+                />
+                <InfoRow
+                  label="Employment"
+                  value={
+                    user?.work_type === "fulltime" ? "Full-time" : "On-site"
+                  }
+                  isDark={isDark}
+                />
               </div>
             </div>
           </div>
 
           {/* RIGHT SIDE */}
           <div className="lg:col-span-2 space-y-6">
-            <div className={`rounded-[24px] p-8 shadow-sm relative border transition-all ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"}`}>
-              <button onClick={() => setActiveModal("skills")} className={`absolute top-6 right-6 transition ${isDark ? "text-gray-600 hover:text-blue-400" : "text-gray-300 hover:text-blue-500"}`}>
+            <div
+              className={`rounded-[24px] p-8 shadow-sm relative border transition-all ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"}`}
+            >
+              <button
+                onClick={() => setActiveModal("skills")}
+                className={`absolute top-6 right-6 transition ${isDark ? "text-gray-600 hover:text-blue-400" : "text-gray-300 hover:text-blue-500"}`}
+              >
                 <FiEdit2 size={18} />
               </button>
 
               <div className="mb-10">
                 <h3 className="text-md font-bold mb-5">Skills</h3>
                 <div className="flex flex-wrap gap-3">
-                  {user?.skils?.length > 0 ? user.skils.map((s, i) => (
-                    <span key={i} className={`px-4 py-2 rounded-lg text-sm border transition-colors ${isDark ? "bg-[#252525] border-gray-700 text-gray-300" : "bg-[#F8F9FB] border-gray-100 text-gray-600"}`}>
-                      {s.skill} ({s.experience_years})
-                    </span>
-                  )) : <p className="text-gray-400 italic">No skills added</p>}
+                  {user?.skils?.length > 0 ? (
+                    user.skils.map((s, i) => (
+                      <span
+                        key={i}
+                        className={`px-4 py-2 rounded-lg text-sm border transition-colors ${isDark ? "bg-[#252525] border-gray-700 text-gray-300" : "bg-[#F8F9FB] border-gray-100 text-gray-600"}`}
+                      >
+                        {s.skill} ({s.experience_years})
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-gray-400 italic">No skills added</p>
+                  )}
                 </div>
               </div>
 
-              <div className={`border-t pt-8 ${isDark ? "border-gray-800" : "border-gray-100"}`}>
+              <div
+                className={`border-t pt-8 ${isDark ? "border-gray-800" : "border-gray-100"}`}
+              >
                 <h3 className="text-md font-bold mb-5">Languages</h3>
                 <div className="flex flex-wrap gap-3">
-                  {user?.language?.length > 0 ? user.language.map((l, i) => (
-                    <span key={i} className={`px-4 py-2 rounded-lg text-sm border transition-colors ${isDark ? "bg-[#252525] border-gray-700 text-gray-300" : "bg-[#F8F9FB] border-gray-100 text-gray-600"}`}>
-                      {l.language} ({l.level})
-                    </span>
-                  )) : <p className="text-gray-400 italic">No languages added</p>}
+                  {user?.language?.length > 0 ? (
+                    user.language.map((l, i) => (
+                      <span
+                        key={i}
+                        className={`px-4 py-2 rounded-lg text-sm border transition-colors ${isDark ? "bg-[#252525] border-gray-700 text-gray-300" : "bg-[#F8F9FB] border-gray-100 text-gray-600"}`}
+                      >
+                        {l.language} ({l.level})
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-gray-400 italic">No languages added</p>
+                  )}
                 </div>
               </div>
             </div>
 
-            <div className={`rounded-[24px] p-8 shadow-sm relative border min-h-[300px] transition-all ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"}`}>
-              <button onClick={() => setActiveModal("about")} className={`absolute top-6 right-6 transition ${isDark ? "text-gray-600 hover:text-blue-400" : "text-gray-300 hover:text-blue-500"}`}>
+            <div
+              className={`rounded-[24px] p-8 shadow-sm relative border min-h-[300px] transition-all ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"}`}
+            >
+              <button
+                onClick={() => setActiveModal("about")}
+                className={`absolute top-6 right-6 transition ${isDark ? "text-gray-600 hover:text-blue-400" : "text-gray-300 hover:text-blue-500"}`}
+              >
                 <FiEdit2 size={18} />
               </button>
               <h3 className="text-md font-bold mb-4">About</h3>
-              <p className={`leading-relaxed whitespace-pre-line ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+              <p
+                className={`leading-relaxed whitespace-pre-line ${isDark ? "text-gray-400" : "text-gray-500"}`}
+              >
                 {user?.about || "Please tell us something about yourself..."}
               </p>
+            </div>
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={() => navigate("/reactions")}
+                className={`w-full px-8 py-4 rounded-2xl font-black transition-all border shadow-sm flex items-center justify-center gap-3
+      ${
+        isDark
+          ? "bg-[#1E1E1E] border-gray-800 text-gray-200 hover:bg-[#252525]"
+          : "bg-white border-gray-100 text-[#163D5C] hover:bg-gray-50"
+      }`}
+              >
+                <span className="text-green-500">
+                  <FiCheckCircle size={18} />
+                </span>
+                View Likes / Dislikes
+              </button>
             </div>
           </div>
         </div>
@@ -252,11 +419,18 @@ const ProfilePage = () => {
       {/* MODALS */}
       {activeModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className={`rounded-[24px] w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] ${isDark ? "bg-[#1E1E1E] text-white" : "bg-white text-[#333]"}`}>
+          <div
+            className={`rounded-[24px] w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] ${isDark ? "bg-[#1E1E1E] text-white" : "bg-white text-[#333]"}`}
+          >
             <div className="p-8 overflow-y-auto">
               <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold uppercase tracking-tight">Edit {activeModal}</h2>
-                <button onClick={() => setActiveModal(null)} className={`p-2 rounded-full transition ${isDark ? "bg-[#252525] text-gray-400 hover:text-red-400" : "bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-500"}`}>
+                <h2 className="text-2xl font-bold uppercase tracking-tight">
+                  Edit {activeModal}
+                </h2>
+                <button
+                  onClick={() => setActiveModal(null)}
+                  className={`p-2 rounded-full transition ${isDark ? "bg-[#252525] text-gray-400 hover:text-red-400" : "bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-500"}`}
+                >
                   <FiX size={20} />
                 </button>
               </div>
@@ -264,33 +438,98 @@ const ProfilePage = () => {
               {/* Rasm tahrirlash qismi (Faqat personal modalda) */}
               {activeModal === "personal" && (
                 <div className="flex flex-col items-center mb-8 pb-6 border-b border-gray-100 dark:border-gray-800">
-                  <div className="relative group cursor-pointer" onClick={() => fileInputRef.current.click()}>
+                  <div
+                    className="relative group cursor-pointer"
+                    onClick={() => fileInputRef.current.click()}
+                  >
                     <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-emerald-500 p-1">
                       {imgUploading ? (
-                         <div className="w-full h-full flex items-center justify-center"><div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin-fast"></div></div>
+                        <div className="w-full h-full flex items-center justify-center">
+                          <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin-fast"></div>
+                        </div>
                       ) : (
-                        <img src={user?.image || "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"} className="w-full h-full object-cover rounded-full" alt="Avatar" />
+                        <img
+                          src={
+                            user?.image ||
+                            "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+                          }
+                          className="w-full h-full object-cover rounded-full"
+                          alt="Avatar"
+                        />
                       )}
                     </div>
                     <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                       <FiCamera className="text-white" size={24} />
                     </div>
                   </div>
-                  <p className="text-xs text-gray-400 mt-2 font-medium">Click to change photo</p>
+                  <p className="text-xs text-gray-400 mt-2 font-medium">
+                    Click to change photo
+                  </p>
                 </div>
               )}
 
               <form onSubmit={handleUpdate} className="space-y-6">
                 {activeModal === "personal" && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <InputGroup label="First Name" value={formData.first_name} onChange={(v) => setFormData({ ...formData, first_name: v })} isDark={isDark} />
-                    <InputGroup label="Last Name" value={formData.last_name} onChange={(v) => setFormData({ ...formData, last_name: v })} isDark={isDark} />
-                    <InputGroup label="Occupation" value={formData.occupation} onChange={(v) => setFormData({ ...formData, occupation: v })} isDark={isDark} />
-                    <InputGroup label="Specialty" value={formData.specialty} onChange={(v) => setFormData({ ...formData, specialty: v })} isDark={isDark} />
-                    <InputGroup label="Country" value={formData.country} onChange={(v) => setFormData({ ...formData, country: v })} isDark={isDark} />
-                    <InputGroup label="City" value={formData.city} onChange={(v) => setFormData({ ...formData, city: v })} isDark={isDark} />
-                    <InputGroup label="Phone" value={formData.phone} onChange={(v) => setFormData({ ...formData, phone: v })} isDark={isDark} />
-                    <InputGroup label="Salary ($)" type="number" value={formData.minimum_salary} onChange={(v) => setFormData({ ...formData, minimum_salary: v })} isDark={isDark} />
+                    <InputGroup
+                      label="First Name"
+                      value={formData.first_name}
+                      onChange={(v) =>
+                        setFormData({ ...formData, first_name: v })
+                      }
+                      isDark={isDark}
+                    />
+                    <InputGroup
+                      label="Last Name"
+                      value={formData.last_name}
+                      onChange={(v) =>
+                        setFormData({ ...formData, last_name: v })
+                      }
+                      isDark={isDark}
+                    />
+                    <InputGroup
+                      label="Occupation"
+                      value={formData.occupation}
+                      onChange={(v) =>
+                        setFormData({ ...formData, occupation: v })
+                      }
+                      isDark={isDark}
+                    />
+                    <InputGroup
+                      label="Specialty"
+                      value={formData.specialty}
+                      onChange={(v) =>
+                        setFormData({ ...formData, specialty: v })
+                      }
+                      isDark={isDark}
+                    />
+                    <InputGroup
+                      label="Country"
+                      value={formData.country}
+                      onChange={(v) => setFormData({ ...formData, country: v })}
+                      isDark={isDark}
+                    />
+                    <InputGroup
+                      label="City"
+                      value={formData.city}
+                      onChange={(v) => setFormData({ ...formData, city: v })}
+                      isDark={isDark}
+                    />
+                    <InputGroup
+                      label="Phone"
+                      value={formData.phone}
+                      onChange={(v) => setFormData({ ...formData, phone: v })}
+                      isDark={isDark}
+                    />
+                    <InputGroup
+                      label="Salary ($)"
+                      type="number"
+                      value={formData.minimum_salary}
+                      onChange={(v) =>
+                        setFormData({ ...formData, minimum_salary: v })
+                      }
+                      isDark={isDark}
+                    />
                   </div>
                 )}
 
@@ -299,13 +538,39 @@ const ProfilePage = () => {
                     <div>
                       <div className="flex justify-between mb-4">
                         <h4 className="font-bold">Skills</h4>
-                        <button type="button" onClick={addSkill} className="text-emerald-500 font-bold flex items-center gap-1"><FiPlus /> Add</button>
+                        <button
+                          type="button"
+                          onClick={addSkill}
+                          className="text-emerald-500 font-bold flex items-center gap-1"
+                        >
+                          <FiPlus /> Add
+                        </button>
                       </div>
                       {formData.skils?.map((s, i) => (
                         <div key={i} className="flex gap-2 mb-2">
-                          <input placeholder="Skill" value={s.skill} onChange={(e) => updateSkill(i, "skill", e.target.value)} className={`flex-1 p-3 rounded-xl border outline-none transition ${isDark ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500" : "bg-gray-50 border-gray-200 focus:border-emerald-500"}`} />
-                          <input placeholder="Years" value={s.experience_years} onChange={(e) => updateSkill(i, "experience_years", e.target.value)} className={`w-32 p-3 rounded-xl border outline-none transition ${isDark ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500" : "bg-gray-50 border-gray-200 focus:border-emerald-500"}`} />
-                          <button type="button" onClick={() => removeSkill(i)} className="text-red-400 p-2 hover:text-red-600"><FiTrash2 /></button>
+                          <input
+                            placeholder="Skill"
+                            value={s.skill}
+                            onChange={(e) =>
+                              updateSkill(i, "skill", e.target.value)
+                            }
+                            className={`flex-1 p-3 rounded-xl border outline-none transition ${isDark ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500" : "bg-gray-50 border-gray-200 focus:border-emerald-500"}`}
+                          />
+                          <input
+                            placeholder="Years"
+                            value={s.experience_years}
+                            onChange={(e) =>
+                              updateSkill(i, "experience_years", e.target.value)
+                            }
+                            className={`w-32 p-3 rounded-xl border outline-none transition ${isDark ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500" : "bg-gray-50 border-gray-200 focus:border-emerald-500"}`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeSkill(i)}
+                            className="text-red-400 p-2 hover:text-red-600"
+                          >
+                            <FiTrash2 />
+                          </button>
                         </div>
                       ))}
                     </div>
@@ -313,11 +578,28 @@ const ProfilePage = () => {
                 )}
 
                 {activeModal === "about" && (
-                  <textarea className={`w-full h-64 border rounded-xl p-5 focus:outline-none focus:ring-2 ring-blue-500/10 transition ${isDark ? "bg-[#252525] border-gray-700 text-white" : "bg-gray-50 border-gray-200"}`} value={formData.about} onChange={(e) => setFormData({ ...formData, about: e.target.value })} />
+                  <textarea
+                    className={`w-full h-64 border rounded-xl p-5 focus:outline-none focus:ring-2 ring-blue-500/10 transition ${isDark ? "bg-[#252525] border-gray-700 text-white" : "bg-gray-50 border-gray-200"}`}
+                    value={formData.about}
+                    onChange={(e) =>
+                      setFormData({ ...formData, about: e.target.value })
+                    }
+                  />
                 )}
 
-                <button type="submit" disabled={saveLoading} className={`w-full py-4 rounded-xl font-bold text-lg transition flex items-center justify-center gap-3 shadow-lg ${saveLoading ? "bg-emerald-400 cursor-not-allowed" : "bg-[#4AD395] hover:bg-[#3ebe84] shadow-emerald-500/20"} text-white`}>
-                  {saveLoading ? <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin-fast"></div> Saving...</> : "Save Changes"}
+                <button
+                  type="submit"
+                  disabled={saveLoading}
+                  className={`w-full py-4 rounded-xl font-bold text-lg transition flex items-center justify-center gap-3 shadow-lg ${saveLoading ? "bg-emerald-400 cursor-not-allowed" : "bg-[#4AD395] hover:bg-[#3ebe84] shadow-emerald-500/20"} text-white`}
+                >
+                  {saveLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin-fast"></div>{" "}
+                      Saving...
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
                 </button>
               </form>
             </div>
@@ -329,16 +611,39 @@ const ProfilePage = () => {
 };
 
 const InfoRow = ({ label, value, isDark }) => (
-  <div className={`flex justify-between items-center text-[13px] py-2 border-b last:border-0 ${isDark ? "border-gray-800" : "border-gray-50"}`}>
+  <div
+    className={`flex justify-between items-center text-[13px] py-2 border-b last:border-0 ${isDark ? "border-gray-800" : "border-gray-50"}`}
+  >
     <span className="text-gray-400 font-medium">{label}:</span>
-    <span className={`font-bold ${isDark ? "text-gray-300" : "text-gray-700"}`}>{value || "—"}</span>
+    <span className={`font-bold ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+      {value || "—"}
+    </span>
   </div>
 );
 
-const InputGroup = ({ label, value, onChange, type = "text", placeholder, isDark }) => (
+const InputGroup = ({
+  label,
+  value,
+  onChange,
+  type = "text",
+  placeholder,
+  isDark,
+}) => (
   <div className="w-full text-left">
-    {label && <label className={`block text-sm font-bold mb-2 ${isDark ? "text-gray-400" : "text-gray-700"}`}>{label}</label>}
-    <input type={type} value={value || ""} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 ring-emerald-500/10 transition ${isDark ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500" : "bg-gray-50 border-gray-200 focus:border-emerald-500"}`} />
+    {label && (
+      <label
+        className={`block text-sm font-bold mb-2 ${isDark ? "text-gray-400" : "text-gray-700"}`}
+      >
+        {label}
+      </label>
+    )}
+    <input
+      type={type}
+      value={value || ""}
+      placeholder={placeholder}
+      onChange={(e) => onChange(e.target.value)}
+      className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 ring-emerald-500/10 transition ${isDark ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500" : "bg-gray-50 border-gray-200 focus:border-emerald-500"}`}
+    />
   </div>
 );
 

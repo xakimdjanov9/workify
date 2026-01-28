@@ -1,6 +1,7 @@
 // Dashboard3.jsx - responsive down to 400px with week/month toggle
 import React, { useEffect, useState, useMemo } from "react";
 import { applicationApi } from "../../services/api";
+import { useTheme } from "../../Context/ThemeContext.jsx";
 import {
   AreaChart,
   Area,
@@ -12,6 +13,9 @@ import {
 } from "recharts";
 
 const Dashboard3 = () => {
+  const { settings } = useTheme();
+  const isDark = settings.darkMode;
+
   const [chartData, setChartData] = useState({ week: [], month: [] });
   const [activeTab, setActiveTab] = useState("week");
   const [loading, setLoading] = useState(true);
@@ -28,18 +32,7 @@ const Dashboard3 = () => {
 
   const weekDaysShort = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const monthNamesShort = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
   ];
 
   useEffect(() => {
@@ -53,7 +46,6 @@ const Dashboard3 = () => {
         const res = await applicationApi.getAll();
         let applications = [];
 
-        // Ma'lumotlarni turli strukturalardan chiqarib olish
         if (res?.data) {
           if (Array.isArray(res.data)) {
             applications = res.data;
@@ -64,7 +56,6 @@ const Dashboard3 = () => {
           } else if (res.data.data && Array.isArray(res.data.data)) {
             applications = res.data.data;
           } else if (typeof res.data === "object") {
-            // Objectdan arrayga convert qilish
             applications = Object.values(res.data)
               .flat()
               .filter(Array.isArray)
@@ -105,17 +96,13 @@ const Dashboard3 = () => {
                     .map(String)
                     .includes(String(userId)),
               );
-              console.log(
-                "Filtered applications for user:",
-                myApplications.length,
-              );
             }
           } catch (e) {
             console.warn("Token parse xatosi:", e);
           }
         }
 
-        // Haftalik ma'lumotlar tayyorlash
+        // Week data
         const now = new Date();
         const startOfWeek = new Date(now);
         startOfWeek.setDate(
@@ -123,7 +110,6 @@ const Dashboard3 = () => {
         );
         startOfWeek.setHours(0, 0, 0, 0);
 
-        // Hafta kunlari uchun array
         const weekData = [];
         for (let i = 0; i < 7; i++) {
           const day = new Date(startOfWeek);
@@ -152,7 +138,7 @@ const Dashboard3 = () => {
           });
         }
 
-        // Oylik ma'lumotlar tayyorlash
+        // Month data
         const currentYear = now.getFullYear();
         const monthData = [];
 
@@ -186,7 +172,6 @@ const Dashboard3 = () => {
         console.error("Dashboard xatosi:", err);
         setError("Ma'lumotlarni yuklab bo'lmadi");
 
-        // Fallback demo ma'lumotlar
         if (isMounted) {
           const demoWeek = weekDaysShort.map((day, i) => ({
             day,
@@ -200,10 +185,7 @@ const Dashboard3 = () => {
             monthIndex: i,
           }));
 
-          setChartData({
-            week: demoWeek,
-            month: demoMonth,
-          });
+          setChartData({ week: demoWeek, month: demoMonth });
         }
       } finally {
         if (isMounted) setLoading(false);
@@ -211,7 +193,6 @@ const Dashboard3 = () => {
     };
 
     fetchAndProcess();
-
     return () => {
       isMounted = false;
     };
@@ -221,15 +202,25 @@ const Dashboard3 = () => {
     return activeTab === "week" ? chartData.week : chartData.month;
   }, [activeTab, chartData]);
 
-  // Custom Tooltip komponenti
-  const CustomTooltip = ({ active, payload, label }) => {
+  // Custom Tooltip
+  const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const value = payload[0].value;
       const dataPoint = payload[0].payload;
 
       return (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-xl p-2 xs:p-3">
-          <p className="text-xs xs:text-sm font-semibold text-gray-800">
+        <div
+          className={`rounded-lg shadow-xl p-2 xs:p-3 border ${
+            isDark
+              ? "bg-[#1E1E1E] border-gray-700"
+              : "bg-white border-gray-200"
+          }`}
+        >
+          <p
+            className={`text-xs xs:text-sm font-semibold ${
+              isDark ? "text-gray-100" : "text-gray-800"
+            }`}
+          >
             {activeTab === "week" ? dataPoint.fullDate : dataPoint.day}
           </p>
           <p className="text-xs xs:text-sm text-[#5ABF89] font-bold">
@@ -241,7 +232,6 @@ const Dashboard3 = () => {
     return null;
   };
 
-  // Sana ko'rsatish
   const getDisplayDate = () => {
     const now = new Date();
     if (activeTab === "week") {
@@ -264,7 +254,6 @@ const Dashboard3 = () => {
     }
   };
 
-  // Responsive chart o'lchamlari
   const getChartHeight = () => {
     if (windowWidth < 400) return 220;
     if (windowWidth < 500) return 240;
@@ -274,7 +263,6 @@ const Dashboard3 = () => {
     return 350;
   };
 
-  // Responsive chart settings
   const chartSettings = {
     margin: {
       top: 20,
@@ -291,38 +279,65 @@ const Dashboard3 = () => {
     activeDotRadius: windowWidth < 400 ? 5 : windowWidth < 768 ? 6 : 8,
   };
 
-  // Chart y o'qi uchun max qiymat
   const getMaxValue = () => {
     if (!activeData || activeData.length === 0) return 100;
     const max = Math.max(...activeData.map((item) => item.views));
-    return Math.ceil(max * 1.2); // 20% ortiqcha joy qoldiramiz
+    return Math.ceil(max * 1.2);
   };
+
+  // ✅ Dark-mode chart colors (UX o'zgarmaydi)
+  const gridStroke = isDark ? "#2b2b2b" : "#f0f0f0";
+  const axisTickFill = isDark ? "#9CA3AF" : "#6b7280"; // gray-400 / gray-500
+  const cursorStroke = "#5ABF89";
 
   return (
     <div className="w-full mx-auto py-4 sm:py-6 pb-16">
-      <div className="bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl shadow-lg p-4 sm:p-6 md:p-8 border border-gray-100">
+      <div
+        className={`rounded-xl sm:rounded-2xl lg:rounded-3xl shadow-lg p-4 sm:p-6 md:p-8 border ${
+          isDark
+            ? "bg-[#1E1E1E] border-gray-800"
+            : "bg-white border-gray-100"
+        }`}
+      >
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8 md:mb-10">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-3 sm:mb-4">
+          <h2
+            className={`text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4 ${
+              isDark ? "text-gray-100" : "text-gray-800"
+            }`}
+          >
             Job Offers
           </h2>
 
-          <div className="inline-flex bg-gray-100 rounded-lg sm:rounded-xl p-1 sm:p-1.5 mb-3 sm:mb-4">
+          <div
+            className={`inline-flex rounded-lg sm:rounded-xl p-1 sm:p-1.5 mb-3 sm:mb-4 ${
+              isDark ? "bg-[#252525]" : "bg-gray-100"
+            }`}
+          >
             <button
               onClick={() => setActiveTab("week")}
               className={`px-4 sm:px-6 md:px-8 py-1.5 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-sm md:text-base font-semibold transition-all ${
                 activeTab === "week"
-                  ? "bg-white text-gray-800 shadow-sm"
+                  ? isDark
+                    ? "bg-[#1E1E1E] text-gray-100 shadow-sm"
+                    : "bg-white text-gray-800 shadow-sm"
+                  : isDark
+                  ? "text-gray-300 hover:text-gray-100 hover:bg-white/10"
                   : "text-gray-500 hover:text-gray-700 hover:bg-white/50"
               }`}
             >
               This Week
             </button>
+
             <button
               onClick={() => setActiveTab("month")}
               className={`px-4 sm:px-6 md:px-8 py-1.5 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-sm md:text-base font-semibold transition-all ${
                 activeTab === "month"
-                  ? "bg-white text-gray-800 shadow-sm"
+                  ? isDark
+                    ? "bg-[#1E1E1E] text-gray-100 shadow-sm"
+                    : "bg-white text-gray-800 shadow-sm"
+                  : isDark
+                  ? "text-gray-300 hover:text-gray-100 hover:bg-white/10"
                   : "text-gray-500 hover:text-gray-700 hover:bg-white/50"
               }`}
             >
@@ -330,7 +345,7 @@ const Dashboard3 = () => {
             </button>
           </div>
 
-          <div className="text-gray-500 text-xs sm:text-sm">
+          <div className={`${isDark ? "text-gray-400" : "text-gray-500"} text-xs sm:text-sm`}>
             {getDisplayDate()}
             {activeTab === "week" && " (Current Week)"}
             {activeTab === "month" && " (Yearly Overview)"}
@@ -340,7 +355,7 @@ const Dashboard3 = () => {
         {/* Chart Container */}
         <div style={{ height: `${getChartHeight()}px` }} className="w-full">
           {loading ? (
-            <div className="h-full flex flex-col items-center justify-center text-gray-500">
+            <div className={`h-full flex flex-col items-center justify-center ${isDark ? "text-gray-300" : "text-gray-500"}`}>
               <div className="animate-spin h-8 w-8 sm:h-10 sm:w-10 border-4 border-indigo-500 border-t-transparent rounded-full mb-3 sm:mb-4" />
               <span className="text-xs sm:text-sm md:text-base">
                 Loading applications data...
@@ -353,7 +368,7 @@ const Dashboard3 = () => {
                 <div className="text-red-600 text-xs sm:text-sm md:text-base">
                   {error}
                 </div>
-                <div className="text-gray-500 text-xs mt-2">
+                <div className={`${isDark ? "text-gray-400" : "text-gray-500"} text-xs mt-2`}>
                   Using demo data for preview
                 </div>
               </div>
@@ -370,7 +385,7 @@ const Dashboard3 = () => {
 
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="#f0f0f0"
+                  stroke={gridStroke}
                   vertical={false}
                   horizontal={true}
                 />
@@ -380,7 +395,7 @@ const Dashboard3 = () => {
                   axisLine={false}
                   tickLine={false}
                   tick={{
-                    fill: "#6b7280",
+                    fill: axisTickFill,
                     fontSize: chartSettings.fontSize.xAxis,
                     fontWeight: 500,
                   }}
@@ -395,7 +410,7 @@ const Dashboard3 = () => {
                   axisLine={false}
                   tickLine={false}
                   tick={{
-                    fill: "#6b7280",
+                    fill: axisTickFill,
                     fontSize: chartSettings.fontSize.yAxis,
                   }}
                   width={windowWidth < 400 ? 30 : windowWidth < 768 ? 35 : 40}
@@ -406,7 +421,7 @@ const Dashboard3 = () => {
                 <Tooltip
                   content={<CustomTooltip />}
                   cursor={{
-                    stroke: "#5ABF89",
+                    stroke: cursorStroke,
                     strokeWidth: 1,
                     strokeDasharray: "3 3",
                   }}
@@ -420,7 +435,7 @@ const Dashboard3 = () => {
                   fill="url(#colorOffers)"
                   activeDot={{
                     r: chartSettings.activeDotRadius,
-                    stroke: "#ffffff",
+                    stroke: isDark ? "#1E1E1E" : "#ffffff",
                     strokeWidth: 2,
                     fill: "#5ABF89",
                   }}
@@ -428,7 +443,7 @@ const Dashboard3 = () => {
                     r: chartSettings.dotRadius,
                     stroke: "#5ABF89",
                     strokeWidth: 1.5,
-                    fill: "#ffffff",
+                    fill: isDark ? "#1E1E1E" : "#ffffff",
                   }}
                 />
               </AreaChart>
