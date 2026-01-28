@@ -19,6 +19,7 @@ import {
   FaThumbsUp,
 } from "react-icons/fa";
 import { useTheme } from "../../Context/ThemeContext.jsx"; // Context ulandi
+import nonImg from '../../assets/img.jpg'
 
 export default function JobMatches() {
   const { settings } = useTheme(); // Dark mode holati
@@ -310,7 +311,7 @@ export default function JobMatches() {
                         <img
                           src={
                             job.company?.profileimg_url ||
-                            "https://via.placeholder.com/100"
+                            nonImg
                           }
                           alt="logo"
                           className="w-full h-full object-contain"
