@@ -72,8 +72,6 @@ const Dashboard3 = () => {
           }
         }
 
-        console.log("Total applications fetched:", applications.length);
-
         // Token orqali foydalanuvchi ID sini olish
         const token = localStorage.getItem("token");
         let myApplications = applications;
@@ -183,7 +181,6 @@ const Dashboard3 = () => {
             week: weekData,
             month: monthData,
           });
-          console.log("Chart data set:", { week: weekData, month: monthData });
         }
       } catch (err) {
         console.error("Dashboard xatosi:", err);
