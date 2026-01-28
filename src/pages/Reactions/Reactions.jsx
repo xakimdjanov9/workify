@@ -3,6 +3,7 @@ import { jobApi } from "../../services/api";
 import { useJobReactions } from "../../Context/JobReactionsContext";
 import { useTheme } from "../../Context/ThemeContext";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 import { FaCity, FaThumbsUp, FaThumbsDown, FaTrash } from "react-icons/fa";
 
 export default function Reactions() {
@@ -23,7 +24,7 @@ export default function Reactions() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ filter: all | like | dislike
+  // filter: all | like | dislike
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
@@ -45,10 +46,25 @@ export default function Reactions() {
   const getJobReaction = (jobId) =>
     getReaction ? getReaction(jobId) : reactions[jobId];
 
+  // ✅ Toast style (dark/light)
+  const toastOptions = useMemo(
+    () => ({
+      duration: 2200,
+      style: {
+        background: isDark ? "#1E1E1E" : "#ffffff",
+        color: isDark ? "#ffffff" : "#1E293B",
+        border: isDark ? "1px solid #374151" : "1px solid #E5E7EB",
+        fontWeight: 700,
+      },
+    }),
+    [isDark],
+  );
+
   // ✅ All reacted jobs
   const reactedJobs = useMemo(() => {
     return jobs.filter((job) => Boolean(getJobReaction(job.id)));
-  }, [jobs, reactions]); // getReaction context ichida bo'lishi mumkin, reactions o'zgarsa qayta hisoblanadi
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobs, reactions]); // reactions o'zgarsa qayta hisoblanadi
 
   // ✅ Counts (badge uchun)
   const counts = useMemo(() => {
@@ -62,12 +78,14 @@ export default function Reactions() {
     }
 
     return { all: reactedJobs.length, like, dislike };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reactedJobs, reactions]);
 
   // ✅ Filtered list
   const filteredJobs = useMemo(() => {
     if (filter === "all") return reactedJobs;
     return reactedJobs.filter((job) => getJobReaction(job.id) === filter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, reactedJobs, reactions]);
 
   const filterBtnClass = (active) =>
@@ -77,9 +95,36 @@ export default function Reactions() {
           ? "bg-gray-800 border-gray-700 text-white"
           : "bg-[#163D5C] border-[#163D5C] text-white"
         : isDark
-        ? "border-gray-700 text-gray-300 hover:bg-gray-800"
-        : "border-gray-200 text-gray-700 hover:bg-gray-50"
+          ? "border-gray-700 text-gray-300 hover:bg-gray-800"
+          : "border-gray-200 text-gray-700 hover:bg-gray-50"
     }`;
+
+  // ✅ Toast handlers (sticker/emoji YO'Q)
+  const handleLike = (jobId) => {
+    const prev = getJobReaction(jobId);
+    toggleLike(jobId);
+
+    if (prev === "like") toast("Removed from liked jobs", toastOptions);
+    else toast("Added to liked jobs", toastOptions);
+  };
+
+  const handleDislike = (jobId) => {
+    const prev = getJobReaction(jobId);
+    toggleDislike(jobId);
+
+    if (prev === "dislike") toast("Removed from disliked jobs", toastOptions);
+    else toast("Added to disliked jobs", toastOptions);
+  };
+
+  const handleClearOne = (jobId) => {
+    clearReaction(jobId);
+    toast("Reaction removed", toastOptions);
+  };
+
+  const handleClearAll = () => {
+    clearAll();
+    toast("All reactions cleared", toastOptions);
+  };
 
   return (
     <div
@@ -87,25 +132,31 @@ export default function Reactions() {
         isDark ? "bg-[#121212] text-white" : "bg-[#F9FAFB] text-[#1E293B]"
       }`}
     >
+      {/* ✅ Toaster shu component ichida */}
+      <Toaster position="top-right" toastOptions={toastOptions} />
+
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center gap-3 mb-6">
           <h1 className="text-2xl font-black">Reactions</h1>
 
-          {/* ✅ FILTER BUTTONS */}
+          {/* FILTER BUTTONS */}
           <div className="flex flex-wrap gap-2 md:ml-4">
             <button
+              type="button"
               onClick={() => setFilter("all")}
               className={filterBtnClass(filter === "all")}
             >
               All ({counts.all})
             </button>
             <button
+              type="button"
               onClick={() => setFilter("like")}
               className={filterBtnClass(filter === "like")}
             >
               Liked ({counts.like})
             </button>
             <button
+              type="button"
               onClick={() => setFilter("dislike")}
               className={filterBtnClass(filter === "dislike")}
             >
@@ -114,7 +165,8 @@ export default function Reactions() {
           </div>
 
           <button
-            onClick={clearAll}
+            type="button"
+            onClick={handleClearAll}
             className={`md:ml-auto px-6 py-3 rounded-xl font-black transition-all border ${
               isDark
                 ? "border-gray-700 text-gray-200 hover:bg-gray-800"
@@ -134,15 +186,15 @@ export default function Reactions() {
                   ? "border-gray-800 border-t-blue-500"
                   : "border-gray-100 border-t-[#163D5C]"
               }`}
-            ></div>
+            />
           </div>
         ) : filteredJobs.length === 0 ? (
           <p className="text-center text-gray-400 py-20">
             {filter === "all"
               ? "No liked or disliked jobs yet."
               : filter === "like"
-              ? "No liked jobs yet."
-              : "No disliked jobs yet."}
+                ? "No liked jobs yet."
+                : "No disliked jobs yet."}
           </p>
         ) : (
           <div className="space-y-6">
@@ -284,7 +336,8 @@ export default function Reactions() {
                   >
                     {/* Like */}
                     <button
-                      onClick={() => toggleLike(job.id)}
+                      type="button"
+                      onClick={() => handleLike(job.id)}
                       className={`transition-colors mr-auto ${
                         reaction === "like"
                           ? "text-green-500"
@@ -297,7 +350,8 @@ export default function Reactions() {
 
                     {/* Dislike */}
                     <button
-                      onClick={() => toggleDislike(job.id)}
+                      type="button"
+                      onClick={() => handleDislike(job.id)}
                       className={`transition-colors ${
                         reaction === "dislike"
                           ? "text-red-500"
@@ -310,7 +364,8 @@ export default function Reactions() {
 
                     {/* Clear single */}
                     <button
-                      onClick={() => clearReaction(job.id)}
+                      type="button"
+                      onClick={() => handleClearOne(job.id)}
                       className="text-gray-400 hover:text-gray-700 transition-colors"
                       title="Delete"
                     >
@@ -318,6 +373,7 @@ export default function Reactions() {
                     </button>
 
                     <button
+                      type="button"
                       onClick={() => navigate(`/job-post/${job.id}`)}
                       className={`px-10 py-4 rounded-2xl font-black transition-all shadow-lg ${
                         isDark
@@ -329,6 +385,7 @@ export default function Reactions() {
                     </button>
 
                     <button
+                      type="button"
                       onClick={() => navigate(`/job-details/${job.company_id}`)}
                       className={`px-8 py-4 border-2 rounded-2xl font-black transition-all ${
                         isDark
