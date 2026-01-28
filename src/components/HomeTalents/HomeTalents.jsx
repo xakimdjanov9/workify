@@ -23,7 +23,7 @@ const HomeTalents = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="flex-grow w-full bg-slate-200 flex flex-col px-4 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8">
+      <div className="flex-grow w-full bg-slate-50 flex flex-col px-4 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8">
         <h1 className="text-lg md:text-xl text-gray-600 border-b-2 border-gray-300 font-semibold mb-2 md:mb-3">
           {talents.length} talents
         </h1>

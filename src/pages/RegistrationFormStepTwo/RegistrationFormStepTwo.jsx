@@ -83,6 +83,18 @@ export default function RegistrationFormStepTwo() {
     setTimeout(() => navigate("/registration/step-3"), 1000);
   };
 
+    const handleBack = () => {
+    if (!occupation) return toast.error("Occupation tanlang");
+    if (!specialty) return toast.error("Specialty tanlang");
+    if (!skils[0].skill) return toast.error("Kamida bitta skill kiriting");
+    if (!languages[0].language) return toast.error("Kamida bitta til kiriting");
+
+    const step2Data = { occupation, specialty, skils, language: languages };
+    localStorage.setItem("talent_step2", JSON.stringify(step2Data));
+    toast.success("Orqaga qaytildi!");
+    setTimeout(() => navigate("/registration/step-1"), 1000);
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Toaster position="top-right" />
@@ -303,7 +315,7 @@ export default function RegistrationFormStepTwo() {
 
             {/* Navigation Buttons */}
             <div className="flex flex-col md:flex-row gap-4 pt-10">
-              <button onClick={() => navigate("/registration/step-1")} className="flex-1 py-4 border-2 border-[#163D5C] text-[#163D5C] rounded-2xl font-bold hover:bg-gray-50 transition-all">Previous Step</button>
+              <button onClick={handleBack} className="flex-1 py-4 border-2 border-[#163D5C] text-[#163D5C] rounded-2xl font-bold hover:bg-gray-50 transition-all">Previous Step</button>
               <button onClick={handleNext} className="flex-1 py-4 bg-[#163D5C] text-white rounded-2xl font-bold hover:bg-[#1a4d73] shadow-lg transition-all">Next Step</button>
             </div>
           </div>
