@@ -84,11 +84,6 @@ export default function RegistrationFormStepTwo() {
   };
 
     const handleBack = () => {
-    if (!occupation) return toast.error("Occupation tanlang");
-    if (!specialty) return toast.error("Specialty tanlang");
-    if (!skils[0].skill) return toast.error("Kamida bitta skill kiriting");
-    if (!languages[0].language) return toast.error("Kamida bitta til kiriting");
-
     const step2Data = { occupation, specialty, skils, language: languages };
     localStorage.setItem("talent_step2", JSON.stringify(step2Data));
     toast.success("Orqaga qaytildi!");
