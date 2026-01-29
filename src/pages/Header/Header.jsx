@@ -206,7 +206,7 @@ const Header = () => {
                   Sign in
                 </Link>
                 <Link
-                  to="/signup"
+                  to="/registration/step-1"
                   onClick={() => setOpen(false)}
                   className="w-full py-4 text-center font-bold text-white bg-[#163D5C] rounded-2xl"
                 >
