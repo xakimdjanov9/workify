@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { useTheme } from "../../Context/ThemeContext.jsx"; // ThemeContext ulandi
+import nonImg from '../../assets/img.jpg'
 
 export default function JobDetail() {
   const { id } = useParams();
@@ -122,7 +123,7 @@ export default function JobDetail() {
                 }`}
               >
                 <img
-                  src={job.company?.profileimg_url || "/default-company.png"}
+                  src={job.company?.profileimg_url || nonImg}
                   alt="logo"
                   className="w-full h-full object-contain"
                 />

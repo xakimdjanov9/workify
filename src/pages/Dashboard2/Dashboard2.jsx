@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { applicationApi } from "../../services/api";
+import { useTheme } from "../../Context/ThemeContext.jsx";
 
 const Dashboard2 = () => {
+  const { settings } = useTheme();
+  const isDark = settings.darkMode;
+
   const [stats, setStats] = useState({
     weekly: [0, 0, 0, 0, 0, 0, 0],
-    monthly: new Array(12).fill(0)
+    monthly: new Array(12).fill(0),
   });
   const [activeTab, setActiveTab] = useState("week");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const weekDays = ["M", "T", "W", "T", "F", "S", "S"];
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthNames = [
+    "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"
+  ];
 
   const getThisMonday = () => {
     const now = new Date();
@@ -23,9 +29,7 @@ const Dashboard2 = () => {
     return monday;
   };
 
-  const getCurrentYear = () => {
-    return new Date().getFullYear();
-  };
+  const getCurrentYear = () => new Date().getFullYear();
 
   useEffect(() => {
     let isMounted = true;
@@ -84,13 +88,11 @@ const Dashboard2 = () => {
           }
         }
 
-        // Haftalik ma'lumotlar
         const monday = getThisMonday();
         const weekEnd = new Date(monday);
         weekEnd.setDate(monday.getDate() + 7);
         const weekData = new Array(7).fill(0);
 
-        // Oylik ma'lumotlar
         const currentYear = getCurrentYear();
         const monthData = new Array(12).fill(0);
 
@@ -98,29 +100,18 @@ const Dashboard2 = () => {
           if (!app?.createdAt) return;
           const created = new Date(app.createdAt);
 
-          // Haftalik statistikaga qo'shish
           if (created >= monday && created < weekEnd) {
-            const dayIndex = Math.floor(
-              (created - monday) / (1000 * 60 * 60 * 24)
-            );
-            if (dayIndex >= 0 && dayIndex < 7) {
-              weekData[dayIndex]++;
-            }
+            const dayIndex = Math.floor((created - monday) / (1000 * 60 * 60 * 24));
+            if (dayIndex >= 0 && dayIndex < 7) weekData[dayIndex]++;
           }
 
-          // Oylik statistikaga qo'shish
-          const year = created.getFullYear();
-          if (year === currentYear) {
-            const month = created.getMonth(); // 0-11
-            monthData[month]++;
+          if (created.getFullYear() === currentYear) {
+            monthData[created.getMonth()]++;
           }
         });
 
         if (isMounted) {
-          setStats({
-            weekly: weekData,
-            monthly: monthData
-          });
+          setStats({ weekly: weekData, monthly: monthData });
         }
       } catch (err) {
         console.error("Dashboard ma'lumot xatosi:", err);
@@ -128,30 +119,24 @@ const Dashboard2 = () => {
         if (isMounted) {
           setStats({
             weekly: [45, 120, 85, 210, 180, 95, 60],
-            monthly: [120, 150, 180, 200, 220, 240, 260, 280, 250, 230, 210, 190]
+            monthly: [120, 150, 180, 200, 220, 240, 260, 280, 250, 230, 210, 190],
           });
         }
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchData();
-
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, []);
 
   const activeStats = activeTab === "week" ? stats.weekly : stats.monthly;
   const labels = activeTab === "week" ? weekDays : monthNames;
   const maxValue = Math.max(...activeStats, 1);
-  
-  // Responsive chart height
+
   const getChartHeight = () => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (window.innerWidth < 640) return 60;
       if (window.innerWidth < 768) return 70;
       if (window.innerWidth < 1024) return 75;
@@ -161,13 +146,13 @@ const Dashboard2 = () => {
   };
 
   const getContainerHeight = () => {
-    if (typeof window !== 'undefined') {
-      if (window.innerWidth < 640) return '140px';
-      if (window.innerWidth < 768) return '150px';
-      if (window.innerWidth < 1024) return '155px';
-      return '165px';
+    if (typeof window !== "undefined") {
+      if (window.innerWidth < 640) return "140px";
+      if (window.innerWidth < 768) return "150px";
+      if (window.innerWidth < 1024) return "155px";
+      return "165px";
     }
-    return '165px';
+    return "165px";
   };
 
   const getBarHeight = (value, maxValue) => {
@@ -177,53 +162,70 @@ const Dashboard2 = () => {
 
   const getLineTop = (i) => {
     const chartH = getChartHeight();
-    if (i === 0) return '0px';
+    if (i === 0) return "0px";
     if (i === 1) return `${chartH * 0.625}px`;
     return `${chartH * 1.25}px`;
   };
 
   const yAxisValues = [0, Math.round(maxValue * 0.5), maxValue];
 
-  const currentDate = new Date().toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-
   const getDisplayDate = () => {
     if (activeTab === "week") {
       const monday = getThisMonday();
       const sunday = new Date(monday);
       sunday.setDate(monday.getDate() + 6);
-      return `${monday.getDate()} ${monday.toLocaleDateString('en-GB', { month: 'short' })} - ${sunday.getDate()} ${sunday.toLocaleDateString('en-GB', { month: 'short' })} ${monday.getFullYear()}`;
-    } else {
-      return `January - December ${getCurrentYear()}`;
+      return `${monday.getDate()} ${monday.toLocaleDateString("en-GB", { month: "short" })} - ${sunday.getDate()} ${sunday.toLocaleDateString("en-GB", { month: "short" })} ${monday.getFullYear()}`;
     }
+    return `January - December ${getCurrentYear()}`;
   };
 
   return (
     <div className="w-full mx-auto lg:max-w-none lg:w-auto lg:flex-1 pt-0 sm:pt-3 lg:pt-6">
-      <div className="bg-white rounded-xl shadow-md p-4 sm:p-5 lg:p-6 border border-gray-100">
+      <div
+        className={`rounded-xl shadow-md p-4 sm:p-5 lg:p-6 border ${
+          isDark
+            ? "bg-[#1E1E1E] border-gray-800"
+            : "bg-white border-gray-100"
+        }`}
+      >
         {/* Header */}
         <div className="text-center mb-4 sm:mb-5 lg:mb-6">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-1">
+          <h2
+            className={`text-lg sm:text-xl lg:text-2xl font-bold mb-1 ${
+              isDark ? "text-gray-100" : "text-gray-800"
+            }`}
+          >
             Profile Views
           </h2>
-          <div className="inline-flex bg-gray-100 rounded-full p-0.5 sm:p-1 lg:p-1 mb-2 sm:mb-3 lg:mb-3">
-            <button 
+
+          <div
+            className={`inline-flex rounded-full p-0.5 sm:p-1 lg:p-1 mb-2 sm:mb-3 lg:mb-3 ${
+              isDark ? "bg-[#252525]" : "bg-gray-100"
+            }`}
+          >
+            <button
               className={`px-3 sm:px-4 lg:px-6 py-1 sm:py-1.5 lg:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm whitespace-nowrap transition-all ${
-                activeTab === "week" 
-                  ? "bg-white text-gray-800" 
+                activeTab === "week"
+                  ? isDark
+                    ? "bg-[#1E1E1E] text-gray-100"
+                    : "bg-white text-gray-800"
+                  : isDark
+                  ? "text-gray-300 hover:bg-white/10"
                   : "text-gray-600 hover:bg-white/60"
               }`}
               onClick={() => setActiveTab("week")}
             >
               This week
             </button>
-            <button 
+
+            <button
               className={`px-3 sm:px-4 lg:px-6 py-1 sm:py-1.5 lg:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-sm whitespace-nowrap transition-all ${
-                activeTab === "month" 
-                  ? "bg-white text-gray-800" 
+                activeTab === "month"
+                  ? isDark
+                    ? "bg-[#1E1E1E] text-gray-100"
+                    : "bg-white text-gray-800"
+                  : isDark
+                  ? "text-gray-300 hover:bg-white/10"
                   : "text-gray-600 hover:bg-white/60"
               }`}
               onClick={() => setActiveTab("month")}
@@ -231,7 +233,8 @@ const Dashboard2 = () => {
               This year
             </button>
           </div>
-          <div className="text-xs sm:text-sm text-gray-500">
+
+          <div className={`text-xs sm:text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
             {getDisplayDate()}
           </div>
         </div>
@@ -239,60 +242,71 @@ const Dashboard2 = () => {
         {/* Chart */}
         <div className="relative">
           {loading ? (
-            <div 
-              className="flex items-center justify-center gap-2 sm:gap-3 text-gray-500"
+            <div
+              className={`flex items-center justify-center gap-2 sm:gap-3 ${
+                isDark ? "text-gray-300" : "text-gray-500"
+              }`}
               style={{ height: getContainerHeight() }}
             >
               <div className="animate-spin h-5 w-5 sm:h-6 sm:w-6 border-3 sm:border-4 border-blue-500 border-t-transparent rounded-full" />
               <span className="text-sm">Loading...</span>
             </div>
           ) : error ? (
-            <div 
-              className="flex items-center justify-center text-red-600"
+            <div
+              className="flex items-center justify-center text-red-500"
               style={{ height: getContainerHeight() }}
             >
               {error}
             </div>
           ) : (
             <div style={{ height: getContainerHeight() }} className="flex">
-              {/* Y o'qi */}
-              <div className="w-8 sm:w-10 lg:w-12 flex flex-col justify-between text-[10px] sm:text-xs text-gray-400 pr-1 sm:pr-2 text-right pb-2">
-                {yAxisValues.reverse().map((val, i) => {
-                  const chartH = getChartHeight();
-                  const itemHeight = chartH + (chartH * 0.5625);
-                  return (
-                    <div 
-                      key={i} 
-                      className="flex items-end justify-end"
-                      style={{ height: `${itemHeight / 2.5}px` }}
-                    >
-                      {val}
-                    </div>
-                  );
-                })}
+              {/* Y axis */}
+              <div
+                className={`w-8 sm:w-10 lg:w-12 flex flex-col justify-between text-[10px] sm:text-xs pr-1 sm:pr-2 text-right pb-2 ${
+                  isDark ? "text-gray-500" : "text-gray-400"
+                }`}
+              >
+                {yAxisValues
+                  .slice()
+                  .reverse()
+                  .map((val, i) => {
+                    const chartH = getChartHeight();
+                    const itemHeight = chartH + chartH * 0.5625;
+                    return (
+                      <div
+                        key={i}
+                        className="flex items-end justify-end"
+                        style={{ height: `${itemHeight / 2.5}px` }}
+                      >
+                        {val}
+                      </div>
+                    );
+                  })}
               </div>
 
-              {/* Grafik maydoni */}
+              {/* Chart area */}
               <div className="flex-1 relative">
-                {/* Horizontal chiziqlar */}
+                {/* Horizontal lines */}
                 <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
                   {[0, 1, 2].map((_, i) => (
                     <div
                       key={i}
-                      className="border-t border-gray-100 w-full"
-                      style={{ 
-                        position: 'absolute',
+                      className={`border-t w-full ${isDark ? "border-gray-800" : "border-gray-100"}`}
+                      style={{
+                        position: "absolute",
                         top: getLineTop(i),
-                        width: '100%'
+                        width: "100%",
                       }}
                     />
                   ))}
                 </div>
 
-                {/* Barlar */}
-                <div className={`absolute inset-0 flex items-end justify-between px-1 sm:px-1.5 lg:px-2 pb-2 ${
-                  activeTab === "month" ? "gap-0.5 sm:gap-1 lg:gap-1.5" : ""
-                }`}>
+                {/* Bars */}
+                <div
+                  className={`absolute inset-0 flex items-end justify-between px-1 sm:px-1.5 lg:px-2 pb-2 ${
+                    activeTab === "month" ? "gap-0.5 sm:gap-1 lg:gap-1.5" : ""
+                  }`}
+                >
                   {labels.map((label, i) => {
                     const value = activeStats[i];
                     const height = getBarHeight(value, maxValue);
@@ -301,24 +315,24 @@ const Dashboard2 = () => {
                       <div
                         key={`${label}-${i}`}
                         className="flex flex-col items-center group"
-                        style={{ 
-                          width: `calc(100% / ${labels.length} - ${activeTab === "month" ? "4px" : "2px"})` 
+                        style={{
+                          width: `calc(100% / ${labels.length} - ${
+                            activeTab === "month" ? "4px" : "2px"
+                          })`,
                         }}
                       >
                         <div className="relative w-full">
-                          {/* Grafik ustuni */}
                           <div
                             className={`w-full rounded-t-lg sm:rounded-t-xl transition-all duration-300 ${
                               value > 0
                                 ? "bg-gradient-to-t from-indigo-600 to-purple-500 hover:brightness-110"
+                                : isDark
+                                ? "bg-[#252525]"
                                 : "bg-gray-100"
                             }`}
-                            style={{ 
-                              height: `${height}px`,
-                              minHeight: '2px'
-                            }}
+                            style={{ height: `${height}px`, minHeight: "2px" }}
                           />
-                          
+
                           {/* Tooltip */}
                           <div className="absolute -top-6 sm:-top-7 lg:-top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition pointer-events-none z-10">
                             <div className="bg-gray-900 text-white text-[10px] sm:text-xs px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg whitespace-nowrap shadow-lg">
@@ -328,12 +342,16 @@ const Dashboard2 = () => {
                           </div>
                         </div>
 
-                        {/* Kun/Oy nomlari */}
-                        <div className={`mt-1 sm:mt-1.5 lg:mt-2 font-medium text-gray-600 ${
-                          activeTab === "month" 
-                            ? "text-[10px] sm:text-xs rotate-45 origin-left" 
-                            : "text-xs sm:text-sm"
-                        }`}>
+                        {/* Labels */}
+                        <div
+                          className={`mt-1 sm:mt-1.5 lg:mt-2 font-medium ${
+                            isDark ? "text-gray-400" : "text-gray-600"
+                          } ${
+                            activeTab === "month"
+                              ? "text-[10px] sm:text-xs rotate-45 origin-left"
+                              : "text-xs sm:text-sm"
+                          }`}
+                        >
                           {label}
                         </div>
                       </div>

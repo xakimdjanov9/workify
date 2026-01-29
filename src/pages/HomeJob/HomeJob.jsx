@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch, FaChevronDown, FaCity, FaThumbsDown } from "react-icons/fa";
 import Header from "../Header/Header.jsx";
 import Footer from "../Footer/Footer.jsx";
+import NonImg from '../../assets/img.jpg'
 
 export default function HomeJob() {
     const [allJobs, setAllJobs] = useState([]);
@@ -113,7 +114,7 @@ export default function HomeJob() {
                                     <div className="flex flex-col md:flex-row justify-between gap-6">
                                         <div className="flex gap-5">
                                             <div className="w-16 h-16 rounded-2xl flex items-center justify-center border border-gray-50 bg-white p-2 shrink-0">
-                                                <img src={job.company?.profileimg_url || "https://via.placeholder.com/100"} alt="logo" className="w-full h-full object-contain" />
+                                                <img src={job.company?.profileimg_url || NonImg} alt="logo" className="w-full h-full object-contain" />
                                             </div>
                                             <div>
                                                 <h3 className="text-xl font-bold text-gray-800">{job.company?.company_name}</h3>

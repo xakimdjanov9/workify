@@ -2,24 +2,21 @@ import React, { useState, useEffect } from "react";
 import { jobApi, talentApi } from "../../services/api";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useJobReactions } from "../../Context/JobReactionsContext.jsx";
+import toast, { Toaster } from "react-hot-toast";
 import {
-  FaBriefcase,
-  FaClock,
-  FaFileContract,
-  FaUserTie,
-  FaBuilding,
-  FaHome,
-  FaFlag,
   FaSearch,
   FaChevronDown,
   FaCity,
   FaDollarSign,
   FaThumbsDown,
+  FaThumbsUp,
 } from "react-icons/fa";
-import { useTheme } from "../../Context/ThemeContext.jsx"; // Context ulandi
+import { useTheme } from "../../Context/ThemeContext.jsx";
+import nonImg from "../../assets/img.jpg";
 
 export default function JobMatches() {
-  const { settings } = useTheme(); // Dark mode holati
+  const { settings } = useTheme();
   const isDark = settings.darkMode;
 
   const [allJobs, setAllJobs] = useState([]);
@@ -34,7 +31,18 @@ export default function JobMatches() {
   const [city, setCity] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const { getReaction, toggleLike, toggleDislike } = useJobReactions();
   const navigate = useNavigate();
+
+  const toastOptions = {
+    duration: 2200,
+    style: {
+      background: isDark ? "#1E1E1E" : "#ffffff",
+      color: isDark ? "#ffffff" : "#1E293B",
+      border: isDark ? "1px solid #374151" : "1px solid #E5E7EB",
+      fontWeight: 700,
+    },
+  };
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -42,15 +50,22 @@ export default function JobMatches() {
         setLoading(true);
         const token = localStorage.getItem("token");
         if (!token) return;
+
         const decoded = jwtDecode(token);
 
         const userRes = await talentApi.getById(decoded.id);
-        const rawSkills = userRes.data?.skills || [];
+        const rawSkills = userRes.data?.skils || [];
+
         const parsedUserSkills = Array.isArray(rawSkills)
           ? rawSkills
-          : rawSkills.split(",").map((s) => s.trim());
+          : String(rawSkills)
+              .split(",")
+              .map((s) => s.trim());
 
-        const lowerUserSkills = parsedUserSkills.map((s) => s.toLowerCase());
+        const lowerUserSkills = parsedUserSkills
+          .map((s) => (typeof s === "string" ? s.toLowerCase() : ""))
+          .filter(Boolean);
+
         setUserSkills(lowerUserSkills);
 
         const jobRes = await jobApi.getAll();
@@ -59,15 +74,15 @@ export default function JobMatches() {
         const sortedJobs = [...jobs].sort((a, b) => {
           const aMatch = lowerUserSkills.some(
             (s) =>
-              a.specialty?.toLowerCase().includes(s) ||
-              a.occupation?.toLowerCase().includes(s),
+              a?.specialty?.toLowerCase?.().includes(s) ||
+              a?.occupation?.toLowerCase?.().includes(s),
           );
           const bMatch = lowerUserSkills.some(
             (s) =>
-              b.specialty?.toLowerCase().includes(s) ||
-              b.occupation?.toLowerCase().includes(s),
+              b?.specialty?.toLowerCase?.().includes(s) ||
+              b?.occupation?.toLowerCase?.().includes(s),
           );
-          return bMatch - aMatch;
+          return Number(bMatch) - Number(aMatch);
         });
 
         setAllJobs(sortedJobs);
@@ -77,6 +92,7 @@ export default function JobMatches() {
         setLoading(false);
       }
     };
+
     fetchInitialData();
   }, []);
 
@@ -96,10 +112,25 @@ export default function JobMatches() {
           .includes(searchQuery.toLowerCase())
       : true;
 
-    return (
-      matchType && matchWorkplace && matchSalary && matchCity && matchSearch
-    );
+    return matchType && matchWorkplace && matchSalary && matchCity && matchSearch;
   });
+
+  // ✅ Like/Dislike toast (stickerlarsiz)
+  const handleLike = (jobId) => {
+    const current = getReaction(jobId); // oldingi holat
+    toggleLike(jobId);
+
+    if (current === "like") toast("Removed from liked jobs", toastOptions);
+    else toast("Added to liked jobs", toastOptions);
+  };
+
+  const handleDislike = (jobId) => {
+    const current = getReaction(jobId); // oldingi holat
+    toggleDislike(jobId);
+
+    if (current === "dislike") toast("Removed from disliked jobs", toastOptions);
+    else toast("Added to disliked jobs", toastOptions);
+  };
 
   return (
     <div
@@ -107,6 +138,9 @@ export default function JobMatches() {
         isDark ? "bg-[#121212] text-white" : "bg-[#F9FAFB] text-[#1E293B]"
       }`}
     >
+      {/* ✅ Toaster faqat shu sahifa uchun */}
+      <Toaster position="top-right" toastOptions={toastOptions} />
+
       <div className="max-w-5xl mx-auto">
         {/* --- JOB ALERTS FILTER SECTION --- */}
         <div
@@ -115,36 +149,53 @@ export default function JobMatches() {
           }`}
         >
           <div
-            className={`p-6 border-b flex justify-between items-center ${isDark ? "border-gray-800" : "border-gray-50"}`}
+            className={`p-6 border-b flex justify-between items-center ${
+              isDark ? "border-gray-800" : "border-gray-50"
+            }`}
           >
             <h2
-              className={`text-xl font-bold ${isDark ? "text-blue-400" : "text-[#163D5C]"}`}
+              className={`text-xl font-bold ${
+                isDark ? "text-blue-400" : "text-[#163D5C]"
+              }`}
             >
               Job Alerts
             </h2>
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className={`p-2 rounded-full transition-all ${isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-50 text-gray-600"}`}
+              className={`p-2 rounded-full transition-all ${
+                isDark
+                  ? "hover:bg-gray-800 text-gray-400"
+                  : "hover:bg-gray-50 text-gray-600"
+              }`}
+              type="button"
             >
               <FaChevronDown
-                className={`transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}
+                className={`transition-transform duration-300 ${
+                  isExpanded ? "rotate-180" : ""
+                }`}
               />
             </button>
           </div>
 
           <div
-            className={`transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}`}
+            className={`transition-all duration-500 ease-in-out overflow-hidden ${
+              isExpanded ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+            }`}
           >
             <div className="p-8 space-y-8">
               {/* Employment Type */}
               <div>
                 <label
-                  className={`block font-bold mb-4 ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                  className={`block font-bold mb-4 ${
+                    isDark ? "text-gray-300" : "text-gray-700"
+                  }`}
                 >
                   Employment type
                 </label>
                 <div
-                  className={`flex flex-wrap rounded-2xl p-1 gap-1 w-fit ${isDark ? "bg-[#252525]" : "bg-[#F1F3F6]"}`}
+                  className={`flex flex-wrap rounded-2xl p-1 gap-1 w-fit ${
+                    isDark ? "bg-[#252525]" : "bg-[#F1F3F6]"
+                  }`}
                 >
                   {["Full time", "Part time", "Contract", "Freelance"].map(
                     (type) => (
@@ -162,6 +213,7 @@ export default function JobMatches() {
                               ? "text-gray-500 hover:text-gray-300"
                               : "text-gray-400 hover:text-gray-600"
                         }`}
+                        type="button"
                       >
                         {type}
                       </button>
@@ -174,12 +226,16 @@ export default function JobMatches() {
                 {/* Workplace Type */}
                 <div>
                   <label
-                    className={`block font-bold mb-4 ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                    className={`block font-bold mb-4 ${
+                      isDark ? "text-gray-300" : "text-gray-700"
+                    }`}
                   >
                     Workplace type
                   </label>
                   <div
-                    className={`flex rounded-2xl p-1 gap-1 w-fit ${isDark ? "bg-[#252525]" : "bg-[#F1F3F6]"}`}
+                    className={`flex rounded-2xl p-1 gap-1 w-fit ${
+                      isDark ? "bg-[#252525]" : "bg-[#F1F3F6]"
+                    }`}
                   >
                     {["Onsite", "Remote", "Hybrid"].map((type) => (
                       <button
@@ -196,6 +252,7 @@ export default function JobMatches() {
                               ? "text-gray-500 hover:text-gray-300"
                               : "text-gray-400 hover:text-gray-600"
                         }`}
+                        type="button"
                       >
                         {type}
                       </button>
@@ -206,13 +263,17 @@ export default function JobMatches() {
                 {/* Salary */}
                 <div>
                   <label
-                    className={`block font-bold mb-4 ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                    className={`block font-bold mb-4 ${
+                      isDark ? "text-gray-300" : "text-gray-700"
+                    }`}
                   >
                     Minimum salary
                   </label>
                   <div className="relative">
                     <FaDollarSign
-                      className={`absolute left-4 top-1/2 -translate-y-1/2 ${isDark ? "text-blue-400" : "text-[#163D5C]"}`}
+                      className={`absolute left-4 top-1/2 -translate-y-1/2 ${
+                        isDark ? "text-blue-400" : "text-[#163D5C]"
+                      }`}
                     />
                     <input
                       type="number"
@@ -228,6 +289,7 @@ export default function JobMatches() {
                   </div>
                 </div>
               </div>
+              {/* city filter UI sizda yo'q edi — tegmadim */}
             </div>
           </div>
         </div>
@@ -248,10 +310,9 @@ export default function JobMatches() {
           />
           <button
             className={`absolute right-3 top-1/2 -translate-y-1/2 px-10 py-3 rounded-xl font-bold transition-all ${
-              isDark
-                ? "bg-blue-600 hover:bg-blue-700"
-                : "bg-[#163D5C] hover:bg-[#0f2d45]"
+              isDark ? "bg-blue-600 hover:bg-blue-700" : "bg-[#163D5C] hover:bg-[#0f2d45]"
             } text-white`}
+            type="button"
           >
             Search
           </button>
@@ -259,20 +320,22 @@ export default function JobMatches() {
 
         {/* --- JOB CARDS LIST --- */}
         <div className="space-y-6">
-          <p
-            className={`font-bold px-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}
-          >
+          <p className={`font-bold px-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
             {filteredJobs.length} jobs available
           </p>
 
           {loading ? (
             <div className="flex justify-center py-20">
               <div
-                className={`w-10 h-10 border-4 rounded-full animate-spin ${isDark ? "border-gray-800 border-t-blue-500" : "border-gray-100 border-t-[#163D5C]"}`}
+                className={`w-10 h-10 border-4 rounded-full animate-spin ${
+                  isDark ? "border-gray-800 border-t-blue-500" : "border-gray-100 border-t-[#163D5C]"
+                }`}
               ></div>
             </div>
           ) : (
             filteredJobs.map((job) => {
+              const reaction = getReaction(job.id);
+
               const isMatch =
                 userSkills.length > 0 &&
                 userSkills.some(
@@ -298,28 +361,22 @@ export default function JobMatches() {
                     <div className="flex gap-5">
                       <div
                         className={`w-16 h-16 rounded-2xl flex items-center justify-center border p-2 shrink-0 shadow-sm ${
-                          isDark
-                            ? "bg-[#252525] border-gray-700"
-                            : "bg-white border-gray-50"
+                          isDark ? "bg-[#252525] border-gray-700" : "bg-white border-gray-50"
                         }`}
                       >
                         <img
-                          src={
-                            job.company?.profileimg_url ||
-                            "https://via.placeholder.com/100"
-                          }
+                          src={job.company?.profileimg_url || nonImg}
                           alt="logo"
                           className="w-full h-full object-contain"
                         />
                       </div>
+
                       <div>
-                        <h3
-                          className={`text-xl font-bold ${isDark ? "text-gray-100" : "text-gray-800"}`}
-                        >
+                        <h3 className={`text-xl font-bold ${isDark ? "text-gray-100" : "text-gray-800"}`}>
                           {job.company?.company_name}
                         </h3>
                         <p className="text-gray-400 text-sm font-bold">
-                          {job.company.city}
+                          {job.company?.city}
                         </p>
                         <div className="flex items-center gap-1 mt-1">
                           {[1, 2, 3, 4].map((i) => (
@@ -327,9 +384,7 @@ export default function JobMatches() {
                               ★
                             </span>
                           ))}
-                          <span
-                            className={`${isDark ? "text-gray-700" : "text-gray-200"} text-sm`}
-                          >
+                          <span className={`${isDark ? "text-gray-700" : "text-gray-200"} text-sm`}>
                             ★
                           </span>
                         </div>
@@ -337,17 +392,13 @@ export default function JobMatches() {
                     </div>
 
                     <div className="flex flex-col md:items-end gap-2">
-                      <div
-                        className={`flex items-center gap-2 font-bold text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}
-                      >
-                        <FaCity className="text-blue-400" />{" "}
-                        {job.company.city || "Uzbekistan"}
+                      <div className={`flex items-center gap-2 font-bold text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                        <FaCity className="text-blue-400" />
+                        {job.company?.city || "Uzbekistan"}
                       </div>
                       <span
                         className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                          isDark
-                            ? "bg-blue-900/30 text-blue-400"
-                            : "bg-[#E7F8F0] text-[#52D394]"
+                          isDark ? "bg-blue-900/30 text-blue-400" : "bg-[#E7F8F0] text-[#52D394]"
                         }`}
                       >
                         {job.workplace_type}
@@ -357,9 +408,7 @@ export default function JobMatches() {
 
                   <div className="flex flex-wrap justify-between items-center mt-6 mb-4">
                     <div className="flex items-center gap-3">
-                      <h2
-                        className={`text-2xl font-black ${isDark ? "text-white" : "text-slate-800"}`}
-                      >
+                      <h2 className={`text-2xl font-black ${isDark ? "text-white" : "text-slate-800"}`}>
                         {job.occupation}
                       </h2>
                       {isMatch && (
@@ -368,23 +417,18 @@ export default function JobMatches() {
                         </span>
                       )}
                     </div>
-                    <span
-                      className={`text-2xl font-black ${isDark ? "text-blue-400" : "text-slate-800"}`}
-                    >
+
+                    <span className={`text-2xl font-black ${isDark ? "text-blue-400" : "text-slate-800"}`}>
                       ${job.salary_min}-{job.salary_max}
                     </span>
                   </div>
 
-                  <p
-                    className={`text-sm font-medium leading-relaxed mb-6 line-clamp-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}
-                  >
+                  <p className={`text-sm font-medium leading-relaxed mb-6 line-clamp-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
                     {job.description || "No description provided..."}
                   </p>
 
                   <div className="mb-8">
-                    <p
-                      className={`font-black text-sm mb-3 ${isDark ? "text-gray-300" : "text-gray-800"}`}
-                    >
+                    <p className={`font-black text-sm mb-3 ${isDark ? "text-gray-300" : "text-gray-800"}`}>
                       Required skills:
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -400,10 +444,30 @@ export default function JobMatches() {
                     </div>
                   </div>
 
-                  <div
-                    className={`flex items-center justify-end gap-4 pt-6 border-t ${isDark ? "border-gray-800" : "border-gray-50"}`}
-                  >
-                    <button className="text-gray-500 hover:text-red-400 transition-colors mr-auto">
+                  <div className={`flex items-center justify-end gap-4 pt-6 border-t ${isDark ? "border-gray-800" : "border-gray-50"}`}>
+                    <button
+                      onClick={() => handleLike(job.id)}
+                      className={`transition-colors mr-3 ${
+                        reaction === "like"
+                          ? "text-green-500"
+                          : "text-gray-500 hover:text-green-400"
+                      }`}
+                      type="button"
+                      title="Like"
+                    >
+                      <FaThumbsUp size={22} />
+                    </button>
+
+                    <button
+                      onClick={() => handleDislike(job.id)}
+                      className={`transition-colors mr-auto ${
+                        reaction === "dislike"
+                          ? "text-red-500"
+                          : "text-gray-500 hover:text-red-400"
+                      }`}
+                      type="button"
+                      title="Dislike"
+                    >
                       <FaThumbsDown size={22} />
                     </button>
 
@@ -414,6 +478,7 @@ export default function JobMatches() {
                           ? "bg-blue-600 hover:bg-blue-700 shadow-blue-900/20"
                           : "bg-[#163D5C] hover:bg-[#0f2d45] shadow-blue-900/10"
                       } text-white`}
+                      type="button"
                     >
                       Quick apply
                     </button>
@@ -425,6 +490,7 @@ export default function JobMatches() {
                           ? "border-gray-700 text-gray-300 hover:bg-gray-800"
                           : "border-[#163D5C] text-[#163D5C] hover:bg-gray-50"
                       }`}
+                      type="button"
                     >
                       View job post
                     </button>

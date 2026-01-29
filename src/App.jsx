@@ -22,6 +22,7 @@ import ForgotPassword from "./pages/ResetPassword/ResetPassword";
 import HomeJob from "./pages/HomeJob/HomeJob.jsx";
 import Congratulations from "./components/Congratulations/Congratulations.jsx";
 import HomeTalents from "./components/HomeTalents/HomeTalents.jsx";
+import Reactions from "./pages/Reactions/Reactions.jsx";
 
 const ProtectedRoute = () => {
   const token = localStorage.getItem("token");
@@ -65,6 +66,7 @@ function App() {
             <Route path="/settings" element={<Setting />} />
             <Route path="/faq" element={<Faq />} />
             <Route path="/contacts" element={<Contact />} />
+            <Route path="/reactions" element={<Reactions />} />
           </Route>
         </Route>
 
