@@ -226,23 +226,24 @@ const Header = () => {
                 <FiLogOut className="text-3xl text-red-500" />
               </div>
               <h3 className="text-xl font-bold text-slate-800 mb-2">
-                Chiqib ketishni xohlaysizmi?
+                Log out
               </h3>
               <p className="text-gray-500 text-sm mb-6">
-                Hisobingizdan chiqib ketsangiz, qayta kirishingiz kerak bo'ladi.
+                Are you sure you want to log out? You will need to log in again
+                to access your account.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowLogoutModal(false)}
                   className="flex-1 py-3 bg-gray-100 text-slate-700 font-bold rounded-xl hover:bg-gray-200 transition"
                 >
-                  Yo'q
+                  No, cancel
                 </button>
                 <button
                   onClick={confirmLogout}
                   className="flex-1 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition shadow-lg shadow-red-500/30"
                 >
-                  Ha, chiqish
+                  Yes, log out
                 </button>
               </div>
             </div>

@@ -68,7 +68,7 @@ export default function JobAlerts() {
       }
       setApplications(myFilteredApps);
     } catch (err) {
-      toast.error("Ma'lumotlarni yuklashda xatolik yuz berdi");
+      toast.error("Error fetching applications.");
     } finally {
       setLoading(false);
     }
@@ -79,13 +79,13 @@ export default function JobAlerts() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Haqiqatdan ham ushbu arizani bekor qilmoqchimisiz?")) {
+    if (window.confirm("Are you sure you want to delete this application?")) {
       try {
         await applicationApi.delete(id);
-        toast.success("Ariza muvaffaqiyatli o'chirildi");
+        toast.success("Application deleted successfully.");
         setApplications(applications.filter((app) => app.id !== id));
       } catch (err) {
-        toast.error("O'chirishda xatolik yuz berdi");
+        toast.error("Error deleting application.");
       }
     }
   };
@@ -191,7 +191,7 @@ export default function JobAlerts() {
                   : "bg-white border-gray-200 text-gray-400"
               }`}
             >
-              Arizalar topilmadi.
+              No applications found for the selected filter.
             </div>
           ) : (
             filteredApps.map((app) => (

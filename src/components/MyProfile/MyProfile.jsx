@@ -121,7 +121,7 @@ const ProfilePage = () => {
         }
       });
 
-      fd.append("skils", JSON.stringify(formData.skils || []));
+      fd.append("skills", JSON.stringify(formData.skills || []));
       fd.append("language", JSON.stringify(formData.language || []));
 
       await talentApi.update(user.id, fd);
@@ -141,9 +141,9 @@ const ProfilePage = () => {
       skils: [...formData.skils, { skill: "", experience_years: "" }],
     });
   const updateSkill = (index, field, value) => {
-    const newSkills = [...formData.skils];
+    const newSkills = [...formData.skills];
     newSkills[index][field] = value;
-    setFormData({ ...formData, skils: newSkills });
+    setFormData({ ...formData, skills: newSkills });
   };
   const removeSkill = (index) =>
     setFormData({
@@ -546,7 +546,7 @@ const ProfilePage = () => {
                           <FiPlus /> Add
                         </button>
                       </div>
-                      {formData.skils?.map((s, i) => (
+                      {formData.skills?.map((s, i) => (
                         <div key={i} className="flex gap-2 mb-2">
                           <input
                             placeholder="Skill"

@@ -34,7 +34,7 @@ export default function JobDetail() {
         const res = await jobApi.getById(id);
         setJob(res.data);
       } catch (err) {
-        toast.error("Ma'lumotlarni yuklashda xatolik!");
+        toast.error("Error fetching job details.");
       } finally {
         setLoading(false);
       }
@@ -51,10 +51,10 @@ export default function JobDetail() {
 
   const handleApply = async () => {
     const token = localStorage.getItem("token");
-    if (!token) return toast.error("Iltimos, avval tizimga kiring!");
+    if (!token) return toast.error("Please sign in to apply for jobs.");
 
     if (!selectedFile) {
-      return toast.error("Iltimos, rezyume faylini yuklang!");
+      return toast.error("Please upload your resume file.");
     }
 
     try {
@@ -70,11 +70,11 @@ export default function JobDetail() {
       const response = await applicationApi.apply(formData);
 
       if (response.data) {
-        toast.success("Arizangiz muvaffaqiyatli yuborildi!");
+        toast.success("Application submitted successfully!");
         navigate("/matches");
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Serverda xatolik yuz berdi");
+      toast.error(err.response?.data?.message || "Error submitting application.");
     } finally {
       setIsSubmitting(false);
     }
@@ -91,7 +91,7 @@ export default function JobDetail() {
       </div>
     );
 
-  if (!job) return <div className="text-center py-20">Ish topilmadi.</div>;
+  if (!job) return <div className="text-center py-20">Job not found</div>;
 
   return (
     <div

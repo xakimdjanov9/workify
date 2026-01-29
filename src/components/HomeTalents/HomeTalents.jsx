@@ -75,8 +75,8 @@ const HomeTalents = () => {
               </h2>
 
               <div className="flex flex-wrap gap-2">
-                {item.skils &&
-                  JSON.parse(item.skils).map((skill, index) => (
+                {item.skills &&
+                  JSON.parse(item.skills).map((skill, index) => (
                     <span
                       key={index}
                       className="px-2 md:px-3 py-1 md:py-2 border rounded-lg text-xs md:text-sm bg-slate-100 text-gray-600 break-words"

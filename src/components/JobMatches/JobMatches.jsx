@@ -439,7 +439,7 @@ export default function JobMatches() {
                             : "bg-[#F1F3F6] text-gray-600 border-transparent"
                         }`}
                       >
-                        {job.skils}
+                        {job.skills}
                       </span>
                     </div>
                   </div>
