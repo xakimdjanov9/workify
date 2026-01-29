@@ -238,12 +238,12 @@ const Contact = () => {
                 },
                 {
                   icon: <AiOutlineGlobal />,
-                  text: "www.TechCells.com",
-                  href: "https://techcells.com",
+                  text: "www.SyncSoft.uz",
+                  href: " https://SyncSoft.uz",
                 },
                 {
                   icon: <MdLocationOn />,
-                  text: "Usta shirin street 74/85, Tashkent",
+                  text: " A.Xodjayev Street, Korzinka near Namangan City",
                   href: null,
                 },
               ].map((item, idx) => (
