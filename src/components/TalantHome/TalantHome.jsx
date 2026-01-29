@@ -26,7 +26,7 @@ const TalantHome = () => {
             looking for and choose one from among the best.
           </p>
 
-          <div className="bg-white p-1.5 rounded-xl shadow-[0_15px_35px_rgba(0,0,0,0.08)] flex flex-col md:flex-row items-center gap-1.5 max-w-lg border border-gray-100">
+          {/* <div className="bg-white p-1.5 rounded-xl shadow-[0_15px_35px_rgba(0,0,0,0.08)] flex flex-col md:flex-row items-center gap-1.5 max-w-lg border border-gray-100">
             <div className="flex-1 px-3 py-2 text-left w-full border-b md:border-b-0 md:border-r border-gray-100">
               <label className="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">
                 Hire a talent
@@ -58,7 +58,7 @@ const TalantHome = () => {
             <button className="bg-[#1B3B5A] text-white px-6 py-3 rounded-lg font-bold text-xs w-full md:w-auto active:scale-95 hover:bg-slate-800 transition-colors duration-300">
               Search
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className="w-full lg:w-1/2 flex justify-center order-1 lg:order-2 relative px-4">
