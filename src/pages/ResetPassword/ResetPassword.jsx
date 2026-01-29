@@ -16,7 +16,7 @@ export default function ForgotPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(300); 
+  const [timeLeft, setTimeLeft] = useState(300);
   const [isError, setIsError] = useState(false);
 
   const inputRefs = useRef([]);
@@ -36,9 +36,9 @@ export default function ForgotPassword() {
       setTimeLeft(300);
       setCode(Array(6).fill(""));
       setIsError(false);
-      toast.success("Kod qayta yuborildi!");
+      toast.success("Code has been resent!");
     } catch (err) {
-      toast.error("Kodni yuborishda xatolik yuz berdi");
+      toast.error("Error occurred while resending code");
     } finally {
       setLoading(false);
     }
@@ -82,14 +82,14 @@ export default function ForgotPassword() {
 
   const handleNext = async () => {
     if (step === 1) {
-      if (!email.includes("@")) return toast.error("Email noto'g'ri");
+      if (!email.includes("@")) return toast.error("Invalid Email");
       setLoading(true);
       try {
         await talentApi.sendResetCode(email);
         localStorage.setItem("verify_email", email);
         setStep(2);
       } catch (err) {
-        toast.error("Xatolik: Email topilmadi");
+        toast.error("Error: Email not found");
       } finally {
         setLoading(false);
       }
@@ -97,31 +97,32 @@ export default function ForgotPassword() {
       setStep(3);
     } else if (step === 3) {
       const finalCode = code.join("");
-      if (finalCode.length < 6) return toast.error("Kodni to'liq kiriting");
-      if (timeLeft === 0) return toast.error("Vaqt tugagan, kodni qayta yuboring!");
+      if (finalCode.length < 6) return toast.error("Enter complete code");
+      if (timeLeft === 0)
+        return toast.error("Code expired! Please resend the code.");
 
       setLoading(true);
       try {
         const res = await talentApi.checkResetCode(email, finalCode);
         if (res.status === 200 || res.data?.success) {
-          toast.success("Kod tasdiqlandi!");
+          toast.success("Code confirmed!");
           setStep(4);
         }
       } catch (err) {
         setIsError(true);
-        toast.error("Kod noto'g'ri");
+        toast.error("Invalid code. Please try again.");
       } finally {
         setLoading(false);
       }
     } else if (step === 4) {
-      if (newPassword.length < 6) return toast.error("Parol juda qisqa");
+      if (newPassword.length < 6) return toast.error("Password too short");
       setLoading(true);
       try {
         await talentApi.confirmResetPassword(email, code.join(""), newPassword);
-        toast.success("Parol yangilandi!");
+        toast.success("Password reset successful!");
         navigate("/signin");
       } catch (err) {
-        toast.error("Xatolik yuz berdi");
+        toast.error("Error resetting password");
       } finally {
         setLoading(false);
       }
@@ -135,7 +136,6 @@ export default function ForgotPassword() {
   };
 
   return (
-    // bg-white orqali fon oqligi ta'minlandi
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
       <main className="flex-grow flex items-center justify-center p-4">
@@ -164,9 +164,13 @@ export default function ForgotPassword() {
           {/* STEP 2: Bot info */}
           {step === 2 && (
             <div className="space-y-6">
-              <p className="text-gray-600">Start our Telegram bot to get reset code</p>
-              <button 
-                onClick={() => window.open("https://t.me/Workify1_bot", "_blank")}
+              <p className="text-gray-600">
+                Start our Telegram bot to get reset code
+              </p>
+              <button
+                onClick={() =>
+                  window.open("https://t.me/Workify1_bot", "_blank")
+                }
                 className="bg-[#61C491] text-white px-8 py-2 rounded-lg font-semibold hover:bg-[#4fb17f] transition-colors"
               >
                 Click here!
@@ -190,24 +194,34 @@ export default function ForgotPassword() {
                     onKeyDown={(e) => handleKeyDown(e, i)}
                     disabled={timeLeft === 0}
                     className={`w-12 h-14 text-center text-xl border-2 rounded-xl outline-none bg-white text-black
-                      ${isError ? "border-red-500 bg-red-50" : "border-gray-200 focus:border-[#163D5C]"}
-                      ${timeLeft === 0 ? "opacity-50 cursor-not-allowed bg-gray-50" : ""}
+                      ${
+                        isError
+                          ? "border-red-500 bg-red-50"
+                          : "border-gray-200 focus:border-[#163D5C]"
+                      }
+                      ${
+                        timeLeft === 0
+                          ? "opacity-50 cursor-not-allowed bg-gray-50"
+                          : ""
+                      }
                     `}
                   />
                 ))}
               </div>
-              
+
               <div className="space-y-2">
                 {timeLeft > 0 ? (
-                  <p className="text-[#163D5C] font-bold">Kodni kiriting: {formatTime(timeLeft)}</p>
+                  <p className="text-[#163D5C] font-bold">
+                    Enter sent code: {formatTime(timeLeft)}
+                  </p>
                 ) : (
                   <div className="space-y-3">
-                    <p className="text-red-500 font-semibold">Vaqt tugadi!</p>
-                    <button 
+                    <p className="text-red-500 font-semibold">Time is up!!</p>
+                    <button
                       onClick={handleResendCode}
                       className="text-blue-600 underline font-medium hover:text-blue-800 bg-transparent"
                     >
-                      Kodni qayta jo'natish
+                      Resend Code
                     </button>
                   </div>
                 )}
@@ -224,14 +238,18 @@ export default function ForgotPassword() {
                   type={showPassword ? "text" : "password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Yangi parol"
+                  placeholder="New Password"
                   className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#163D5C] bg-white text-black"
                 />
-                <button 
-                  onClick={() => setShowPassword(!showPassword)} 
+                <button
+                  onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
                 >
-                  {showPassword ? <FaRegEyeSlash size={20} /> : <FaRegEye size={20} />}
+                  {showPassword ? (
+                    <FaRegEyeSlash size={20} />
+                  ) : (
+                    <FaRegEye size={20} />
+                  )}
                 </button>
               </div>
             </div>
@@ -243,7 +261,7 @@ export default function ForgotPassword() {
               disabled={loading || (step === 3 && timeLeft === 0)}
               className="bg-[#163D5C] text-white px-12 py-2 rounded-xl font-bold disabled:opacity-50 hover:opacity-90 transition-opacity"
             >
-              {loading ? "Yuklanmoqda..." : "Next"}
+              {loading ? "Loading..." : "Next"}
             </button>
           </div>
         </div>

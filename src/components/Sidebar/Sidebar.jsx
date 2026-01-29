@@ -105,7 +105,7 @@ const Sidebar = () => {
                 <p
                   className={`text-[12px] font-medium truncate ${isDark ? "text-gray-500" : "text-[#cbd5e1]"}`}
                 >
-                  {user?.city || user?.location || "O'zbekiston"}
+                  {user?.city || user?.location || "Uzbekistan"}
                 </p>
               </div>
             </>
@@ -188,11 +188,10 @@ const Sidebar = () => {
             <h3
               className={`text-xl font-bold mb-2 ${isDark ? "text-gray-100" : "text-[#334155]"}`}
             >
-              Chiqish
+              Log out
             </h3>
             <p className={`mb-6 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              Rostdan ham tizimdan chiqmoqchimisiz? Barcha ma'lumotlar
-              tozalanadi.
+              Are you sure you want to log out? You will need to log in again to access your account.
             </p>
             <div className="flex gap-3">
               <button
@@ -203,13 +202,13 @@ const Sidebar = () => {
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
-                Yo'q
+                No, cancel
               </button>
               <button
                 onClick={handleLogout}
                 className="flex-1 py-3 px-4 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-colors"
               >
-                Ha, chiqish
+                Yes, log out
               </button>
             </div>
           </div>

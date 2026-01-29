@@ -249,7 +249,7 @@ const Dashboard2 = () => {
               style={{ height: getContainerHeight() }}
             >
               <div className="animate-spin h-5 w-5 sm:h-6 sm:w-6 border-3 sm:border-4 border-blue-500 border-t-transparent rounded-full" />
-              <span className="text-sm">Yuklanmoqda...</span>
+              <span className="text-sm">Loading...</span>
             </div>
           ) : error ? (
             <div

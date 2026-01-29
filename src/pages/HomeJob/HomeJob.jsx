@@ -30,7 +30,7 @@ export default function HomeJob() {
                     try {
                         const decoded = jwtDecode(token);
                         const userRes = await talentApi.getById(decoded.id);
-                        const rawSkills = userRes.data?.skils || [];
+                        const rawSkills = userRes.data?.skills || [];
                         lowerUserSkills = (Array.isArray(rawSkills) 
                             ? rawSkills 
                             : rawSkills.split(",").map(s => s.trim())

@@ -33,7 +33,7 @@ export default function JobDetail() {
           });
         }
       } catch (err) {
-        toast.error("Ma'lumotlarni yuklashda xatolik yuz berdi");
+        toast.error("Error fetching job details.");
       } finally {
         setLoading(false);
       }
@@ -57,7 +57,7 @@ export default function JobDetail() {
       <div
         className={`text-center py-20 font-bold ${isDark ? "text-red-400" : "text-red-500"}`}
       >
-        Ish topilmadi.
+        Job not found.
       </div>
     );
 
@@ -162,7 +162,7 @@ export default function JobDetail() {
                       : "bg-[#F1F3F6] text-gray-600 border-transparent"
                   }`}
                 >
-                  {job.skils}
+                  {job.skills}
                 </span>
               </div>
             </div>
