@@ -84,10 +84,10 @@ export default function RegistrationFormStepTwo() {
   };
 
 const handleBack = () => {
-  if (!occupation) return toast.error("Please select an occupation");
-  if (!specialty) return toast.error("Please select a specialty");
-  if (!skils[0].skill) return toast.error("Please enter at least one skill");
-  if (!languages[0].language) return toast.error("Please enter at least one language");
+  // if (!occupation) return toast.error("Please select an occupation");
+  // if (!specialty) return toast.error("Please select a specialty");
+  // if (!skils[0].skill) return toast.error("Please enter at least one skill");
+  // if (!languages[0].language) return toast.error("Please enter at least one language");
 
   const step2Data = {
     occupation,
