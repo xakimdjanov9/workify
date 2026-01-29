@@ -14,7 +14,7 @@ export default function RegistrationFormStepTwo() {
   // States
   const [occupation, setOccupation] = useState("");
   const [specialty, setSpecialty] = useState("");
-  const [skils, setskils] = useState([{ skill: "", experience_years: "" }]);
+  const [skills, setSkills] = useState([{ skill: "", experience_years: "" }]);
   const [languages, setLanguages] = useState([{ language: "", level: "" }]);
 
   // Dropdown visibility
@@ -22,7 +22,7 @@ export default function RegistrationFormStepTwo() {
   const [showSpecialtyDropdown, setShowSpecialtyDropdown] = useState(false);
   const [showSkillDropdown, setShowSkillDropdown] = useState([false]);
   const [showExpDropdown, setShowExpDropdown] = useState([false]);
-  const [showLangDropdown, setShowLangDropdown] = useState([false]); // Tillari uchun
+  const [showLangDropdown, setShowLangDropdown] = useState([false]); 
   const [showLevelDropdown, setShowLevelDropdown] = useState([false]);
 
   // Data Lists
@@ -32,7 +32,7 @@ export default function RegistrationFormStepTwo() {
     "Programmer": ["Frontend Developer", "Backend Developer", "Fullstack Developer", "Mobile Developer", "DevOps"],
     "Designer": ["UX/UI Designer", "Graphic Designer", "Motion Designer", "3D Artist"],
   };
-  const skilsList = ["Figma", "Photoshop", "React", "Node.js", "Python", "Marketing", "Illustrator"];
+  const skillsList = ["Figma", "Photoshop", "React", "Node.js", "Python", "Marketing", "Illustrator"];
   const expList = ["1 year", "2 years", "3 years", "4 years", "5+ years"];
   const levels = ["Beginner", "Intermediate", "Advanced", "Native"];
   const popularLanguages = ["Uzbek", "English", "Russian", "German", "Turkish", "French", "Chinese"];
@@ -49,18 +49,18 @@ export default function RegistrationFormStepTwo() {
         const parsed = JSON.parse(savedData);
         setOccupation(parsed.occupation || "");
         setSpecialty(parsed.specialty || "");
-        if (parsed.skils?.length) setskils(parsed.skils);
+        if (parsed.skills?.length) setSkills(parsed.skills);
         if (parsed.language?.length) setLanguages(parsed.language);
       } catch (e) { console.error(e); }
     }
   }, []);
 
   const addSkill = () => {
-    if (skils.length < 5) {
-      setskils([...skils, { skill: "", experience_years: "" }]);
+    if (skills.length < 5) {
+      setSkills([...skills, { skill: "", experience_years: "" }]);
       setShowSkillDropdown([...showSkillDropdown, false]);
       setShowExpDropdown([...showExpDropdown, false]);
-    } else { toast.error("Maksimum 5 ta skill"); }
+    } else { toast.error("Max 5 skills"); }
   };
 
   const addLanguage = () => {
@@ -68,18 +68,18 @@ export default function RegistrationFormStepTwo() {
       setLanguages([...languages, { language: "", level: "" }]);
       setShowLangDropdown([...showLangDropdown, false]);
       setShowLevelDropdown([...showLevelDropdown, false]);
-    } else { toast.error("Maksimum 3 ta til"); }
+    } else { toast.error("Max 3 languages"); }
   };
 
   const handleNext = () => {
-    if (!occupation) return toast.error("Occupation tanlang");
-    if (!specialty) return toast.error("Specialty tanlang");
-    if (!skils[0].skill) return toast.error("Kamida bitta skill kiriting");
-    if (!languages[0].language) return toast.error("Kamida bitta til kiriting");
+    if (!occupation) return toast.error("Choose Occupation");
+    if (!specialty) return toast.error("Choose Specialty");
+    if (!skills[0].skill) return toast.error("At least one skill");
+    if (!languages[0].language) return toast.error("At least one language");
 
-    const step2Data = { occupation, specialty, skils, language: languages };
+    const step2Data = { occupation, specialty, skills, language: languages };
     localStorage.setItem("talent_step2", JSON.stringify(step2Data));
-    toast.success("Saqlandi!");
+    toast.success("Saved!");
     setTimeout(() => navigate("/registration/step-3"), 1000);
   };
 
@@ -155,7 +155,7 @@ export default function RegistrationFormStepTwo() {
             {/* Skills Section */}
             <div className="space-y-4">
               <h3 className="text-lg font-bold text-gray-800">Skills & Experience</h3>
-              {skils.map((s, index) => (
+              {skills.map((s, index) => (
                 <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end animate-fadeIn">
                   <div className="relative">
                     <label className="block text-xs font-semibold text-gray-500 mb-1 ml-1">Skill</label>
@@ -165,9 +165,9 @@ export default function RegistrationFormStepTwo() {
                         type="text"
                         value={s.skill}
                         onChange={(e) => {
-                          const updated = [...skils];
+                          const updated = [...skills];
                           updated[index].skill = e.target.value;
-                          setskils(updated);
+                          setSkills(updated);
                         }}
                         onFocus={() => { let arr = [...showSkillDropdown]; arr[index] = true; setShowSkillDropdown(arr); }}
                         onBlur={() => setTimeout(() => { let arr = [...showSkillDropdown]; arr[index] = false; setShowSkillDropdown(arr); }, 200)}
@@ -176,11 +176,11 @@ export default function RegistrationFormStepTwo() {
                       />
                       {showSkillDropdown[index] && (
                         <div className="absolute z-40 w-full mt-1 bg-white border rounded-xl shadow-xl max-h-32 overflow-y-auto">
-                          {getFiltered(skilsList, s.skill).map((item, i) => (
+                          {getFiltered(skillsList, s.skill).map((item, i) => (
                             <div key={i} onMouseDown={() => {
-                              const updated = [...skils];
+                              const updated = [...skills];
                               updated[index].skill = item;
-                              setskils(updated);
+                              setSkills(updated);
                             }} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">{item}</div>
                           ))}
                         </div>
@@ -206,9 +206,9 @@ export default function RegistrationFormStepTwo() {
                           <div className="absolute z-40 w-full mt-1 bg-white border rounded-xl shadow-xl">
                             {expList.map((item, i) => (
                               <div key={i} onMouseDown={() => {
-                                const updated = [...skils];
+                                const updated = [...skills];
                                 updated[index].experience_years = item;
-                                setskils(updated);
+                                setSkills(updated);
                               }} className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">{item}</div>
                             ))}
                           </div>
@@ -216,7 +216,7 @@ export default function RegistrationFormStepTwo() {
                       </div>
                     </div>
                     {index > 0 && (
-                      <button onClick={() => setskils(skils.filter((_, i) => i !== index))} className="mt-5 p-3 text-red-500 hover:bg-red-50 rounded-xl"><FaTimes /></button>
+                      <button onClick={() => setSkills(skills.filter((_, i) => i !== index))} className="mt-5 p-3 text-red-500 hover:bg-red-50 rounded-xl"><FaTimes /></button>
                     )}
                   </div>
                 </div>

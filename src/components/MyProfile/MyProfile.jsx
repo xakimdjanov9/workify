@@ -49,7 +49,7 @@ const ProfilePage = () => {
       const res = await talentApi.getById(decoded.id);
       const data = res.data;
 
-      data.skils = typeof data.skils === "string" ? JSON.parse(data.skils) : data.skils || [];
+      data.skills = typeof data.skills === "string" ? JSON.parse(data.skills) : data.skills || [];
       data.language = typeof data.language === "string" ? JSON.parse(data.language) : data.language || [];
 
       setUser(data);
@@ -102,7 +102,7 @@ const ProfilePage = () => {
         }
       });
 
-      fd.append("skils", JSON.stringify(formData.skils || []));
+      fd.append("skills", JSON.stringify(formData.skills || []));
       fd.append("language", JSON.stringify(formData.language || []));
 
       await talentApi.update(user.id, fd);
@@ -116,13 +116,13 @@ const ProfilePage = () => {
   };
 
   // Skill & Language Logic
-  const addSkill = () => setFormData({ ...formData, skils: [...formData.skils, { skill: "", experience_years: "" }] });
+  const addSkill = () => setFormData({ ...formData, skills: [...formData.skills, { skill: "", experience_years: "" }] });
   const updateSkill = (index, field, value) => {
-    const newSkills = [...formData.skils];
+    const newSkills = [...formData.skills];
     newSkills[index][field] = value;
-    setFormData({ ...formData, skils: newSkills });
+    setFormData({ ...formData, skills: newSkills });
   };
-  const removeSkill = (index) => setFormData({ ...formData, skils: formData.skils.filter((_, i) => i !== index) });
+  const removeSkill = (index) => setFormData({ ...formData, skills: formData.skills.filter((_, i) => i !== index) });
 
   const addLanguage = () => setFormData({ ...formData, language: [...formData.language, { language: "", level: "Beginner" }] });
   const updateLanguage = (index, field, value) => {
@@ -216,7 +216,7 @@ const ProfilePage = () => {
               <div className="mb-10">
                 <h3 className="text-md font-bold mb-5">Skills</h3>
                 <div className="flex flex-wrap gap-3">
-                  {user?.skils?.length > 0 ? user.skils.map((s, i) => (
+                  {user?.skills?.length > 0 ? user.skills.map((s, i) => (
                     <span key={i} className={`px-4 py-2 rounded-lg text-sm border transition-colors ${isDark ? "bg-[#252525] border-gray-700 text-gray-300" : "bg-[#F8F9FB] border-gray-100 text-gray-600"}`}>
                       {s.skill} ({s.experience_years})
                     </span>
@@ -301,7 +301,7 @@ const ProfilePage = () => {
                         <h4 className="font-bold">Skills</h4>
                         <button type="button" onClick={addSkill} className="text-emerald-500 font-bold flex items-center gap-1"><FiPlus /> Add</button>
                       </div>
-                      {formData.skils?.map((s, i) => (
+                      {formData.skills?.map((s, i) => (
                         <div key={i} className="flex gap-2 mb-2">
                           <input placeholder="Skill" value={s.skill} onChange={(e) => updateSkill(i, "skill", e.target.value)} className={`flex-1 p-3 rounded-xl border outline-none transition ${isDark ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500" : "bg-gray-50 border-gray-200 focus:border-emerald-500"}`} />
                           <input placeholder="Years" value={s.experience_years} onChange={(e) => updateSkill(i, "experience_years", e.target.value)} className={`w-32 p-3 rounded-xl border outline-none transition ${isDark ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500" : "bg-gray-50 border-gray-200 focus:border-emerald-500"}`} />

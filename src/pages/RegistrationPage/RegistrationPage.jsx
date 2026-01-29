@@ -76,15 +76,15 @@ export default function RegistrationForm() {
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.first_name.trim()) errors.first_name = "Ismni kiriting";
-    if (!formData.last_name.trim()) errors.last_name = "Familiyani kiriting";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = "To'g'ri email kiriting";
-    if (formData.password.length < 6) errors.password = "Parol kamida 6 ta belgi bo'lsin";
-    if (!formData.location) errors.location = "Joylashuvni tanlang";
-    if (!formData.date_of_birth) errors.date_of_birth = "Tug'ilgan sanani kiriting";
+    if (!formData.first_name.trim()) errors.first_name = "Your name";
+    if (!formData.last_name.trim()) errors.last_name = "Your last name";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = "Your email";
+    if (formData.password.length < 6) errors.password = "Minimum 6 characters";
+    if (!formData.location) errors.location = "Your location";
+    if (!formData.date_of_birth) errors.date_of_birth = "Date of birth";
     
     const digits = formData.phone.replace(/[^\d]/g, "");
-    if (digits.length < 12) errors.phone = "Telefon raqamini to'liq kiriting";
+    if (digits.length < 12) errors.phone = "Valid phone number";
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -99,10 +99,10 @@ export default function RegistrationForm() {
       await new Promise(resolve => setTimeout(resolve, 800));
       localStorage.setItem("step1_data", JSON.stringify(formData));
       localStorage.setItem("user_role", activeTab);
-      toast.success("Ma'lumotlar saqlandi!");
+      toast.success("Information saved successfully!");
       navigate("/registration/step-2");
     } catch (error) {
-      toast.error("Xatolik yuz berdi");
+      toast.error("Error saving data. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

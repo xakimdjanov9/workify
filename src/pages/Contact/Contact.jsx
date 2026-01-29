@@ -38,7 +38,7 @@ const Contact = () => {
       !formData.message.trim()
     ) {
       setMessage({
-        text: "Iltimos, barcha maydonlarni to'ldiring",
+        text: "Please fill in all fields before submitting.",
         type: "error",
       });
       return;
@@ -50,13 +50,13 @@ const Contact = () => {
         createdAt: new Date().toISOString(),
       });
       setMessage({
-        text: "Xabaringiz muvaffaqiyatli yuborildi!",
+        text: "Your message has been sent successfully!",
         type: "success",
       });
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       setMessage({
-        text: "Xatolik yuz berdi. Iltimos keyinroq urinib ko'ring",
+        text: "Error occurred while sending your message. Please try again later.",
         type: "error",
       });
     } finally {
@@ -166,7 +166,7 @@ const Contact = () => {
                       : "bg-[#1B3E59] hover:bg-[#152f44]"
                   } text-white`}
                 >
-                  {loading ? "Yuborilmoqda..." : "Send"}
+                  {loading ? "Sending..." : "Send"}
                 </button>
               </div>
             </form>

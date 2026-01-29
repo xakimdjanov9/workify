@@ -35,12 +35,12 @@ const SignIn = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.email) {
-      newErrors.email = "Email maydonini to'ldiring";
+      newErrors.email = "Fill in the email field";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email formati noto'g'ri";
+      newErrors.email = "Invalid email format";
     }
     if (!formData.password) {
-      newErrors.password = "Parol maydonini to'ldiring";
+      newErrors.password = "Fill in the password field";
     }
     return newErrors;
   };
@@ -67,12 +67,12 @@ const SignIn = () => {
       const { token } = res.data; 
       if (token) {
         localStorage.setItem("token", token);
-        toast.success("Muvaffaqiyatli kirildi!");
+        toast.success("Successfully logged in!");
         setTimeout(() => navigate("/dashboard"), 1500);
       }
     } catch (error) {
       setErrors({ email: true, password: true });
-      toast.error(error.response?.data?.message || "Email yoki parol noto'g'ri");
+      toast.error(error.response?.data?.message || "Wrong email or password");
     } finally {
       setLoading(false);
     }

@@ -45,7 +45,7 @@ export default function JobMatches() {
         const decoded = jwtDecode(token);
 
         const userRes = await talentApi.getById(decoded.id);
-        const rawSkills = userRes.data?.skils || [];
+        const rawSkills = userRes.data?.skills || [];
         const parsedUserSkills = Array.isArray(rawSkills)
           ? rawSkills
           : rawSkills.split(",").map((s) => s.trim());
@@ -395,7 +395,7 @@ export default function JobMatches() {
                             : "bg-[#F1F3F6] text-gray-600 border-transparent"
                         }`}
                       >
-                        {job.skils}
+                        {job.skills}
                       </span>
                     </div>
                   </div>

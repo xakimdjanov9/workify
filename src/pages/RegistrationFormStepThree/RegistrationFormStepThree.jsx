@@ -66,7 +66,7 @@ export default function RegistrationFormStepThree() {
     setErrors(newErrors);
 
     if (newErrors.workplaceType || newErrors.minimumSalary || newErrors.city) {
-      toast.error("Iltimos, barcha maydonlarni to'ldiring");
+      toast.error("Please fill in all required fields correctly.");
       return;
     }
 
@@ -87,7 +87,7 @@ export default function RegistrationFormStepThree() {
       const allData = { ...step1, ...step2, ...step3 };
 
       if (!allData.email) {
-        toast.error("Email topilmadi. Iltimos 1-qadamni qayta to'ldiring.");
+        toast.error("Email not found. Please restart the registration process.");
         setLoading(false);
         return;
       }
@@ -116,15 +116,15 @@ export default function RegistrationFormStepThree() {
         localStorage.removeItem("talent_step2");
         localStorage.removeItem("talent_step3");
 
-        toast.success("Ma'lumotlar saqlandi! Endi hisobingizni tasdiqlang.");
+        toast.success("Info saved! Redirecting to verification...");
         
         setTimeout(() => {
           navigate("/verify-account"); // Tasdiqlash sahifasiga o'tish
         }, 1500);
       }
     } catch (error) {
-      console.error("Backend xatosi:", error.response?.data);
-      toast.error(`Xatolik: ${error.response?.data?.message || "Serverda muammo yuz berdi"}`);
+      console.error("Backend error:", error.response?.data);
+      toast.error(`Error: ${error.response?.data?.message || "Server error"}`);
     } finally {
       setLoading(false);
     }

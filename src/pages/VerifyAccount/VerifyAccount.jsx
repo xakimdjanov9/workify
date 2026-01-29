@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { talentApi } from "../../services/api";
-import verifyImg from '../../assets/verify.png';
+import verifyImg from "../../assets/verify.png";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
@@ -12,8 +12,7 @@ export default function VerifyAccount() {
   const [code, setCode] = useState(new Array(6).fill(""));
   const [loading, setLoading] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
-  
-  // Har bir input uchun ref yaratamiz
+
   const inputRefs = useRef([]);
 
   useEffect(() => {
@@ -25,27 +24,22 @@ export default function VerifyAccount() {
     }
   }, [navigate]);
 
-  // Raqam kiritish mantiqi
   const handleChange = (e, index) => {
     const value = e.target.value;
     if (isNaN(value)) return;
 
     const newCode = [...code];
-    // Faqat oxirgi kiritilgan raqamni olish
     newCode[index] = value.substring(value.length - 1);
     setCode(newCode);
 
-    // Agar raqam kiritilsa, keyingi katakka o'tish
     if (value && index < 5) {
       inputRefs.current[index + 1].focus();
     }
   };
 
-  // O'chirish mantiqi (Backspace)
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace") {
       if (!code[index] && index > 0) {
-        // Agar joriy katak bo'sh bo'lsa, oldingisiga o'tib uni o'chirish
         const newCode = [...code];
         newCode[index - 1] = "";
         setCode(newCode);
@@ -54,10 +48,9 @@ export default function VerifyAccount() {
     }
   };
 
-  // Nusxalab qo'yish mantiqi (Ctrl + V)
   const handlePaste = (e) => {
-    const pasteData = e.clipboardData.getData("text").slice(0, 6); // Dastlabki 6 ta belgini olish
-    if (!/^\d+$/.test(pasteData)) return; // Faqat raqam bo'lsa qabul qilish
+    const pasteData = e.clipboardData.getData("text").slice(0, 6);
+    if (!/^\d+$/.test(pasteData)) return;
 
     const newCode = [...code];
     pasteData.split("").forEach((char, index) => {
@@ -65,7 +58,6 @@ export default function VerifyAccount() {
     });
     setCode(newCode);
 
-    // Fokusni oxirgi kiritilgan raqamdan keyingisiga yoki oxirgisiga o'tkazish
     const nextIndex = pasteData.length < 6 ? pasteData.length : 5;
     inputRefs.current[nextIndex].focus();
   };
@@ -86,15 +78,16 @@ export default function VerifyAccount() {
 
   const handleVerify = async () => {
     const finalCode = code.join("");
-    if (finalCode.length < 6) return toast.error("Kodni to'liq kiriting");
+    if (finalCode.length < 6)
+      return toast.error("Please enter the 6-digit code.");
 
     setLoading(true);
     try {
       await talentApi.checkVerifyCode(email, finalCode);
-      toast.success("Muvaffaqiyatli tasdiqlandi!");
+      toast.success("Account verified successfully!");
       setTimeout(() => navigate("/signin"), 1500);
     } catch (error) {
-      toast.error("Kod noto'g'ri yoki muddati o'tgan");
+      toast.error("Invalid code or expired. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -108,7 +101,8 @@ export default function VerifyAccount() {
 
         <div className="max-w-2xl w-full text-center space-y-8">
           <h1 className="text-2xl md:text-3xl font-bold text-[#163D5C] px-4">
-            Start our Telegram bot to be notified when we find a job that fits you perfectly!
+            Start our Telegram bot to be notified when we find a job that fits
+            you perfectly!
           </h1>
 
           <div className="min-h-[400px] flex flex-col items-center justify-center space-y-8 transition-all duration-500">
@@ -131,14 +125,19 @@ export default function VerifyAccount() {
               </>
             ) : (
               <div className="space-y-6 animate-slide-up">
-                <p className="text-gray-500 font-medium">Enter the 6-digit code sent to your Telegram</p>
-                <div className="flex gap-2 md:gap-4 justify-center" onPaste={handlePaste}>
+                <p className="text-gray-500 font-medium">
+                  Enter the 6-digit code sent to your Telegram
+                </p>
+                <div
+                  className="flex gap-2 md:gap-4 justify-center"
+                  onPaste={handlePaste}
+                >
                   {code.map((data, index) => (
                     <input
                       key={index}
                       type="text"
                       maxLength="1"
-                      ref={(el) => (inputRefs.current[index] = el)} // Har bir inputni refga bog'laymiz
+                      ref={(el) => (inputRefs.current[index] = el)}
                       value={data}
                       onChange={(e) => handleChange(e, index)}
                       onKeyDown={(e) => handleKeyDown(e, index)}
@@ -147,7 +146,7 @@ export default function VerifyAccount() {
                     />
                   ))}
                 </div>
-                <button 
+                <button
                   onClick={() => setShowOtp(false)}
                   className="text-sm text-gray-400 hover:text-[#163D5C] underline"
                 >
@@ -159,7 +158,7 @@ export default function VerifyAccount() {
 
           <div className="flex gap-4 justify-center pt-6">
             <button
-              onClick={() => showOtp ? setShowOtp(false) : navigate(-1)}
+              onClick={() => (showOtp ? setShowOtp(false) : navigate(-1))}
               className="px-12 py-3 border-2 border-[#163D5C] text-[#163D5C] rounded-xl font-bold hover:bg-gray-50 transition-all w-40"
             >
               Back
