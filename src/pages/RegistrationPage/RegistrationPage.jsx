@@ -15,7 +15,6 @@ import {
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
-// O'zbekiston shaharlari (bular ingliz tilida ham shunday qoladi, chunki joy nomlari)
 const UZBEKISTAN_CITIES = [
   "Toshkent shahri",
   "Toshkent viloyati",
@@ -39,8 +38,6 @@ export default function RegistrationForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Dropdown states
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -68,7 +65,6 @@ export default function RegistrationForm() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Phone formatting: +998 (90) 123-45-67
   const formatPhoneNumber = (value) => {
     const phoneNumber = value.replace(/[^\d]/g, "");
     const size = phoneNumber.length;
@@ -95,15 +91,13 @@ export default function RegistrationForm() {
     if (formErrors[name]) setFormErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // Password Validation
   const validatePassword = (password) => {
     const hasLength = password.length >= 6;
-    const hasUpperCase = /[A-Z]/.test(password); // At least 1 Uppercase
-    const hasNumber = /\d/.test(password); // At least 1 Number
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
     return hasLength && hasUpperCase && hasNumber;
   };
 
-  // Age Validation (14 years old)
   const validateAge = (dateString) => {
     if (!dateString) return false;
     const today = new Date();
@@ -118,14 +112,12 @@ export default function RegistrationForm() {
 
   const validateForm = () => {
     const errors = {};
-    // INGLIZ TILIGA O'GIRILDI
     if (!formData.first_name.trim())
       errors.first_name = "Enter your first name";
     if (!formData.last_name.trim()) errors.last_name = "Enter your last name";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
       errors.email = "Invalid email address";
 
-    // Password Validations (English)
     if (!formData.password) {
       errors.password = "Enter your password";
     } else if (!validatePassword(formData.password)) {
@@ -139,7 +131,6 @@ export default function RegistrationForm() {
 
     if (!formData.location) errors.location = "Select your location";
 
-    // Age Validation (English)
     if (!formData.date_of_birth) {
       errors.date_of_birth = "Enter your date of birth";
     } else if (!validateAge(formData.date_of_birth)) {
@@ -147,7 +138,7 @@ export default function RegistrationForm() {
     }
 
     const digits = formData.phone.replace(/[^\d]/g, "");
-    if (digits.length < 12) errors.phone = "Invalid phone number"; // Rasm 2 dagi xatolik
+    if (digits.length < 12) errors.phone = "Invalid phone number";
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -156,8 +147,6 @@ export default function RegistrationForm() {
   const handleNext = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
-      const firstError = Object.values(formErrors)[0];
-      // Agar birinchi marta bosganda error bo'lsa, uni ko'rsatish (ixtiyoriy)
       return;
     }
 
@@ -182,287 +171,293 @@ export default function RegistrationForm() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Toaster position="top-right" />
       <Header />
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 md:p-8">
-        <div className="bg-white rounded-2xl shadow-lg w-full max-w-[988px] p-6 md:p-12">
-          {/* Tab Switcher */}
-          <div className="relative bg-gray-100 rounded-[50px] border border-gray-200 grid grid-cols-2 p-1 mb-8 overflow-hidden">
-            <div
-              className="absolute top-1 bottom-1 left-1 w-[calc(50%-0.5rem)] bg-white rounded-[50px] shadow-md transition-all duration-300"
-              style={{
-                transform: `translateX(${activeTab === "company" ? "100%" : "0%"})`,
-              }}
-            ></div>
-            <button
-              type="button"
-              onClick={() => setActiveTab("talent")}
-              className={`flex items-center justify-center gap-2 px-6 py-3 relative z-10 font-medium ${activeTab === "talent" ? "text-[#163D5C]" : "text-gray-400"}`}
-            >
-              <FaUser /> <span>Talent</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab("company")}
-              className={`flex items-center justify-center gap-2 px-6 py-3 relative z-10 font-medium ${activeTab === "company" ? "text-[#163D5C]" : "text-gray-400"}`}
-            >
-              <FaBuilding /> <span>Company</span>
-            </button>
-          </div>
-
-          <form onSubmit={handleNext} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* First Name */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  First name *
-                </label>
-                <div className="relative">
-                  <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-[#163D5C]" />
-                  <input
-                    name="first_name"
-                    type="text"
-                    value={formData.first_name}
-                    onChange={handleChange}
-                    placeholder="Enter name"
-                    className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none ${getInputErrorClass("first_name")}`}
-                  />
-                </div>
-                {formErrors.first_name && (
-                  <p className="text-xs text-red-500 mt-1">
-                    {formErrors.first_name}
-                  </p>
-                )}
-              </div>
-
-              {/* Last Name */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Last name *
-                </label>
-                <div className="relative">
-                  <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-[#163D5C]" />
-                  <input
-                    name="last_name"
-                    type="text"
-                    value={formData.last_name}
-                    onChange={handleChange}
-                    placeholder="Enter last name"
-                    className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none ${getInputErrorClass("last_name")}`}
-                  />
-                </div>
-                {formErrors.last_name && (
-                  <p className="text-xs text-red-500 mt-1">
-                    {formErrors.last_name}
-                  </p>
-                )}
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Email *
-                </label>
-                <div className="relative">
-                  <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-[#163D5C]" />
-                  <input
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="example@mail.com"
-                    className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none ${getInputErrorClass("email")}`}
-                  />
-                </div>
-                {formErrors.email && (
-                  <p className="text-xs text-red-500 mt-1">
-                    {formErrors.email}
-                  </p>
-                )}
-              </div>
-
-              {/* Password - TEXT O'ZGARTIRILDI (Rasm 1) */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Password *{" "}
-                  <span className="text-xs text-gray-400 ml-2 font-normal">
-                    (min 6, uppercase, number)
-                  </span>
-                </label>
-                <div className="relative">
-                  <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#163D5C]" />
-                  <input
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    value={formData.password}
-                    onChange={handleChange}
-                    className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:outline-none ${getInputErrorClass("password")}`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-                {formErrors.password && (
-                  <p className="text-xs text-red-500 mt-1">
-                    {formErrors.password}
-                  </p>
-                )}
-              </div>
-
-              {/* Gender */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Gender
-                </label>
-                <div className="relative bg-gray-100 rounded-[50px] border grid grid-cols-2 p-1 overflow-hidden">
-                  <div
-                    className="absolute top-1 bottom-1 left-1 w-[calc(50%-0.5rem)] bg-white rounded-[50px] shadow-sm transition-all duration-300"
-                    style={{
-                      transform: `translateX(${formData.gender === "female" ? "100%" : "0%"})`,
-                    }}
-                  ></div>
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, gender: "male" })}
-                    className={`relative z-10 py-2 text-sm font-medium ${formData.gender === "male" ? "text-[#163D5C]" : "text-gray-400"}`}
-                  >
-                    Male
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFormData({ ...formData, gender: "female" })
-                    }
-                    className={`relative z-10 py-2 text-sm font-medium ${formData.gender === "female" ? "text-[#163D5C]" : "text-gray-400"}`}
-                  >
-                    Female
-                  </button>
-                </div>
-              </div>
-
-              {/* Date of Birth */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Date of birth *
-                </label>
-                <div className="relative">
-                  <FaCalendarAlt className="absolute left-4 top-1/2 -translate-y-1/2 text-[#163D5C]" />
-                  <input
-                    name="date_of_birth"
-                    type="date"
-                    value={formData.date_of_birth}
-                    onChange={handleChange}
-                    // 14 years old constraint
-                    max={
-                      new Date(
-                        new Date().setFullYear(new Date().getFullYear() - 14),
-                      )
-                        .toISOString()
-                        .split("T")[0]
-                    }
-                    className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none ${getInputErrorClass("date_of_birth")}`}
-                  />
-                </div>
-                {formErrors.date_of_birth && (
-                  <p className="text-xs text-red-500 mt-1">
-                    {formErrors.date_of_birth}
-                  </p>
-                )}
-              </div>
-
-              {/* Location */}
-              <div className="relative" ref={dropdownRef}>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Location *
-                </label>
-                <div className="relative">
-                  <FaMapMarkerAlt className="absolute left-4 top-1/2 -translate-y-1/2 text-[#163D5C]" />
-                  <input
-                    type="text"
-                    name="location"
-                    value={formData.location}
-                    onFocus={() => setShowDropdown(true)}
-                    onChange={(e) => {
-                      setFormData({ ...formData, location: e.target.value });
-                      setShowDropdown(true);
-                    }}
-                    placeholder="Search city..."
-                    className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none ${getInputErrorClass("location")}`}
-                    autoComplete="off"
-                  />
-                </div>
-                {showDropdown && (
-                  <div className="absolute z-50 w-full mt-1 bg-white border rounded-lg shadow-xl max-h-48 overflow-y-auto">
-                    {UZBEKISTAN_CITIES.filter((c) =>
-                      c.toLowerCase().includes(formData.location.toLowerCase()),
-                    ).map((city) => (
-                      <div
-                        key={city}
-                        onClick={() => {
-                          setFormData({ ...formData, location: city });
-                          setShowDropdown(false);
-                        }}
-                        className="p-3 hover:bg-gray-50 cursor-pointer text-sm border-b last:border-0"
-                      >
-                        {city}
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {formErrors.location && (
-                  <p className="text-xs text-red-500 mt-1">
-                    {formErrors.location}
-                  </p>
-                )}
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">
-                  Phone *
-                </label>
-                <div className="relative">
-                  <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-[#163D5C]" />
-                  <input
-                    name="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none ${getInputErrorClass("phone")}`}
-                  />
-                </div>
-                {formErrors.phone && (
-                  <p className="text-xs text-red-500 mt-1">
-                    {formErrors.phone}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="pt-6 flex flex-col md:flex-row gap-4 justify-center">
+      
+      <main className="flex-grow flex items-center justify-center px-3 xs:px-4 sm:px-6 py-6 sm:py-8 md:py-10">
+        <div className="w-full max-w-4xl">
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-5 xs:p-6 sm:p-8 md:p-10 lg:p-12">
+            {/* Tab Switcher */}
+            <div className="relative bg-gray-100 rounded-[50px] border border-gray-200 grid grid-cols-2 p-1 mb-6 sm:mb-8 overflow-hidden">
+              <div
+                className="absolute top-1 bottom-1 left-1 w-[calc(50%-0.5rem)] bg-white rounded-[50px] shadow-md transition-all duration-300"
+                style={{
+                  transform: `translateX(${activeTab === "company" ? "100%" : "0%"})`,
+                }}
+              ></div>
               <button
                 type="button"
-                onClick={() => navigate("/")}
-                className="px-12 py-3 border-2 border-[#163D5C] text-[#163D5C] rounded-lg font-medium hover:bg-gray-50 transition-all"
+                onClick={() => setActiveTab("talent")}
+                className={`flex items-center justify-center gap-1 xs:gap-2 px-3 xs:px-4 sm:px-6 py-2 xs:py-3 relative z-10 font-medium text-sm xs:text-base ${activeTab === "talent" ? "text-[#163D5C]" : "text-gray-400"}`}
               >
-                Back
+                <FaUser className="text-sm xs:text-base" /> 
+                <span className="truncate">Talent</span>
               </button>
               <button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-12 py-3 bg-[#163D5C] text-white rounded-lg font-medium hover:bg-[#1a4d73] shadow-md flex items-center justify-center gap-2 min-w-[180px]"
+                type="button"
+                onClick={() => setActiveTab("company")}
+                className={`flex items-center justify-center gap-1 xs:gap-2 px-3 xs:px-4 sm:px-6 py-2 xs:py-3 relative z-10 font-medium text-sm xs:text-base ${activeTab === "company" ? "text-[#163D5C]" : "text-gray-400"}`}
               >
-                {isSubmitting ? "Processing..." : "Next"}
+                <FaBuilding className="text-sm xs:text-base" /> 
+                <span className="truncate">Company</span>
               </button>
             </div>
-          </form>
+
+            <form onSubmit={handleNext} className="space-y-5 sm:space-y-6 md:space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 xs:gap-5 sm:gap-6">
+                {/* First Name */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
+                    First name *
+                  </label>
+                  <div className="relative">
+                    <FaUser className="absolute left-3 xs:left-4 top-1/2 -translate-y-1/2 text-[#163D5C] text-sm xs:text-base" />
+                    <input
+                      name="first_name"
+                      type="text"
+                      value={formData.first_name}
+                      onChange={handleChange}
+                      placeholder="Enter name"
+                      className={`w-full pl-9 xs:pl-10 sm:pl-12 pr-3 xs:pr-4 py-2.5 xs:py-3 border rounded-lg focus:outline-none text-sm xs:text-base ${getInputErrorClass("first_name")}`}
+                    />
+                  </div>
+                  {formErrors.first_name && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {formErrors.first_name}
+                    </p>
+                  )}
+                </div>
+
+                {/* Last Name */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
+                    Last name *
+                  </label>
+                  <div className="relative">
+                    <FaUser className="absolute left-3 xs:left-4 top-1/2 -translate-y-1/2 text-[#163D5C] text-sm xs:text-base" />
+                    <input
+                      name="last_name"
+                      type="text"
+                      value={formData.last_name}
+                      onChange={handleChange}
+                      placeholder="Enter last name"
+                      className={`w-full pl-9 xs:pl-10 sm:pl-12 pr-3 xs:pr-4 py-2.5 xs:py-3 border rounded-lg focus:outline-none text-sm xs:text-base ${getInputErrorClass("last_name")}`}
+                    />
+                  </div>
+                  {formErrors.last_name && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {formErrors.last_name}
+                    </p>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
+                    Email *
+                  </label>
+                  <div className="relative">
+                    <FaEnvelope className="absolute left-3 xs:left-4 top-1/2 -translate-y-1/2 text-[#163D5C] text-sm xs:text-base" />
+                    <input
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="example@mail.com"
+                      className={`w-full pl-9 xs:pl-10 sm:pl-12 pr-3 xs:pr-4 py-2.5 xs:py-3 border rounded-lg focus:outline-none text-sm xs:text-base ${getInputErrorClass("email")}`}
+                    />
+                  </div>
+                  {formErrors.email && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {formErrors.email}
+                    </p>
+                  )}
+                </div>
+
+                {/* Password */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
+                    Password *{" "}
+                    <span className="text-xs text-gray-400 font-normal">
+                      (min 6, uppercase, number)
+                    </span>
+                  </label>
+                  <div className="relative">
+                    <FaLock className="absolute left-3 xs:left-4 top-1/2 -translate-y-1/2 text-[#163D5C] text-sm xs:text-base" />
+                    <input
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      value={formData.password}
+                      onChange={handleChange}
+                      className={`w-full pl-9 xs:pl-10 sm:pl-12 pr-10 xs:pr-12 py-2.5 xs:py-3 border rounded-lg focus:outline-none text-sm xs:text-base ${getInputErrorClass("password")}`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 xs:right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    >
+                      {showPassword ? <FaEyeSlash className="text-sm xs:text-base" /> : <FaEye className="text-sm xs:text-base" />}
+                    </button>
+                  </div>
+                  {formErrors.password && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {formErrors.password}
+                    </p>
+                  )}
+                </div>
+
+                {/* Gender */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
+                    Gender
+                  </label>
+                  <div className="relative bg-gray-100 rounded-[50px] border grid grid-cols-2 p-1 overflow-hidden">
+                    <div
+                      className="absolute top-1 bottom-1 left-1 w-[calc(50%-0.5rem)] bg-white rounded-[50px] shadow-sm transition-all duration-300"
+                      style={{
+                        transform: `translateX(${formData.gender === "female" ? "100%" : "0%"})`,
+                      }}
+                    ></div>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, gender: "male" })}
+                      className={`relative z-10 py-1.5 xs:py-2 text-xs xs:text-sm font-medium ${formData.gender === "male" ? "text-[#163D5C]" : "text-gray-400"}`}
+                    >
+                      Male
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setFormData({ ...formData, gender: "female" })
+                      }
+                      className={`relative z-10 py-1.5 xs:py-2 text-xs xs:text-sm font-medium ${formData.gender === "female" ? "text-[#163D5C]" : "text-gray-400"}`}
+                    >
+                      Female
+                    </button>
+                  </div>
+                </div>
+
+                {/* Date of Birth */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
+                    Date of birth *
+                  </label>
+                  <div className="relative">
+                    <FaCalendarAlt className="absolute left-3 xs:left-4 top-1/2 -translate-y-1/2 text-[#163D5C] text-sm xs:text-base" />
+                    <input
+                      name="date_of_birth"
+                      type="date"
+                      value={formData.date_of_birth}
+                      onChange={handleChange}
+                      max={
+                        new Date(
+                          new Date().setFullYear(new Date().getFullYear() - 14),
+                        )
+                          .toISOString()
+                          .split("T")[0]
+                      }
+                      className={`w-full pl-9 xs:pl-10 sm:pl-12 pr-3 xs:pr-4 py-2.5 xs:py-3 border rounded-lg focus:outline-none text-sm xs:text-base ${getInputErrorClass("date_of_birth")}`}
+                    />
+                  </div>
+                  {formErrors.date_of_birth && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {formErrors.date_of_birth}
+                    </p>
+                  )}
+                </div>
+
+                {/* Location */}
+                <div className="relative" ref={dropdownRef}>
+                  <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
+                    Location *
+                  </label>
+                  <div className="relative">
+                    <FaMapMarkerAlt className="absolute left-3 xs:left-4 top-1/2 -translate-y-1/2 text-[#163D5C] text-sm xs:text-base" />
+                    <input
+                      type="text"
+                      name="location"
+                      value={formData.location}
+                      onFocus={() => setShowDropdown(true)}
+                      onChange={(e) => {
+                        setFormData({ ...formData, location: e.target.value });
+                        setShowDropdown(true);
+                      }}
+                      placeholder="Search city..."
+                      className={`w-full pl-9 xs:pl-10 sm:pl-12 pr-3 xs:pr-4 py-2.5 xs:py-3 border rounded-lg focus:outline-none text-sm xs:text-base ${getInputErrorClass("location")}`}
+                      autoComplete="off"
+                    />
+                  </div>
+                  {showDropdown && (
+                    <div className="absolute z-50 w-full mt-1 bg-white border rounded-lg shadow-xl max-h-40 xs:max-h-48 overflow-y-auto">
+                      {UZBEKISTAN_CITIES.filter((c) =>
+                        c.toLowerCase().includes(formData.location.toLowerCase()),
+                      ).map((city) => (
+                        <div
+                          key={city}
+                          onClick={() => {
+                            setFormData({ ...formData, location: city });
+                            setShowDropdown(false);
+                          }}
+                          className="p-2 xs:p-3 hover:bg-gray-50 cursor-pointer text-xs xs:text-sm border-b last:border-0"
+                        >
+                          {city}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {formErrors.location && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {formErrors.location}
+                    </p>
+                  )}
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
+                    Phone *
+                  </label>
+                  <div className="relative">
+                    <FaPhone className="absolute left-3 xs:left-4 top-1/2 -translate-y-1/2 text-[#163D5C] text-sm xs:text-base" />
+                    <input
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className={`w-full pl-9 xs:pl-10 sm:pl-12 pr-3 xs:pr-4 py-2.5 xs:py-3 border rounded-lg focus:outline-none text-sm xs:text-base ${getInputErrorClass("phone")}`}
+                    />
+                  </div>
+                  {formErrors.phone && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {formErrors.phone}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div className="pt-4 sm:pt-6 flex flex-col xs:flex-row gap-3 sm:gap-4 justify-center">
+                <button
+                  type="button"
+                  onClick={() => navigate("/")}
+                  className="px-6 xs:px-8 sm:px-10 md:px-12 py-2.5 xs:py-3 border-2 border-[#163D5C] text-[#163D5C] rounded-lg font-medium hover:bg-gray-50 transition-all text-sm xs:text-base w-full xs:w-auto"
+                >
+                  Back
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-6 xs:px-8 sm:px-10 md:px-12 py-2.5 xs:py-3 bg-[#163D5C] text-white rounded-lg font-medium hover:bg-[#1a4d73] shadow-md flex items-center justify-center gap-2 text-sm xs:text-base w-full xs:w-auto min-w-[120px] xs:min-w-[140px] sm:min-w-[160px]"
+                >
+                  {isSubmitting ? "Processing..." : "Next"}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      </main>
+      
       <Footer />
     </div>
   );
