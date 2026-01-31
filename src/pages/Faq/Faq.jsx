@@ -1,43 +1,94 @@
 import React, { useState } from "react";
 import { IoChevronDown } from "react-icons/io5";
 import FAQimg from "../../assets/FAQimg.png";
-import { useTheme } from "../../Context/ThemeContext.jsx"; // Context ulandi
+import { useTheme } from "../../Context/ThemeContext.jsx";
 
 const Faq = () => {
-  const { settings } = useTheme(); // Dark mode holati olindi
+  const { settings } = useTheme();
   const isDark = settings.darkMode;
+
+  const [activeTab, setActiveTab] = useState("talents");
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const faqData = [
-    {
-      question:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when?",
-      answer:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.",
-    },
-    {
-      question:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when?",
-      answer:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. It helps focus on the structure rather than the text itself.",
-    },
-    {
-      question:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when?",
-      answer:
-        "This is another sample answer to demonstrate the toggle effect of the accordion component. It opens and closes smoothly.",
-    },
-    {
-      question:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when?",
-      answer:
-        "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Many desktop publishing packages and web page editors now use Lorem Ipsum.",
-    },
-  ];
+  // MA'LUMOTLAR BAZASI
+  const faqContent = {
+    all: [
+      {
+        question: "How do I register on the platform?",
+        answer:
+          "You can register by clicking the 'Sign Up' button on the top right corner. The process is simple: verify your email, choose your role (User or Company), and fill in your profile details to get started.",
+      },
+      {
+        question: "Is the service free to use for everyone?",
+        answer:
+          "Yes, basic registration and browsing are completely free. However, we offer Premium plans for users who want to access exclusive features, advanced filters, and priority support.",
+      },
+      {
+        question: "What should I do if I forgot my password?",
+        answer:
+          "Don't worry! Go to the Login page and click on 'Forgot password?'. Enter your registered email address, and we will send you a link to reset your password securely.",
+      },
+      {
+        question: "How can I contact the support team?",
+        answer:
+          "Our support team is available 24/7. You can reach out via the 'Contact Us' page, use the live chat widget in the bottom corner, or email us directly at support@workify.com.",
+      },
+    ],
+    company: [
+      {
+        question: "How can I hire a talent efficiently?",
+        answer:
+          "To hire a talent, browse through the verified profiles using our smart filters. Once you find a match, you can send them an offer directly or schedule an interview through our integrated calendar system.",
+      },
+      {
+        question: "What are the payment methods for companies?",
+        answer:
+          "We support secure payments via Visa, MasterCard, PayPal, and Bank Transfers. You can choose to pay per hire or subscribe to a monthly plan for unlimited access to talent contacts.",
+      },
+      {
+        question: "Can I post a job vacancy for free?",
+        answer:
+          "Companies can post their first 3 job vacancies for free. For more listings and to boost your posts to the top of the search results, you will need to upgrade to a Business Plan.",
+      },
+      {
+        question: "How do I verify my company profile?",
+        answer:
+          "To build trust with talents, go to 'Settings' > 'Verification'. Upload your business registration documents. Our team will review them within 24 hours and grant you a 'Verified Company' badge.",
+      },
+    ],
+    talents: [
+      {
+        question:
+          "It is a long established fact that a reader will be distracted by the readable content of a page when?",
+        answer:
+          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.",
+      },
+      {
+        question:
+          "It is a long established fact that a reader will be distracted by the readable content of a page when?",
+        answer:
+          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. It helps focus on the structure rather than the text itself.",
+      },
+      {
+        question:
+          "It is a long established fact that a reader will be distracted by the readable content of a page when?",
+        answer:
+          "This is another sample answer to demonstrate the toggle effect of the accordion component. It opens and closes smoothly.",
+      },
+      {
+        question:
+          "It is a long established fact that a reader will be distracted by the readable content of a page when?",
+        answer:
+          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Many desktop publishing packages and web page editors now use Lorem Ipsum.",
+      },
+    ],
+  };
 
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
+
+  const currentFaqs = faqContent[activeTab];
 
   return (
     <div
@@ -53,10 +104,49 @@ const Faq = () => {
           }`}
         >
           <h1
-            className={`text-xl md:text-2xl font-bold ${isDark ? "text-gray-100" : "text-[#1E293B]"}`}
+            className={`text-xl md:text-2xl font-bold ${
+              isDark ? "text-gray-100" : "text-[#1E293B]"
+            }`}
           >
             FAQ
           </h1>
+        </div>
+
+        {/* TAB SWITCHER (O'ZGARTIRILDI: Header bilan bir xil o'lchamda) */}
+        <div className="mb-8">
+          <div
+            className={`p-1.5 rounded-2xl grid grid-cols-3 gap-2 w-full transition-colors duration-500 border ${
+              // Bu yerda border qo'shildi, Header bilan bir xil bo'lishi uchun
+              isDark
+                ? "bg-[#1E1E1E] border-gray-800" // Orqa fon Header bilan bir xil
+                : "bg-white border-gray-100"
+            }`}
+          >
+            {[
+              { id: "all", label: "All users" },
+              { id: "company", label: "Company" },
+              { id: "talents", label: "Talents" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setActiveIndex(null);
+                }}
+                className={`py-3 px-4 text-sm md:text-base font-semibold rounded-xl transition-all duration-300 ${
+                  activeTab === tab.id
+                    ? isDark
+                      ? "bg-[#3E3E3E] text-white shadow-sm" // Faol tugma rangi
+                      : "bg-gray-100 text-gray-900 shadow-sm"
+                    : isDark
+                      ? "text-gray-400 hover:text-white hover:bg-[#2A2A2A]"
+                      : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Illustration */}
@@ -65,14 +155,16 @@ const Faq = () => {
             <img
               src={FAQimg}
               alt="FAQ Illustration"
-              className={`max-h-full w-auto object-contain transition-opacity duration-500 ${isDark ? "opacity-80" : "opacity-100"}`}
+              className={`max-h-full w-auto object-contain transition-opacity duration-500 ${
+                isDark ? "opacity-80" : "opacity-100"
+              }`}
             />
           </div>
         </div>
 
         {/* Accordion List */}
         <div className="space-y-3 md:space-y-4">
-          {faqData.map((item, index) => {
+          {currentFaqs.map((item, index) => {
             const isOpen = activeIndex === index;
             return (
               <div
