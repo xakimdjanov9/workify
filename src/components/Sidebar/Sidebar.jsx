@@ -13,6 +13,7 @@ import {
   HiOutlineUsers,
   HiOutlineLogout,
 } from "react-icons/hi";
+import userPng from '../../assets/user.png'
 
 const Sidebar = () => {
   const { settings } = useTheme(); // Dark mode holatini olamiz
@@ -91,11 +92,17 @@ const Sidebar = () => {
             </div>
           ) : (
             <>
-              <img
-                src={user?.image || "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"}
-                alt="avatar"
-                className={`w-11 h-11 rounded-full object-cover border shadow-sm ${isDark ? "border-gray-700" : "border-gray-100"}`}
-              />
+                          <img
+              src={user?.image || userPng}
+              alt="avatar"
+              onError={(e) => {
+                e.currentTarget.src = userPng;
+              }}
+              className={`w-11 h-11 rounded-full object-cover border shadow-sm ${
+                isDark ? "border-gray-700" : "border-gray-100"
+              }`}
+            />
+
               <div className="overflow-hidden text-ellipsis whitespace-nowrap">
                 <h3
                   className={`font-bold text-[14px] truncate ${isDark ? "text-gray-200" : "text-[#334155]"}`}
