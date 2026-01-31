@@ -59,25 +59,22 @@ const Faq = () => {
     talents: [
       {
         question:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when?",
+          "It is a long established fact that a reader will be distracted?",
         answer:
           "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.",
       },
       {
-        question:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when?",
+        question: "Why do we use it in our designs?",
         answer:
           "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. It helps focus on the structure rather than the text itself.",
       },
       {
-        question:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when?",
+        question: "Where does it come from actually?",
         answer:
-          "This is another sample answer to demonstrate the toggle effect of the accordion component. It opens and closes smoothly.",
+          "This is another sample answer to demonstrate the toggle effect of the accordion component. It opens and closes smoothly and adapts to any screen size perfectly.",
       },
       {
-        question:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when?",
+        question: "Is it safe to use for prototyping?",
         answer:
           "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Many desktop publishing packages and web page editors now use Lorem Ipsum.",
       },
@@ -92,19 +89,19 @@ const Faq = () => {
 
   return (
     <div
-      className={`min-h-screen py-6 md:py-10 px-4 font-sans transition-colors duration-500 ${
+      className={`min-h-screen py-6 md:py-10 px-3 sm:px-4 font-sans transition-colors duration-500 ${
         isDark ? "bg-[#121212] text-white" : "bg-[#F5F5F5] text-[#1E293B]"
       }`}
     >
       <div className="max-w-4xl mx-auto">
         {/* Header Section */}
         <div
-          className={`rounded-2xl py-3 px-6 md:py-4 md:px-8 mb-8 shadow-sm border transition-colors duration-500 ${
+          className={`rounded-2xl py-3 px-4 sm:px-6 md:py-4 md:px-8 mb-6 sm:mb-8 shadow-sm border transition-colors duration-500 ${
             isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
           }`}
         >
           <h1
-            className={`text-xl md:text-2xl font-bold ${
+            className={`text-lg sm:text-xl md:text-2xl font-bold ${
               isDark ? "text-gray-100" : "text-[#1E293B]"
             }`}
           >
@@ -112,13 +109,12 @@ const Faq = () => {
           </h1>
         </div>
 
-        {/* TAB SWITCHER (O'ZGARTIRILDI: Header bilan bir xil o'lchamda) */}
-        <div className="mb-8">
+        {/* TAB SWITCHER */}
+        <div className="mb-6 sm:mb-8">
           <div
-            className={`p-1.5 rounded-2xl grid grid-cols-3 gap-2 w-full transition-colors duration-500 border ${
-              // Bu yerda border qo'shildi, Header bilan bir xil bo'lishi uchun
+            className={`p-1 sm:p-1.5 rounded-xl sm:rounded-2xl grid grid-cols-3 gap-1 sm:gap-2 w-full transition-colors duration-500 border ${
               isDark
-                ? "bg-[#1E1E1E] border-gray-800" // Orqa fon Header bilan bir xil
+                ? "bg-[#1E1E1E] border-gray-800"
                 : "bg-white border-gray-100"
             }`}
           >
@@ -133,10 +129,10 @@ const Faq = () => {
                   setActiveTab(tab.id);
                   setActiveIndex(null);
                 }}
-                className={`py-3 px-4 text-sm md:text-base font-semibold rounded-xl transition-all duration-300 ${
+                className={`py-2 sm:py-3 px-1 sm:px-4 text-[11px] xs:text-xs sm:text-sm md:text-base font-semibold rounded-lg sm:rounded-xl transition-all duration-300 truncate ${
                   activeTab === tab.id
                     ? isDark
-                      ? "bg-[#3E3E3E] text-white shadow-sm" // Faol tugma rangi
+                      ? "bg-[#3E3E3E] text-white shadow-sm"
                       : "bg-gray-100 text-gray-900 shadow-sm"
                     : isDark
                       ? "text-gray-400 hover:text-white hover:bg-[#2A2A2A]"
@@ -150,8 +146,8 @@ const Faq = () => {
         </div>
 
         {/* Illustration */}
-        <div className="flex justify-center mb-10 md:mb-14">
-          <div className="h-44 md:h-72 w-full flex items-center justify-center">
+        <div className="flex justify-center mb-8 sm:mb-10 md:mb-14">
+          <div className="h-32 sm:h-44 md:h-72 w-full flex items-center justify-center">
             <img
               src={FAQimg}
               alt="FAQ Illustration"
@@ -177,13 +173,13 @@ const Faq = () => {
               >
                 <button
                   onClick={() => toggleAccordion(index)}
-                  className={`w-full flex items-start md:items-center justify-between p-4 md:p-6 text-left transition-all duration-500 ${
+                  className={`w-full flex items-start md:items-center justify-between p-3 sm:p-4 md:p-6 text-left transition-all duration-500 ${
                     isDark ? "hover:bg-gray-800/50" : "hover:bg-gray-50/50"
                   }`}
                 >
-                  <div className="flex items-start md:items-center gap-3 md:gap-5">
+                  <div className="flex items-start md:items-center gap-2.5 sm:gap-3 md:gap-5">
                     <span
-                      className={`text-lg md:text-2xl mt-1 md:mt-0 transition-all duration-500 ease-in-out ${
+                      className={`text-base sm:text-lg md:text-2xl mt-0.5 md:mt-0 transition-all duration-500 ease-in-out flex-shrink-0 ${
                         isOpen
                           ? "text-[#3B82F6] rotate-180"
                           : isDark
@@ -194,7 +190,7 @@ const Faq = () => {
                       <IoChevronDown />
                     </span>
                     <span
-                      className={`font-semibold text-sm md:text-lg leading-tight transition-colors duration-500 ${
+                      className={`font-semibold text-sm sm:text-base md:text-lg leading-snug transition-colors duration-500 ${
                         isOpen
                           ? isDark
                             ? "text-white"
@@ -209,15 +205,16 @@ const Faq = () => {
                   </div>
                 </button>
 
+                {/* Javob qismi: paddinglar moslashtirildi */}
                 <div
-                  className={`transition-all duration-500 ease-in-out px-11 md:px-16 overflow-hidden ${
+                  className={`transition-all duration-500 ease-in-out px-4 sm:px-8 md:px-16 overflow-hidden ${
                     isOpen
-                      ? "max-h-[800px] pb-5 md:pb-8 opacity-100"
+                      ? "max-h-[800px] pb-4 sm:pb-5 md:pb-8 opacity-100"
                       : "max-h-0 opacity-0"
                   }`}
                 >
                   <p
-                    className={`leading-relaxed text-xs md:text-base border-t pt-3 md:pt-4 transition-colors duration-500 ${
+                    className={`leading-relaxed text-sm sm:text-base border-t pt-3 md:pt-4 transition-colors duration-500 ${
                       isDark
                         ? "text-gray-400 border-gray-800"
                         : "text-gray-500 border-gray-50"
