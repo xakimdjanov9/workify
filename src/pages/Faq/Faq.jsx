@@ -6,7 +6,6 @@ import { useTheme } from "../../Context/ThemeContext.jsx";
 const Faq = () => {
   const { settings } = useTheme();
   const isDark = settings.darkMode;
-
   const [activeTab, setActiveTab] = useState("talents");
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -132,7 +131,7 @@ const Faq = () => {
                 className={`py-3 px-4 text-sm md:text-base font-semibold rounded-xl transition-all duration-300 ${
                   activeTab === tab.id
                     ? isDark
-                      ? "bg-[#3E3E3E] text-white shadow-sm" // Faol tugma rangi
+                      ? "bg-[#3E3E3E] text-white shadow-sm"
                       : "bg-gray-100 text-gray-900 shadow-sm"
                     : isDark
                     ? "text-gray-400 hover:text-white hover:bg-[#2A2A2A]"
@@ -145,7 +144,6 @@ const Faq = () => {
           </div>
         </div>
 
-        {/* Illustration */}
         <div className="flex justify-center mb-10 md:mb-14">
           <div className="h-44 md:h-72 w-full flex items-center justify-center">
             <img
@@ -158,10 +156,10 @@ const Faq = () => {
           </div>
         </div>
 
-        {/* Accordion List */}
         <div className="space-y-3 md:space-y-4">
           {currentFaqs.map((item, index) => {
             const isOpen = activeIndex === index;
+
             return (
               <div
                 key={index}
@@ -183,8 +181,8 @@ const Faq = () => {
                         isOpen
                           ? "text-[#3B82F6] rotate-180"
                           : isDark
-                          ? "text-gray-600 rotate-0"
-                          : "text-gray-400 rotate-0"
+                          ? "text-gray-600"
+                          : "text-gray-400"
                       }`}
                     >
                       <IoChevronDown />
@@ -206,21 +204,21 @@ const Faq = () => {
                 </button>
 
                 <div
-                  className={`transition-all duration-500 ease-in-out px-11 md:px-16 overflow-hidden ${
-                    isOpen
-                      ? "max-h-[800px] pb-5 md:pb-8 opacity-100"
-                      : "max-h-0 opacity-0"
+                  className={`grid transition-all duration-500 ease-in-out ${
+                    isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
                   }`}
                 >
-                  <p
-                    className={`leading-relaxed text-xs md:text-base border-t pt-3 md:pt-4 transition-colors duration-500 ${
-                      isDark
-                        ? "text-gray-400 border-gray-800"
-                        : "text-gray-500 border-gray-50"
-                    }`}
-                  >
-                    {item.answer}
-                  </p>
+                  <div className="overflow-hidden">
+                    <p
+                      className={`px-11 md:px-16 pb-5 md:pb-8 border-t pt-3 md:pt-4 leading-relaxed text-xs md:text-base transition-colors duration-500 ${
+                        isDark
+                          ? "text-gray-400 border-gray-800"
+                          : "text-gray-500 border-gray-50"
+                      }`}
+                    >
+                      {item.answer}
+                    </p>
+                  </div>
                 </div>
               </div>
             );
