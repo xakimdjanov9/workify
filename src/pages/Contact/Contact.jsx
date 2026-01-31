@@ -80,8 +80,8 @@ const Contact = () => {
             }`}
           >
             <h1
-              className={`text-xl md:text-2xl font-bold ${
-                isDark ? "text-gray-100" : "text-[#4A4A4A]"
+              className={`text-xl md:text-2xl font-semibold ${
+                isDark ? "text-gray-100" : "text-[#505151]"
               }`}
             >
               Contact Us

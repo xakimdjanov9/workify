@@ -103,7 +103,7 @@ export default function JobAlerts() {
     >
       <div className="max-w-5xl mx-auto">
         <div
-          className={`rounded-[32px] shadow-sm border transition-all duration-500 mb-8 overflow-hidden ${
+          className={`rounded-3xl shadow-sm border transition-all duration-500 mb-8 overflow-hidden ${
             isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
           }`}
         >
@@ -113,11 +113,11 @@ export default function JobAlerts() {
             }`}
           >
             <h2
-              className={`text-xl font-black ${
-                isDark ? "text-blue-400" : "text-[#163D5C]"
+              className={`text-xl md:text-2xl font-semibold ${
+                isDark ? "text-blue-400" : "text-[##505151]"
               }`}
             >
-              My Job Applications
+              Job Alerts
             </h2>
             <button
               onClick={() => setIsFilterExpanded(!isFilterExpanded)}

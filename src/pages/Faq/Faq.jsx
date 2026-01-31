@@ -101,8 +101,8 @@ const Faq = () => {
           }`}
         >
           <h1
-            className={`text-xl md:text-2xl font-bold ${
-              isDark ? "text-gray-100" : "text-[#1E293B]"
+            className={`text-xl md:text-2xl font-semibold ${
+              isDark ? "text-gray-100" : "text-[#505151]"
             }`}
           >
             FAQ

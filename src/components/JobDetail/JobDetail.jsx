@@ -12,13 +12,13 @@ import {
   FaThumbsDown,
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
-import { useTheme } from "../../Context/ThemeContext.jsx"; 
-import nonImg from '../../assets/img.jpg'
+import { useTheme } from "../../Context/ThemeContext.jsx";
+import nonImg from "../../assets/img.jpg";
 
 export default function JobDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { settings } = useTheme(); 
+  const { settings } = useTheme();
   const isDark = settings.darkMode;
 
   const [job, setJob] = useState(null);
@@ -74,7 +74,9 @@ export default function JobDetail() {
         navigate("/matches");
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Error submitting application.");
+      toast.error(
+        err.response?.data?.message || "Error submitting application."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -83,10 +85,16 @@ export default function JobDetail() {
   if (loading)
     return (
       <div
-        className={`min-h-screen flex items-center justify-center ${isDark ? "bg-[#121212] text-white" : "bg-[#F9FAFB] text-gray-500"}`}
+        className={`min-h-screen flex items-center justify-center ${
+          isDark ? "bg-[#121212] text-white" : "bg-[#F9FAFB] text-gray-500"
+        }`}
       >
         <div
-          className={`w-10 h-10 border-4 rounded-full animate-spin ${isDark ? "border-gray-800 border-t-blue-500" : "border-gray-100 border-t-[#163D5C]"}`}
+          className={`w-10 h-10 border-4 rounded-full animate-spin ${
+            isDark
+              ? "border-gray-800 border-t-blue-500"
+              : "border-gray-100 border-t-[#163D5C]"
+          }`}
         ></div>
       </div>
     );
@@ -102,7 +110,11 @@ export default function JobDetail() {
       <div className="max-w-4xl mx-auto">
         <button
           onClick={() => navigate(-1)}
-          className={`flex items-center gap-2 font-bold mb-6 transition-colors ${isDark ? "text-blue-400 hover:text-blue-300" : "text-[#163D5C] hover:text-blue-700"}`}
+          className={`flex items-center gap-2 font-bold mb-6 transition-colors ${
+            isDark
+              ? "text-blue-400 hover:text-blue-300"
+              : "text-[#163D5C] hover:text-blue-700"
+          }`}
         >
           <FaChevronLeft /> Back to matches
         </button>
@@ -129,7 +141,9 @@ export default function JobDetail() {
               </div>
               <div>
                 <h1
-                  className={`text-2xl font-black ${isDark ? "text-gray-100" : "text-slate-800"}`}
+                  className={`text-2xl font-black ${
+                    isDark ? "text-gray-100" : "text-slate-800"
+                  }`}
                 >
                   {job.occupation}
                 </h1>
@@ -148,14 +162,18 @@ export default function JobDetail() {
             </div>
             <div className="md:text-right">
               <span
-                className={`text-2xl font-black ${isDark ? "text-blue-400" : "text-slate-800"}`}
+                className={`text-2xl font-black ${
+                  isDark ? "text-blue-400" : "text-slate-800"
+                }`}
               >
                 ${job.salary_max}.00
               </span>
             </div>
           </div>
           <p
-            className={`text-sm leading-relaxed ${isDark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-sm leading-relaxed ${
+              isDark ? "text-gray-400" : "text-gray-500"
+            }`}
           >
             {job.description}
           </p>
@@ -180,10 +198,14 @@ export default function JobDetail() {
               accept=".pdf,.doc,.docx"
             />
             <FaCloudUploadAlt
-              className={`mx-auto text-5xl mb-4 ${isDark ? "text-blue-500" : "text-[#163D5C]"}`}
+              className={`mx-auto text-5xl mb-4 ${
+                isDark ? "text-blue-500" : "text-[#163D5C]"
+              }`}
             />
             <p
-              className={`font-bold ${isDark ? "text-gray-300" : "text-gray-600"}`}
+              className={`font-bold ${
+                isDark ? "text-gray-300" : "text-gray-600"
+              }`}
             >
               Drag and drop or{" "}
               <span className="text-blue-500 underline">Browse</span> resume
@@ -205,7 +227,9 @@ export default function JobDetail() {
                 />
                 <div className="truncate max-w-[200px]">
                   <p
-                    className={`text-xs font-bold truncate ${isDark ? "text-gray-200" : "text-gray-700"}`}
+                    className={`text-xs font-bold truncate ${
+                      isDark ? "text-gray-200" : "text-gray-700"
+                    }`}
                   >
                     {selectedFile.name}
                   </p>
@@ -249,8 +273,8 @@ export default function JobDetail() {
                 isSubmitting
                   ? "bg-gray-600 cursor-not-allowed"
                   : isDark
-                    ? "bg-green-600 hover:bg-green-700"
-                    : "bg-[#52D394] hover:bg-[#46b881]"
+                  ? "bg-green-600 hover:bg-green-700"
+                  : "bg-[#52D394] hover:bg-[#46b881]"
               }`}
             >
               {isSubmitting ? "Sending..." : "Apply Now"}

@@ -15,10 +15,10 @@ const Dashboard = () => {
       }`}
     >
       <h2
-        className={`py-3 xs:py-4 px-4 xs:px-6 sm:pl-8 rounded-xl text-base xs:text-lg sm:text-xl font-semibold mb-4 xs:mb-6 border transition-all duration-500 shadow-sm ${
+        className={`py-3 xs:py-4 px-4 xs:px-6 sm:pl-8 rounded-xl text-xl md:text-2xl font-semibold mb-4 xs:mb-6 border transition-all duration-500 shadow-sm ${
           isDark
             ? "bg-[#1E1E1E] text-gray-200 border-gray-800"
-            : "bg-white text-gray-800 border-gray-100"
+            : "bg-white text-{#505151} border-gray-100"
         }`}
       >
         Dashboard

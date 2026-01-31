@@ -117,7 +117,7 @@ export default function JobMatches() {
   });
 
   const handleLike = (jobId) => {
-    const current = getReaction(jobId); // oldingi holat
+    const current = getReaction(jobId);
     toggleLike(jobId);
 
     if (current === "like") toast("Removed from liked jobs", toastOptions);
@@ -125,7 +125,7 @@ export default function JobMatches() {
   };
 
   const handleDislike = (jobId) => {
-    const current = getReaction(jobId); // oldingi holat
+    const current = getReaction(jobId);
     toggleDislike(jobId);
 
     if (current === "dislike")
@@ -153,11 +153,11 @@ export default function JobMatches() {
             }`}
           >
             <h2
-              className={`text-xl font-bold ${
-                isDark ? "text-blue-400" : "text-[#163D5C]"
+              className={`text-xl md:text-2xl font-semibold ${
+                isDark ? "text-blue-400" : "text-[#505151]"
               }`}
             >
-              Job Alerts
+              Job Matches
             </h2>
             <button
               onClick={() => setIsExpanded(!isExpanded)}

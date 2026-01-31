@@ -213,7 +213,7 @@ const ProfilePage = () => {
           className={`rounded-xl p-4 mb-6 shadow-sm flex justify-between items-center border ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"}`}
         >
           <h1
-            className={`text-xl font-bold ${isDark ? "text-gray-200" : "text-gray-800"}`}
+            className={`text-xl md:text-2xl font-semibold ${isDark ? "text-gray-200" : "text-{#505151"}`}
           >
             My profile
           </h1>

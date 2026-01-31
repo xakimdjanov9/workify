@@ -118,7 +118,7 @@ const Sidebar = () => {
                 </h3>
                 <p
                   className={`text-[12px] font-medium truncate ${
-                    isDark ? "text-gray-500" : "text-[#cbd5e1]"
+                    isDark ? "text-gray-500" : "text-[#bbd5e1]"
                   }`}
                 >
                   {user?.city || user?.location || "Uzbekistan"}
@@ -249,7 +249,7 @@ const MenuItem = ({ to, icon, label, badge, isDark }) => (
           ? "bg-[#163853] text-white shadow-md"
           : isDark
           ? "text-gray-500 hover:bg-gray-800 hover:text-gray-300"
-          : "text-[#cbd5e1] hover:bg-gray-50 hover:text-[#94a3b8]"
+          : "text-[#bbd5e1] hover:bg-gray-50 hover:text-[#94a3b8]"
       }
     `}
   >

@@ -57,8 +57,8 @@ const Setting = () => {
           } p-3 md:p-4 rounded-xl shadow-sm mb-6 border transition-colors`}
         >
           <h1
-            className={`text-lg md:text-xl font-medium ${
-              settings.darkMode ? "text-gray-200" : "text-gray-700"
+            className={`text-xl md:text-2xl font-semibold ${
+              settings.darkMode ? "text-gray-200" : "text-{#505151}"
             } ml-1`}
           >
             Settings
