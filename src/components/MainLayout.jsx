@@ -12,10 +12,8 @@ const MainLayout = () => {
         settings.darkMode ? "bg-[#121212]" : "bg-gray-100"
       }`}
     >
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main content */}
       <main className="flex-1 p-4 ml-[290px] md:p-6 talent-sidebar">
         <Outlet />
       </main>

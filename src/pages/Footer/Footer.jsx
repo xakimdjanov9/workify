@@ -1,12 +1,6 @@
 import React from "react";
-import {
-  BsInstagram,
-  BsFacebook,
-  BsYoutube,
-  BsTelegram,
-} from "react-icons/bs";
+import { BsInstagram, BsFacebook, BsYoutube, BsTelegram } from "react-icons/bs";
 
-// Ustunlar uchun yordamchi komponent - responsive gap va font
 const FooterColumn = ({ title, links }) => (
   <div className="flex flex-col">
     <h5 className="text-white font-bold text-[14px] sm:text-[15px] mb-3 sm:mb-4">
@@ -31,9 +25,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#1B3B5A] text-white pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-10 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24">
       <div className="max-w-[1440px] mx-auto">
-        {/* Main Footer Content - responsive grid */}
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 sm:gap-10 lg:gap-12 mb-12 sm:mb-16 lg:mb-20">
-          {/* Brand Section */}
           <div className="flex flex-col items-start md:col-span-3 lg:col-span-1 lg:col-start-1">
             <h2 className="text-2xl sm:text-[26px] lg:text-[28px] font-bold tracking-tight mb-1">
               workify
@@ -46,7 +38,6 @@ const Footer = () => {
             </button>
           </div>
 
-          {/* Footer Columns - responsive positioning */}
           <div className="xs:col-start-1 xs:row-start-2 md:col-start-1 md:row-start-2 lg:col-start-2 lg:row-start-1 lg:ml-auto">
             <FooterColumn
               title="General"
@@ -83,18 +74,14 @@ const Footer = () => {
             />
           </div>
 
-          {/* Empty column for large screens */}
           <div className="hidden lg:block lg:col-start-5"></div>
         </div>
 
-        {/* Bottom Section - responsive flex direction */}
         <div className="pt-6 sm:pt-8 border-t border-slate-700/50 flex flex-col-reverse md:flex-row justify-between items-center gap-4 sm:gap-6">
-          {/* Copyright */}
           <p className="text-slate-400 text-xs sm:text-[13px] font-medium text-center md:text-left">
             All rights reserved 2021
           </p>
 
-          {/* Social Icons */}
           <div className="flex gap-4 sm:gap-5 items-center">
             <a
               href="https://instagram.com"

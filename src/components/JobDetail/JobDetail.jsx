@@ -12,13 +12,13 @@ import {
   FaThumbsDown,
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
-import { useTheme } from "../../Context/ThemeContext.jsx"; // ThemeContext ulandi
+import { useTheme } from "../../Context/ThemeContext.jsx"; 
 import nonImg from '../../assets/img.jpg'
 
 export default function JobDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { settings } = useTheme(); // Dark mode holati
+  const { settings } = useTheme(); 
   const isDark = settings.darkMode;
 
   const [job, setJob] = useState(null);
@@ -107,7 +107,6 @@ export default function JobDetail() {
           <FaChevronLeft /> Back to matches
         </button>
 
-        {/* JOB INFO SECTION */}
         <div
           className={`rounded-[32px] p-8 border transition-all duration-500 mb-6 shadow-sm ${
             isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
@@ -162,7 +161,6 @@ export default function JobDetail() {
           </p>
         </div>
 
-        {/* APPLY FORM SECTION */}
         <div
           className={`rounded-[32px] p-8 md:p-10 border transition-all duration-500 shadow-sm ${
             isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"

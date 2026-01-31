@@ -10,7 +10,6 @@ const Faq = () => {
   const [activeTab, setActiveTab] = useState("talents");
   const [activeIndex, setActiveIndex] = useState(null);
 
-  // MA'LUMOTLAR BAZASI
   const faqContent = {
     all: [
       {
@@ -97,7 +96,6 @@ const Faq = () => {
       }`}
     >
       <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
         <div
           className={`rounded-2xl py-3 px-6 md:py-4 md:px-8 mb-8 shadow-sm border transition-colors duration-500 ${
             isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
@@ -112,13 +110,11 @@ const Faq = () => {
           </h1>
         </div>
 
-        {/* TAB SWITCHER (O'ZGARTIRILDI: Header bilan bir xil o'lchamda) */}
         <div className="mb-8">
           <div
             className={`p-1.5 rounded-2xl grid grid-cols-3 gap-2 w-full transition-colors duration-500 border ${
-              // Bu yerda border qo'shildi, Header bilan bir xil bo'lishi uchun
               isDark
-                ? "bg-[#1E1E1E] border-gray-800" // Orqa fon Header bilan bir xil
+                ? "bg-[#1E1E1E] border-gray-800"
                 : "bg-white border-gray-100"
             }`}
           >
@@ -139,8 +135,8 @@ const Faq = () => {
                       ? "bg-[#3E3E3E] text-white shadow-sm" // Faol tugma rangi
                       : "bg-gray-100 text-gray-900 shadow-sm"
                     : isDark
-                      ? "text-gray-400 hover:text-white hover:bg-[#2A2A2A]"
-                      : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                    ? "text-gray-400 hover:text-white hover:bg-[#2A2A2A]"
+                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                 }`}
               >
                 {tab.label}
@@ -187,8 +183,8 @@ const Faq = () => {
                         isOpen
                           ? "text-[#3B82F6] rotate-180"
                           : isDark
-                            ? "text-gray-600 rotate-0"
-                            : "text-gray-400 rotate-0"
+                          ? "text-gray-600 rotate-0"
+                          : "text-gray-400 rotate-0"
                       }`}
                     >
                       <IoChevronDown />
@@ -200,8 +196,8 @@ const Faq = () => {
                             ? "text-white"
                             : "text-[#1E293B]"
                           : isDark
-                            ? "text-gray-400"
-                            : "text-[#475569]"
+                          ? "text-gray-400"
+                          : "text-[#475569]"
                       }`}
                     >
                       {item.question}

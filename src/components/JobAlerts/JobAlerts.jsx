@@ -11,10 +11,10 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import CompImg from "../../assets/bg.png";
-import { useTheme } from "../../Context/ThemeContext.jsx"; // Context ulandi
+import { useTheme } from "../../Context/ThemeContext.jsx";
 
 export default function JobAlerts() {
-  const { settings } = useTheme(); // Dark mode holati
+  const { settings } = useTheme();
   const isDark = settings.darkMode;
 
   const [applications, setApplications] = useState([]);
@@ -55,7 +55,7 @@ export default function JobAlerts() {
                 app.applicant_id === userId ||
                 app.userId === userId ||
                 app.user_id === userId ||
-                app.profileId === userId,
+                app.profileId === userId
             );
           } else {
             myFilteredApps = allApplications;
@@ -102,41 +102,58 @@ export default function JobAlerts() {
       }`}
     >
       <div className="max-w-5xl mx-auto">
-        {/* --- FILTER SECTION --- */}
         <div
           className={`rounded-[32px] shadow-sm border transition-all duration-500 mb-8 overflow-hidden ${
             isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
           }`}
         >
           <div
-            className={`p-6 border-b flex justify-between items-center ${isDark ? "border-gray-800" : "border-gray-50"}`}
+            className={`p-6 border-b flex justify-between items-center ${
+              isDark ? "border-gray-800" : "border-gray-50"
+            }`}
           >
             <h2
-              className={`text-xl font-black ${isDark ? "text-blue-400" : "text-[#163D5C]"}`}
+              className={`text-xl font-black ${
+                isDark ? "text-blue-400" : "text-[#163D5C]"
+              }`}
             >
               My Job Applications
             </h2>
             <button
               onClick={() => setIsFilterExpanded(!isFilterExpanded)}
-              className={`p-2 rounded-full transition-all ${isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-50 text-gray-600"}`}
+              className={`p-2 rounded-full transition-all ${
+                isDark
+                  ? "hover:bg-gray-800 text-gray-400"
+                  : "hover:bg-gray-50 text-gray-600"
+              }`}
             >
               <FaChevronDown
-                className={`transition-transform duration-300 ${isFilterExpanded ? "rotate-180" : ""}`}
+                className={`transition-transform duration-300 ${
+                  isFilterExpanded ? "rotate-180" : ""
+                }`}
               />
             </button>
           </div>
 
           <div
-            className={`transition-all duration-500 ease-in-out overflow-hidden ${isFilterExpanded ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
+            className={`transition-all duration-500 ease-in-out overflow-hidden ${
+              isFilterExpanded
+                ? "max-h-[500px] opacity-100"
+                : "max-h-0 opacity-0"
+            }`}
           >
             <div className="p-8">
               <label
-                className={`block font-bold mb-4 ${isDark ? "text-gray-400" : "text-gray-700"}`}
+                className={`block font-bold mb-4 ${
+                  isDark ? "text-gray-400" : "text-gray-700"
+                }`}
               >
                 Filter by Status
               </label>
               <div
-                className={`flex flex-wrap rounded-2xl p-1 gap-1 w-fit ${isDark ? "bg-[#252525]" : "bg-[#F1F3F6]"}`}
+                className={`flex flex-wrap rounded-2xl p-1 gap-1 w-fit ${
+                  isDark ? "bg-[#252525]" : "bg-[#F1F3F6]"
+                }`}
               >
                 {[
                   { id: "all", label: "All", icon: <FaBriefcase /> },
@@ -157,8 +174,8 @@ export default function JobAlerts() {
                           ? "bg-blue-600 text-white shadow-md"
                           : "bg-white text-[#163D5C] shadow-sm"
                         : isDark
-                          ? "text-gray-500 hover:text-gray-300"
-                          : "text-gray-400 hover:text-gray-600"
+                        ? "text-gray-500 hover:text-gray-300"
+                        : "text-gray-400 hover:text-gray-600"
                     }`}
                   >
                     {tab.icon} {tab.label}
@@ -169,10 +186,11 @@ export default function JobAlerts() {
           </div>
         </div>
 
-        {/* --- APPLICATIONS LIST --- */}
         <div className="space-y-6">
           <p
-            className={`font-bold ml-2 ${isDark ? "text-gray-500" : "text-gray-500"}`}
+            className={`font-bold ml-2 ${
+              isDark ? "text-gray-500" : "text-gray-500"
+            }`}
           >
             {filteredApps.length} applications found
           </p>
@@ -180,7 +198,11 @@ export default function JobAlerts() {
           {loading ? (
             <div className="flex justify-center py-20">
               <div
-                className={`w-10 h-10 border-4 rounded-full animate-spin ${isDark ? "border-gray-800 border-t-blue-500" : "border-gray-100 border-t-[#163D5C]"}`}
+                className={`w-10 h-10 border-4 rounded-full animate-spin ${
+                  isDark
+                    ? "border-gray-800 border-t-blue-500"
+                    : "border-gray-100 border-t-[#163D5C]"
+                }`}
               ></div>
             </div>
           ) : filteredApps.length === 0 ? (
@@ -220,7 +242,9 @@ export default function JobAlerts() {
                     </div>
                     <div>
                       <h3
-                        className={`text-xl font-black ${isDark ? "text-gray-100" : "text-slate-800"}`}
+                        className={`text-xl font-black ${
+                          isDark ? "text-gray-100" : "text-slate-800"
+                        }`}
                       >
                         {app.job?.occupation}
                       </h3>
@@ -229,7 +253,9 @@ export default function JobAlerts() {
                       </p>
                       <div className="flex items-center gap-4 mt-2 text-xs font-bold">
                         <span
-                          className={`flex items-center gap-1 ${isDark ? "text-gray-400" : "text-gray-400"}`}
+                          className={`flex items-center gap-1 ${
+                            isDark ? "text-gray-400" : "text-gray-400"
+                          }`}
                         >
                           <FaMapMarkerAlt className="text-blue-400" />{" "}
                           {app.job?.location}
@@ -239,10 +265,10 @@ export default function JobAlerts() {
                             app.status === "accepted"
                               ? "bg-green-500/10 text-green-500"
                               : app.status === "rejected"
-                                ? "bg-red-500/10 text-red-500"
-                                : isDark
-                                  ? "bg-blue-900/30 text-blue-400"
-                                  : "bg-gray-100 text-gray-500"
+                              ? "bg-red-500/10 text-red-500"
+                              : isDark
+                              ? "bg-blue-900/30 text-blue-400"
+                              : "bg-gray-100 text-gray-500"
                           }`}
                         >
                           {app.status}
@@ -253,7 +279,9 @@ export default function JobAlerts() {
 
                   <div className="md:text-right">
                     <p
-                      className={`text-2xl font-black ${isDark ? "text-blue-400" : "text-slate-800"}`}
+                      className={`text-2xl font-black ${
+                        isDark ? "text-blue-400" : "text-slate-800"
+                      }`}
                     >
                       ${app.job?.salary_max || 0}.00
                     </p>
@@ -267,10 +295,14 @@ export default function JobAlerts() {
                 </div>
 
                 <div
-                  className={`mt-6 pt-6 border-t flex items-center justify-between ${isDark ? "border-gray-800" : "border-gray-50"}`}
+                  className={`mt-6 pt-6 border-t flex items-center justify-between ${
+                    isDark ? "border-gray-800" : "border-gray-50"
+                  }`}
                 >
                   <p
-                    className={`text-sm italic line-clamp-1 max-w-[70%] ${isDark ? "text-gray-500" : "text-gray-500"}`}
+                    className={`text-sm italic line-clamp-1 max-w-[70%] ${
+                      isDark ? "text-gray-500" : "text-gray-500"
+                    }`}
                   >
                     "{app.cover_letter || "No cover letter provided."}"
                   </p>

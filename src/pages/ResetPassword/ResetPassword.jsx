@@ -145,7 +145,6 @@ export default function ForgotPassword() {
             {step === 4 ? "Set New Password" : "Reset your password"}
           </h1>
 
-          {/* STEP 1: Email */}
           {step === 1 && (
             <div className="max-w-sm mx-auto space-y-4">
               <div className="relative">
@@ -161,7 +160,6 @@ export default function ForgotPassword() {
             </div>
           )}
 
-          {/* STEP 2: Bot info */}
           {step === 2 && (
             <div className="space-y-6">
               <p className="text-gray-600">
@@ -179,7 +177,6 @@ export default function ForgotPassword() {
             </div>
           )}
 
-          {/* STEP 3: Code & Resend */}
           {step === 3 && (
             <div className="space-y-6">
               <div className="flex justify-center gap-2">
@@ -229,7 +226,6 @@ export default function ForgotPassword() {
             </div>
           )}
 
-          {/* STEP 4: Password */}
           {step === 4 && (
             <div className="max-w-sm mx-auto space-y-4">
               <div className="relative">
