@@ -121,7 +121,7 @@ const ProfilePage = () => {
         }
       });
 
-      fd.append("skills", JSON.stringify(formData.skills || []));
+      fd.append("skils", JSON.stringify(formData.skils || []));
       fd.append("language", JSON.stringify(formData.language || []));
 
       await talentApi.update(user.id, fd);
@@ -141,9 +141,9 @@ const ProfilePage = () => {
       skils: [...formData.skils, { skill: "", experience_years: "" }],
     });
   const updateSkill = (index, field, value) => {
-    const newSkills = [...formData.skills];
-    newSkills[index][field] = value;
-    setFormData({ ...formData, skills: newSkills });
+    const newskils = [...formData.skils];
+    newskils[index][field] = value;
+    setFormData({ ...formData, skils: newskils });
   };
   const removeSkill = (index) =>
     setFormData({
@@ -334,14 +334,14 @@ const ProfilePage = () => {
               className={`rounded-[24px] p-8 shadow-sm relative border transition-all ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"}`}
             >
               <button
-                onClick={() => setActiveModal("skills")}
+                onClick={() => setActiveModal("skils")}
                 className={`absolute top-6 right-6 transition ${isDark ? "text-gray-600 hover:text-blue-400" : "text-gray-300 hover:text-blue-500"}`}
               >
                 <FiEdit2 size={18} />
               </button>
 
               <div className="mb-10">
-                <h3 className="text-md font-bold mb-5">Skills</h3>
+                <h3 className="text-md font-bold mb-5">skils</h3>
                 <div className="flex flex-wrap gap-3">
                   {user?.skils?.length > 0 ? (
                     user.skils.map((s, i) => (
@@ -353,7 +353,7 @@ const ProfilePage = () => {
                       </span>
                     ))
                   ) : (
-                    <p className="text-gray-400 italic">No skills added</p>
+                    <p className="text-gray-400 italic">No skils added</p>
                   )}
                 </div>
               </div>
@@ -533,11 +533,11 @@ const ProfilePage = () => {
                   </div>
                 )}
 
-                {activeModal === "skills" && (
+                {activeModal === "skils" && (
                   <div className="space-y-6">
                     <div>
                       <div className="flex justify-between mb-4">
-                        <h4 className="font-bold">Skills</h4>
+                        <h4 className="font-bold">skils</h4>
                         <button
                           type="button"
                           onClick={addSkill}
@@ -546,7 +546,7 @@ const ProfilePage = () => {
                           <FiPlus /> Add
                         </button>
                       </div>
-                      {formData.skills?.map((s, i) => (
+                      {formData.skils?.map((s, i) => (
                         <div key={i} className="flex gap-2 mb-2">
                           <input
                             placeholder="Skill"
