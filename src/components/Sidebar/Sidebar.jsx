@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { talentApi, applicationApi } from "../../services/api";
-import { useTheme } from "../../Context/ThemeContext";
+import { useTheme } from "../../Context/ThemeContext"; // ThemeContext ulandi
 import { jwtDecode } from "jwt-decode";
 import {
   HiChartBar,
@@ -16,7 +16,7 @@ import {
 import userPng from "../../assets/user.png";
 
 const Sidebar = () => {
-  const { settings } = useTheme();
+  const { settings } = useTheme(); // Dark mode holatini olamiz
   const isDark = settings.darkMode;
 
   const [user, setUser] = useState(null);
@@ -32,7 +32,7 @@ const Sidebar = () => {
         if (!token) return;
 
         const decoded = jwtDecode(token);
-        const currentUserId = decoded.id || decoded.userId || decoded.user_id;
+        const currentUserId = decoded.id  decoded.userId  decoded.user_id;
 
         const [userRes, appRes] = await Promise.all([
           talentApi.getById(decoded.id),
@@ -43,12 +43,12 @@ const Sidebar = () => {
 
         const allApps = Array.isArray(appRes.data)
           ? appRes.data
-          : appRes.data?.data || [];
+          : appRes.data?.data[];
 
         if (currentUserId) {
           const myApps = allApps.filter(
             (app) =>
-              app.talentId === currentUserId || app.userId === currentUserId
+              app.talentId === currentUserId  app.userId === currentUserId,
           );
           setAppCount(myApps.length);
         }
@@ -70,64 +70,53 @@ const Sidebar = () => {
   return (
     <>
       <aside
-        className={`fixed bottom-0 left-0 w-full h-[75px] md:top-0 md:h-screen md:w-[290px] z-50 md:rounded-r-[35px] flex md:flex-col py-2 md:py-8 transition-all duration-500 border-t md:border-r ${
-          isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
-        }`}
+        className={`fixed bottom-0 left-0 w-full h-[75px] md:top-0 md:h-screen md:w-[290px] z-50 md:rounded-r-[35px] flex md:flex-col py-2 md:py-8 transition-all duration-500 border-t md:border-r ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
+          }`}
       >
+        {/* User Profile Section */}
         <div className="hidden md:flex items-center gap-3 px-8 mb-8">
           {loading ? (
             <div className="flex items-center gap-3 animate-pulse">
               <div
-                className={`w-11 h-11 rounded-full ${
-                  isDark ? "bg-gray-700" : "bg-gray-200"
-                }`}
+                className={`w-11 h-11 rounded-full ${isDark ? "bg-gray-700" : "bg-gray-200"}`}
               ></div>
               <div className="space-y-2">
                 <div
-                  className={`h-3 w-24 rounded ${
-                    isDark ? "bg-gray-700" : "bg-gray-200"
-                  }`}
+                  className={`h-3 w-24 rounded ${isDark ? "bg-gray-700" : "bg-gray-200"}`}
                 ></div>
                 <div
-                  className={`h-2 w-16 rounded ${
-                    isDark ? "bg-gray-800" : "bg-gray-100"
-                  }`}
+                  className={`h-2 w-16 rounded ${isDark ? "bg-gray-800" : "bg-gray-100"}`}
                 ></div>
               </div>
             </div>
           ) : (
             <>
               <img
-                src={user?.image || userPng}
-                alt="avatar"
-                onError={(e) => {
-                  e.currentTarget.src = userPng;
-                }}
-                className={`w-11 h-11 rounded-full object-cover border shadow-sm ${
-                  isDark ? "border-gray-700" : "border-gray-100"
+                src={user?.image  userPng}
+              alt="avatar"
+              onError={(e) => {
+                e.currentTarget.src = userPng;
+              }}
+              className={`w-11 h-11 rounded-full object-cover border shadow-sm ${isDark ? "border-gray-700" : "border-gray-100"
                 }`}
               />
 
               <div className="overflow-hidden text-ellipsis whitespace-nowrap">
                 <h3
-                  className={`font-bold text-[14px] truncate ${
-                    isDark ? "text-gray-200" : "text-[#334155]"
-                  }`}
+                  className={`font-bold text-[14px] truncate ${isDark ? "text-gray-200" : "text-[#334155]"}`}
                 >
                   {user?.first_name} {user?.last_name?.charAt(0)}.
                 </h3>
                 <p
-                  className={`text-[12px] font-medium truncate ${
-                    isDark ? "text-gray-500" : "text-[#bbd5e1]"
-                  }`}
+                  className={`text-[12px] font-medium truncate ${isDark ? "text-gray-500" : "text-[#adb6c2]"}`}
                 >
-                  {user?.city || user?.location || "Uzbekistan"}
+                  {user?.city  user?.location || "Uzbekistan"}
                 </p>
               </div>
             </>
           )}
         </div>
-
+        {/* Navigation Menu */}
         <nav className="flex w-full justify-between px-2 md:justify-start md:flex-col md:px-5 gap-0 md:gap-1">
           <MenuItem
             to="/dashboard"
@@ -179,9 +168,8 @@ const Sidebar = () => {
           <div className="hidden md:block md:mt-auto md:pt-4">
             <button
               onClick={() => setIsModalOpen(true)}
-              className={`flex flex-col md:flex-row items-center gap-1 md:gap-4 px-3 md:px-6 py-2 md:py-[14px] rounded-xl md:rounded-[14px] transition-all duration-200 text-[10px] md:text-[16px] font-bold text-red-500 w-full ${
-                isDark ? "hover:bg-red-900/20" : "hover:bg-red-50"
-              }`}
+              className={`flex flex-col md:flex-row items-center gap-1 md:gap-4 px-3 md:px-6 py-2 md:py-[14px] rounded-xl md:rounded-[14px] transition-all duration-200 text-[10px] md:text-[16px] font-bold text-red-500 w-full ${isDark ? "hover:bg-red-900/20" : "hover:bg-red-50"
+                }`}
             >
               <span className="text-[22px] md:text-[24px]">
                 <HiOutlineLogout />
@@ -192,17 +180,15 @@ const Sidebar = () => {
         </nav>
       </aside>
 
+      {/* Logout Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div
-            className={`rounded-2xl p-6 w-full max-w-sm shadow-2xl animate-in fade-in zoom-in duration-200 ${
-              isDark ? "bg-[#1E1E1E] text-white" : "bg-white"
-            }`}
+            className={`rounded-2xl p-6 w-full max-w-sm shadow-2xl animate-in fade-in zoom-in duration-200 ${isDark ? "bg-[#1E1E1E] text-white" : "bg-white"
+              }`}
           >
             <h3
-              className={`text-xl font-bold mb-2 ${
-                isDark ? "text-gray-100" : "text-[#334155]"
-              }`}
+              className={`text-xl font-bold mb-2 ${isDark ? "text-gray-100" : "text-[#334155]"}`}
             >
               Log out
             </h3>
@@ -213,11 +199,10 @@ const Sidebar = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className={`flex-1 py-3 px-4 rounded-xl font-bold transition-colors ${
-                  isDark
-                    ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+                className={`flex-1 py-3 px-4 rounded-xl font-bold transition-colors ${isDark
+                  ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
               >
                 No, cancel
               </button>
@@ -244,12 +229,11 @@ const MenuItem = ({ to, icon, label, badge, isDark }) => (
       rounded-xl md:rounded-[14px] transition-all duration-200
       text-[9px] md:text-[16px] font-bold
       relative group flex-1 md:w-full
-      ${
-        isActive
-          ? "bg-[#163853] text-white shadow-md"
-          : isDark
+      ${isActive
+        ? "bg-[#163853] text-white shadow-md"
+        : isDark
           ? "text-gray-500 hover:bg-gray-800 hover:text-gray-300"
-          : "text-[#bbd5e1] hover:bg-gray-50 hover:text-[#94a3b8]"
+          : "text-[#a0a8b1] hover:bg-gray-50 hover:text-[#94a3b8]"
       }
     `}
   >
