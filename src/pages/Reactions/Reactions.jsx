@@ -24,7 +24,6 @@ export default function Reactions() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // filter: all | like | dislike
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
@@ -42,11 +41,9 @@ export default function Reactions() {
     fetchJobs();
   }, []);
 
-  // Reactionni bir xil usulda olish
   const getJobReaction = (jobId) =>
     getReaction ? getReaction(jobId) : reactions[jobId];
 
-  // ✅ Toast style (dark/light)
   const toastOptions = useMemo(
     () => ({
       duration: 2200,
@@ -57,16 +54,13 @@ export default function Reactions() {
         fontWeight: 700,
       },
     }),
-    [isDark],
+    [isDark]
   );
 
-  // ✅ All reacted jobs
   const reactedJobs = useMemo(() => {
     return jobs.filter((job) => Boolean(getJobReaction(job.id)));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobs, reactions]); // reactions o'zgarsa qayta hisoblanadi
+  }, [jobs, reactions]);
 
-  // ✅ Counts (badge uchun)
   const counts = useMemo(() => {
     let like = 0;
     let dislike = 0;
@@ -78,14 +72,11 @@ export default function Reactions() {
     }
 
     return { all: reactedJobs.length, like, dislike };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reactedJobs, reactions]);
 
-  // ✅ Filtered list
   const filteredJobs = useMemo(() => {
     if (filter === "all") return reactedJobs;
     return reactedJobs.filter((job) => getJobReaction(job.id) === filter);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, reactedJobs, reactions]);
 
   const filterBtnClass = (active) =>
@@ -95,11 +86,10 @@ export default function Reactions() {
           ? "bg-gray-800 border-gray-700 text-white"
           : "bg-[#163D5C] border-[#163D5C] text-white"
         : isDark
-          ? "border-gray-700 text-gray-300 hover:bg-gray-800"
-          : "border-gray-200 text-gray-700 hover:bg-gray-50"
+        ? "border-gray-700 text-gray-300 hover:bg-gray-800"
+        : "border-gray-200 text-gray-700 hover:bg-gray-50"
     }`;
 
-  // ✅ Toast handlers (sticker/emoji YO'Q)
   const handleLike = (jobId) => {
     const prev = getJobReaction(jobId);
     toggleLike(jobId);
@@ -132,14 +122,12 @@ export default function Reactions() {
         isDark ? "bg-[#121212] text-white" : "bg-[#F9FAFB] text-[#1E293B]"
       }`}
     >
-      {/* ✅ Toaster shu component ichida */}
       <Toaster position="top-right" toastOptions={toastOptions} />
 
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center gap-3 mb-6">
           <h1 className="text-2xl font-black">Reactions</h1>
 
-          {/* FILTER BUTTONS */}
           <div className="flex flex-wrap gap-2 md:ml-4">
             <button
               type="button"
@@ -193,8 +181,8 @@ export default function Reactions() {
             {filter === "all"
               ? "No liked or disliked jobs yet."
               : filter === "like"
-                ? "No liked jobs yet."
-                : "No disliked jobs yet."}
+              ? "No liked jobs yet."
+              : "No disliked jobs yet."}
           </p>
         ) : (
           <div className="space-y-6">
@@ -210,7 +198,6 @@ export default function Reactions() {
                       : "bg-white border-gray-50 shadow-sm"
                   }`}
                 >
-                  {/* header */}
                   <div className="flex flex-col md:flex-row justify-between gap-6">
                     <div className="flex gap-5">
                       <div
@@ -242,7 +229,6 @@ export default function Reactions() {
                           {job.company?.city}
                         </p>
 
-                        {/* reaction badge */}
                         <div className="mt-2">
                           {reaction === "like" ? (
                             <span className="inline-flex items-center gap-2 text-green-500 font-bold text-sm">
@@ -278,7 +264,6 @@ export default function Reactions() {
                     </div>
                   </div>
 
-                  {/* title + salary */}
                   <div className="flex flex-wrap justify-between items-center mt-6 mb-4">
                     <h2
                       className={`text-2xl font-black ${
@@ -297,7 +282,6 @@ export default function Reactions() {
                     </span>
                   </div>
 
-                  {/* description */}
                   <p
                     className={`text-sm font-medium leading-relaxed mb-6 ${
                       isDark ? "text-gray-400" : "text-gray-500"
@@ -306,7 +290,6 @@ export default function Reactions() {
                     {job.description || "No description provided..."}
                   </p>
 
-                  {/* skills */}
                   <div className="mb-8">
                     <p
                       className={`font-black text-sm mb-3 ${
@@ -328,13 +311,11 @@ export default function Reactions() {
                     </div>
                   </div>
 
-                  {/* actions */}
                   <div
                     className={`flex flex-wrap items-center justify-end gap-4 pt-6 border-t ${
                       isDark ? "border-gray-800" : "border-gray-50"
                     }`}
                   >
-                    {/* Like */}
                     <button
                       type="button"
                       onClick={() => handleLike(job.id)}
@@ -348,7 +329,6 @@ export default function Reactions() {
                       <FaThumbsUp size={22} />
                     </button>
 
-                    {/* Dislike */}
                     <button
                       type="button"
                       onClick={() => handleDislike(job.id)}
@@ -362,7 +342,6 @@ export default function Reactions() {
                       <FaThumbsDown size={22} />
                     </button>
 
-                    {/* Clear single */}
                     <button
                       type="button"
                       onClick={() => handleClearOne(job.id)}

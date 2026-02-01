@@ -5,17 +5,15 @@ import CongratulationBg from "../../assets/Congratulations-img.png";
 const Congratulations = () => {
   const navigate = useNavigate();
 
-  // 1. Setting'dagi holatni localStorage'dan o'qiymiz
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem("user-settings");
     if (saved) {
       const parsed = JSON.parse(saved);
-      return parsed.darkMode; // true yoki false qaytaradi
+      return parsed.darkMode;
     }
     return false;
   });
 
-  // 2. Agar foydalanuvchi boshqa oynada settingsni o'zgartirsa, bu yerda ham yangilanishi uchun
   useEffect(() => {
     const root = document.documentElement;
     if (isDark) {
@@ -26,13 +24,11 @@ const Congratulations = () => {
   }, [isDark]);
 
   return (
-    // isDark holatiga qarab ranglarni tanlaymiz
     <div
       className={`min-h-screen w-full p-4 flex flex-col items-center gap-5 font-sans transition-colors duration-500 ${
         isDark ? "bg-[#121212] text-white" : "bg-[#f0f2f5] text-gray-800"
       }`}
     >
-      {/* 1-QISM: TEPADAGI HEADER */}
       <div
         className={`w-full max-w-4xl rounded-[20px] py-4 px-8 shadow-sm border transition-colors duration-500 ${
           isDark
@@ -49,7 +45,6 @@ const Congratulations = () => {
         </h1>
       </div>
 
-      {/* 2-QISM: PASTKI KARTA */}
       <div
         className={`w-full max-w-4xl rounded-[30px] shadow-sm overflow-hidden relative h-[600px] md:h-[750px] border transition-colors duration-500 ${
           isDark
@@ -57,19 +52,16 @@ const Congratulations = () => {
             : "bg-white border-transparent"
         }`}
       >
-        {/* Orqa fon rasmi */}
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${CongratulationBg})` }}
         >
-          {/* Rasm ustidagi qora qatlam - dark mode'da kuchliroq bo'ladi */}
           <div
             className={`absolute inset-0 transition-colors duration-500 ${
               isDark ? "bg-black/40" : "bg-black/10"
             }`}
           ></div>
 
-          {/* Ustidagi yozuvlar */}
           <div className="relative flex flex-col items-center pt-16 md:pt-20 px-4 text-center z-10">
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg tracking-wide">
               Congratulations !
@@ -83,7 +75,6 @@ const Congratulations = () => {
           </div>
         </div>
 
-        {/* Pastki tugma */}
         <div className="absolute bottom-8 w-full flex justify-center z-20">
           <button
             onClick={() => navigate("/matches")}

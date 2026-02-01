@@ -1,6 +1,6 @@
 import React from "react";
 import { TbMoon } from "react-icons/tb";
-import { useTheme } from "../../Context/ThemeContext"; // Contextni chaqiramiz
+import { useTheme } from "../../Context/ThemeContext";
 
 const Theme = ({ CustomToggle, SettingItem }) => {
   const { settings, toggleSwitch } = useTheme();

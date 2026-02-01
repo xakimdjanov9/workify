@@ -7,8 +7,6 @@ export const JobReactionsProvider = ({ children }) => {
     const saved = localStorage.getItem("job-reactions");
     return saved ? JSON.parse(saved) : {};
   });
-//   reactions format:
-//   { [jobId]: "like" | "dislike" }
 
   useEffect(() => {
     localStorage.setItem("job-reactions", JSON.stringify(reactions));

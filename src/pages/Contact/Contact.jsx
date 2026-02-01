@@ -10,10 +10,10 @@ import { MdEmail, MdPhoneInTalk, MdLocationOn } from "react-icons/md";
 import { AiOutlineGlobal } from "react-icons/ai";
 import ContactImg from "../../assets/Contactimg.png";
 import { contactApi } from "../../services/api";
-import { useTheme } from "../../Context/ThemeContext.jsx"; // Context ulandi
+import { useTheme } from "../../Context/ThemeContext.jsx";
 
 const Contact = () => {
-  const { settings } = useTheme(); // Dark mode holati
+  const { settings } = useTheme();
   const isDark = settings.darkMode;
 
   const [formData, setFormData] = useState({
@@ -71,7 +71,6 @@ const Contact = () => {
       }`}
     >
       <div className="max-w-6xl mx-auto space-y-6">
-        {/* Header Section */}
         <div className="w-full flex justify-start mb-6">
           <div
             className={`w-full rounded-2xl py-3 px-6 md:py-4 md:px-10 shadow-sm border-l-4 transition-all duration-500 ${
@@ -81,7 +80,9 @@ const Contact = () => {
             }`}
           >
             <h1
-              className={`text-xl md:text-2xl font-bold ${isDark ? "text-gray-100" : "text-[#4A4A4A]"}`}
+              className={`text-xl md:text-2xl font-semibold ${
+                isDark ? "text-gray-100" : "text-[#505151]"
+              }`}
             >
               Contact Us
             </h1>
@@ -89,7 +90,6 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-          {/* Form Card */}
           <div
             className={`rounded-[32px] p-6 md:p-10 shadow-sm border transition-all duration-500 flex flex-col items-center w-full ${
               isDark
@@ -98,7 +98,9 @@ const Contact = () => {
             }`}
           >
             <h2
-              className={`text-xl md:text-2xl font-bold text-center mb-8 leading-tight ${isDark ? "text-gray-100" : "text-[#333]"}`}
+              className={`text-xl md:text-2xl font-bold text-center mb-8 leading-tight ${
+                isDark ? "text-gray-100" : "text-[#333]"
+              }`}
             >
               Is there a message? <br /> Let us know.
             </h2>
@@ -172,7 +174,6 @@ const Contact = () => {
             </form>
           </div>
 
-          {/* Image & Social Card */}
           <div className="flex flex-col gap-6">
             <div
               className={`rounded-[32px] p-6 shadow-sm border transition-all duration-500 flex items-center justify-center flex-grow min-h-[300px] ${
@@ -184,7 +185,9 @@ const Contact = () => {
               <img
                 src={ContactImg}
                 alt="Contact"
-                className={`max-h-full w-auto object-contain ${isDark ? "opacity-80" : ""}`}
+                className={`max-h-full w-auto object-contain ${
+                  isDark ? "opacity-80" : ""
+                }`}
               />
             </div>
 
@@ -204,21 +207,24 @@ const Contact = () => {
               ].map((Icon, i) => (
                 <Icon
                   key={i}
-                  className={`text-2xl md:text-3xl cursor-pointer hover:scale-110 transition-transform ${isDark ? "text-blue-400" : "text-[#1B3E59]"}`}
+                  className={`text-2xl md:text-3xl cursor-pointer hover:scale-110 transition-transform ${
+                    isDark ? "text-blue-400" : "text-[#1B3E59]"
+                  }`}
                 />
               ))}
             </div>
           </div>
         </div>
 
-        {/* Info & Map Card */}
         <div
           className={`rounded-[32px] p-6 md:p-10 shadow-sm border transition-all duration-500 ${
             isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"
           }`}
         >
           <h2
-            className={`text-xl md:text-2xl font-bold text-center mb-10 ${isDark ? "text-gray-100" : "text-[#333]"}`}
+            className={`text-xl md:text-2xl font-bold text-center mb-10 ${
+              isDark ? "text-gray-100" : "text-[#333]"
+            }`}
           >
             Our contacts
           </h2>
@@ -249,20 +255,28 @@ const Contact = () => {
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-5 group">
                   <div
-                    className={`text-2xl md:text-3xl shrink-0 group-hover:scale-110 transition-transform ${isDark ? "text-blue-400" : "text-[#1B3E59]"}`}
+                    className={`text-2xl md:text-3xl shrink-0 group-hover:scale-110 transition-transform ${
+                      isDark ? "text-blue-400" : "text-[#1B3E59]"
+                    }`}
                   >
                     {item.icon}
                   </div>
                   {item.href ? (
                     <a
                       href={item.href}
-                      className={`font-medium transition-colors text-sm md:text-base ${isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-blue-600"}`}
+                      className={`font-medium transition-colors text-sm md:text-base ${
+                        isDark
+                          ? "text-gray-400 hover:text-white"
+                          : "text-gray-600 hover:text-blue-600"
+                      }`}
                     >
                       {item.text}
                     </a>
                   ) : (
                     <p
-                      className={`font-medium text-sm md:text-base ${isDark ? "text-gray-400" : "text-gray-600"}`}
+                      className={`font-medium text-sm md:text-base ${
+                        isDark ? "text-gray-400" : "text-gray-600"
+                      }`}
                     >
                       {item.text}
                     </p>
@@ -271,7 +285,6 @@ const Contact = () => {
               ))}
             </div>
 
-            {/* Map qismi - FAQAT SHU QISMNI O'ZGARTIRING */}
             <div
               className={`rounded-3xl overflow-hidden border shadow-inner h-[250px] md:h-[350px] w-full ${
                 isDark ? "border-gray-800" : "border-gray-100"
@@ -282,7 +295,6 @@ const Contact = () => {
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
-                // Bu yerda filterlarni olib tashladik, xarita o'z holicha qoladi
                 className="hover:opacity-90 transition-all duration-700"
                 title="Our Location on Google Maps"
                 loading="lazy"

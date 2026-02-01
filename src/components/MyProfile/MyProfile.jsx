@@ -73,7 +73,6 @@ const ProfilePage = () => {
     fetchProfile();
   }, []);
 
-  // RASMNI SERVERGA YUBORISH
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -84,7 +83,7 @@ const ProfilePage = () => {
       fd.append("image", file);
 
       await talentApi.update(user.id, fd);
-      await fetchProfile(); // Serverdan yangi rasm URLini olish
+      await fetchProfile();
     } catch (err) {
       alert("Rasmni saqlashda xatolik yuz berdi");
     } finally {
@@ -134,7 +133,6 @@ const ProfilePage = () => {
     }
   };
 
-  // Skill & Language Logic
   const addSkill = () =>
     setFormData({
       ...formData,
@@ -215,14 +213,13 @@ const ProfilePage = () => {
           className={`rounded-xl p-4 mb-6 shadow-sm flex justify-between items-center border ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"}`}
         >
           <h1
-            className={`text-xl font-bold ${isDark ? "text-gray-200" : "text-gray-800"}`}
+            className={`text-xl md:text-2xl font-semibold ${isDark ? "text-gray-200" : "text-{#505151"}`}
           >
             My profile
           </h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* LEFT SIDE */}
           <div className="lg:col-span-1">
             <div
               className={`rounded-[24px] p-6 shadow-sm relative border text-center transition-all ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"}`}
@@ -328,7 +325,6 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          {/* RIGHT SIDE */}
           <div className="lg:col-span-2 space-y-6">
             <div
               className={`rounded-[24px] p-8 shadow-sm relative border transition-all ${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"}`}
@@ -416,7 +412,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* MODALS */}
       {activeModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div
@@ -435,7 +430,6 @@ const ProfilePage = () => {
                 </button>
               </div>
 
-              {/* Rasm tahrirlash qismi (Faqat personal modalda) */}
               {activeModal === "personal" && (
                 <div className="flex flex-col items-center mb-8 pb-6 border-b border-gray-100 dark:border-gray-800">
                   <div

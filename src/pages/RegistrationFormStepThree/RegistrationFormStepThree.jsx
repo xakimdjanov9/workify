@@ -168,9 +168,7 @@ export default function RegistrationFormStepThree() {
               </div>
             </div>
 
-            {/* Form Content */}
             <div className="space-y-5 sm:space-y-6 md:space-y-8">
-              {/* Employment Type */}
               <div>
                 <label className="block text-gray-700 font-medium mb-3 text-sm xs:text-base">
                   Employment type
@@ -217,9 +215,7 @@ export default function RegistrationFormStepThree() {
                 </div>
               </div>
 
-              {/* Workplace Type & Minimum Salary */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 xs:gap-5 sm:gap-6">
-                {/* Workplace Type */}
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
                     Workplace type *
@@ -263,7 +259,6 @@ export default function RegistrationFormStepThree() {
                   </div>
                 </div>
 
-                {/* Minimum Salary */}
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
                     Minimum salary *
@@ -295,9 +290,7 @@ export default function RegistrationFormStepThree() {
                 </div>
               </div>
 
-              {/* City & Country */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 xs:gap-5 sm:gap-6">
-                {/* City */}
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
                     City *
@@ -327,7 +320,6 @@ export default function RegistrationFormStepThree() {
                   )}
                 </div>
 
-                {/* Country (Optional) */}
                 <div>
                   <label className="block text-gray-700 font-medium mb-2 text-sm xs:text-base">
                     Country

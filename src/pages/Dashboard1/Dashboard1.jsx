@@ -1,4 +1,3 @@
-// Dashboard1.jsx - responsive down to 400px (with dark mode)
 import React, { useEffect, useState } from "react";
 import { talentApi } from "../../services/api";
 import { jwtDecode } from "jwt-decode";
@@ -26,7 +25,7 @@ const Dashboard1 = () => {
           (v) =>
             typeof v !== "number" &&
             v !== data.createdAt &&
-            v !== data.updatedAt,
+            v !== data.updatedAt
         );
 
         const filled = filtered.filter((v) => {
@@ -55,7 +54,6 @@ const Dashboard1 = () => {
     return "#5ABF89";
   };
 
-  // Responsive CircleProgress
   const CircleProgress = ({ percentage }) => {
     const [size, setSize] = useState(100);
 
@@ -145,7 +143,8 @@ const Dashboard1 = () => {
           </div>
 
           <p className="text-white/90 text-[11px] xs:text-xs sm:text-sm text-center px-2 xs:px-3 sm:px-4 leading-tight">
-            Complete all parts of your profile and <br className="hidden xs:block" />
+            Complete all parts of your profile and{" "}
+            <br className="hidden xs:block" />
             increase your chances of finding a job
           </p>
         </div>

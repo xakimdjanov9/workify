@@ -3,12 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { jobApi } from "../../services/api";
 import { FaChevronLeft } from "react-icons/fa";
 import { toast } from "react-hot-toast";
-import { useTheme } from "../../Context/ThemeContext.jsx"; // ThemeContext ulandi
+import { useTheme } from "../../Context/ThemeContext.jsx";
 
 export default function JobDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { settings } = useTheme(); // Dark mode holati
+  const { settings } = useTheme();
   const isDark = settings.darkMode;
 
   const [job, setJob] = useState(null);
@@ -44,10 +44,14 @@ export default function JobDetail() {
   if (loading)
     return (
       <div
-        className={`min-h-screen flex items-center justify-center ${isDark ? "bg-[#121212]" : "bg-[#F9FAFB]"}`}
+        className={`min-h-screen flex items-center justify-center ${
+          isDark ? "bg-[#121212]" : "bg-[#F9FAFB]"
+        }`}
       >
         <div
-          className={`animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 ${isDark ? "border-blue-500" : "border-[#52D394]"}`}
+          className={`animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 ${
+            isDark ? "border-blue-500" : "border-[#52D394]"
+          }`}
         ></div>
       </div>
     );
@@ -55,7 +59,9 @@ export default function JobDetail() {
   if (!job)
     return (
       <div
-        className={`text-center py-20 font-bold ${isDark ? "text-red-400" : "text-red-500"}`}
+        className={`text-center py-20 font-bold ${
+          isDark ? "text-red-400" : "text-red-500"
+        }`}
       >
         Job not found.
       </div>
@@ -75,19 +81,24 @@ export default function JobDetail() {
           }`}
         >
           <h2
-            className={`text-lg font-bold ${isDark ? "text-gray-200" : "text-gray-700"} ml-4`}
+            className={`text-lg font-bold ${
+              isDark ? "text-gray-200" : "text-gray-700"
+            } ml-4`}
           >
             Job Details
           </h2>
           <button
             onClick={() => navigate(-1)}
-            className={`p-2 rounded-full transition-all ${isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-50 text-gray-400"}`}
+            className={`p-2 rounded-full transition-all ${
+              isDark
+                ? "hover:bg-gray-800 text-gray-400"
+                : "hover:bg-gray-50 text-gray-400"
+            }`}
           >
             <FaChevronLeft />
           </button>
         </div>
 
-        {/* --- JOB INFO CARD --- */}
         <div
           className={`rounded-[32px] p-8 border transition-all duration-500 shadow-sm mb-6 ${
             isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
@@ -108,7 +119,9 @@ export default function JobDetail() {
               </div>
               <div>
                 <h1
-                  className={`text-2xl font-black tracking-tight ${isDark ? "text-gray-100" : "text-slate-800"}`}
+                  className={`text-2xl font-black tracking-tight ${
+                    isDark ? "text-gray-100" : "text-slate-800"
+                  }`}
                 >
                   {job.occupation}
                 </h1>
@@ -116,7 +129,9 @@ export default function JobDetail() {
                   {job.company?.company_name}
                 </p>
                 <p
-                  className={`text-[12px] mt-1 font-medium italic ${isDark ? "text-gray-500" : "text-gray-400"}`}
+                  className={`text-[12px] mt-1 font-medium italic ${
+                    isDark ? "text-gray-500" : "text-gray-400"
+                  }`}
                 >
                   {job.company?.city} • {job.workplace_type}
                 </p>
@@ -127,7 +142,9 @@ export default function JobDetail() {
                 Posted {new Date(job.createdAt).toLocaleDateString()}
               </p>
               <span
-                className={`text-2xl font-black ${isDark ? "text-blue-400" : "text-slate-800"}`}
+                className={`text-2xl font-black ${
+                  isDark ? "text-blue-400" : "text-slate-800"
+                }`}
               >
                 ${job.salary_min}-${job.salary_max}
               </span>
@@ -137,12 +154,16 @@ export default function JobDetail() {
           <div className="space-y-8">
             <div>
               <h3
-                className={`text-md font-black mb-3 uppercase tracking-wider text-[13px] ${isDark ? "text-gray-300" : "text-slate-800"}`}
+                className={`text-md font-black mb-3 uppercase tracking-wider text-[13px] ${
+                  isDark ? "text-gray-300" : "text-slate-800"
+                }`}
               >
                 What you will do:
               </h3>
               <p
-                className={`text-sm leading-relaxed whitespace-pre-line ${isDark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-sm leading-relaxed whitespace-pre-line ${
+                  isDark ? "text-gray-400" : "text-gray-500"
+                }`}
               >
                 {job.description || "No description provided."}
               </p>
@@ -150,7 +171,9 @@ export default function JobDetail() {
 
             <div>
               <h3
-                className={`text-md font-black mb-3 uppercase tracking-wider text-[13px] ${isDark ? "text-gray-300" : "text-slate-800"}`}
+                className={`text-md font-black mb-3 uppercase tracking-wider text-[13px] ${
+                  isDark ? "text-gray-300" : "text-slate-800"
+                }`}
               >
                 Required skills:
               </h3>
@@ -168,7 +191,6 @@ export default function JobDetail() {
             </div>
           </div>
 
-          {/* APPLY BUTTON */}
           <div className="flex justify-center mt-12">
             <button
               onClick={() => navigate(`/job-post/${job.id}`)}
@@ -183,14 +205,15 @@ export default function JobDetail() {
           </div>
         </div>
 
-        {/* --- ABOUT COMPANY SECTION --- */}
         <div
           className={`rounded-[32px] p-8 border transition-all duration-500 shadow-sm ${
             isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
           }`}
         >
           <h3
-            className={`text-md font-black mb-6 uppercase tracking-wider text-[13px] ${isDark ? "text-gray-300" : "text-slate-800"}`}
+            className={`text-md font-black mb-6 uppercase tracking-wider text-[13px] ${
+              isDark ? "text-gray-300" : "text-slate-800"
+            }`}
           >
             About company
           </h3>
@@ -210,7 +233,9 @@ export default function JobDetail() {
               </div>
               <div className="overflow-hidden">
                 <h4
-                  className={`text-md font-black truncate ${isDark ? "text-gray-200" : "text-slate-800"}`}
+                  className={`text-md font-black truncate ${
+                    isDark ? "text-gray-200" : "text-slate-800"
+                  }`}
                 >
                   {job.company?.company_name}
                 </h4>
@@ -223,7 +248,6 @@ export default function JobDetail() {
               </div>
             </div>
 
-            {/* Statistika (Dinamik) */}
             <div
               className={`flex items-center justify-around w-full lg:w-auto gap-4 md:gap-12 text-center border-t lg:border-t-0 lg:border-l pt-6 lg:pt-0 lg:pl-10 ${
                 isDark ? "border-gray-800" : "border-gray-100"
@@ -231,7 +255,9 @@ export default function JobDetail() {
             >
               <div className="min-w-[80px]">
                 <p
-                  className={`text-xl md:text-2xl font-black ${isDark ? "text-blue-400" : "text-slate-800"}`}
+                  className={`text-xl md:text-2xl font-black ${
+                    isDark ? "text-blue-400" : "text-slate-800"
+                  }`}
                 >
                   {companyStats.active}
                 </p>
@@ -240,11 +266,15 @@ export default function JobDetail() {
                 </p>
               </div>
               <div
-                className={`hidden md:block h-8 w-[1px] ${isDark ? "bg-gray-800" : "bg-gray-100"}`}
+                className={`hidden md:block h-8 w-[1px] ${
+                  isDark ? "bg-gray-800" : "bg-gray-100"
+                }`}
               ></div>
               <div className="min-w-[80px]">
                 <p
-                  className={`text-xl md:text-2xl font-black ${isDark ? "text-blue-400" : "text-slate-800"}`}
+                  className={`text-xl md:text-2xl font-black ${
+                    isDark ? "text-blue-400" : "text-slate-800"
+                  }`}
                 >
                   {companyStats.total}
                 </p>
@@ -253,11 +283,15 @@ export default function JobDetail() {
                 </p>
               </div>
               <div
-                className={`hidden md:block h-8 w-[1px] ${isDark ? "bg-gray-800" : "bg-gray-100"}`}
+                className={`hidden md:block h-8 w-[1px] ${
+                  isDark ? "bg-gray-800" : "bg-gray-100"
+                }`}
               ></div>
               <div className="min-w-[80px]">
                 <p
-                  className={`text-xl md:text-2xl font-black ${isDark ? "text-blue-400" : "text-slate-800"}`}
+                  className={`text-xl md:text-2xl font-black ${
+                    isDark ? "text-blue-400" : "text-slate-800"
+                  }`}
                 >
                   250+
                 </p>

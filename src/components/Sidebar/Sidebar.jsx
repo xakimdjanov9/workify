@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { talentApi, applicationApi } from "../../services/api";
-import { useTheme } from "../../Context/ThemeContext"; // ThemeContext ulandi
+import { useTheme } from "../../Context/ThemeContext";
 import { jwtDecode } from "jwt-decode";
 import {
   HiChartBar,
@@ -16,7 +16,7 @@ import {
 import userPng from "../../assets/user.png";
 
 const Sidebar = () => {
-  const { settings } = useTheme(); // Dark mode holatini olamiz
+  const { settings } = useTheme();
   const isDark = settings.darkMode;
 
   const [user, setUser] = useState(null);
@@ -48,7 +48,7 @@ const Sidebar = () => {
         if (currentUserId) {
           const myApps = allApps.filter(
             (app) =>
-              app.talentId === currentUserId || app.userId === currentUserId,
+              app.talentId === currentUserId || app.userId === currentUserId
           );
           setAppCount(myApps.length);
         }
@@ -74,19 +74,24 @@ const Sidebar = () => {
           isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
         }`}
       >
-        {/* User Profile Section */}
         <div className="hidden md:flex items-center gap-3 px-8 mb-8">
           {loading ? (
             <div className="flex items-center gap-3 animate-pulse">
               <div
-                className={`w-11 h-11 rounded-full ${isDark ? "bg-gray-700" : "bg-gray-200"}`}
+                className={`w-11 h-11 rounded-full ${
+                  isDark ? "bg-gray-700" : "bg-gray-200"
+                }`}
               ></div>
               <div className="space-y-2">
                 <div
-                  className={`h-3 w-24 rounded ${isDark ? "bg-gray-700" : "bg-gray-200"}`}
+                  className={`h-3 w-24 rounded ${
+                    isDark ? "bg-gray-700" : "bg-gray-200"
+                  }`}
                 ></div>
                 <div
-                  className={`h-2 w-16 rounded ${isDark ? "bg-gray-800" : "bg-gray-100"}`}
+                  className={`h-2 w-16 rounded ${
+                    isDark ? "bg-gray-800" : "bg-gray-100"
+                  }`}
                 ></div>
               </div>
             </div>
@@ -105,12 +110,16 @@ const Sidebar = () => {
 
               <div className="overflow-hidden text-ellipsis whitespace-nowrap">
                 <h3
-                  className={`font-bold text-[14px] truncate ${isDark ? "text-gray-200" : "text-[#334155]"}`}
+                  className={`font-bold text-[14px] truncate ${
+                    isDark ? "text-gray-200" : "text-[#334155]"
+                  }`}
                 >
                   {user?.first_name} {user?.last_name?.charAt(0)}.
                 </h3>
                 <p
-                  className={`text-[12px] font-medium truncate ${isDark ? "text-gray-500" : "text-[#adb6c2]"}`}
+                  className={`text-[12px] font-medium truncate ${
+                    isDark ? "text-gray-500" : "text-[#bbd5e1]"
+                  }`}
                 >
                   {user?.city || user?.location || "Uzbekistan"}
                 </p>
@@ -119,7 +128,6 @@ const Sidebar = () => {
           )}
         </div>
 
-        {/* Navigation Menu */}
         <nav className="flex w-full justify-between px-2 md:justify-start md:flex-col md:px-5 gap-0 md:gap-1">
           <MenuItem
             to="/dashboard"
@@ -184,7 +192,6 @@ const Sidebar = () => {
         </nav>
       </aside>
 
-      {/* Logout Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div
@@ -193,7 +200,9 @@ const Sidebar = () => {
             }`}
           >
             <h3
-              className={`text-xl font-bold mb-2 ${isDark ? "text-gray-100" : "text-[#334155]"}`}
+              className={`text-xl font-bold mb-2 ${
+                isDark ? "text-gray-100" : "text-[#334155]"
+              }`}
             >
               Log out
             </h3>
@@ -239,8 +248,8 @@ const MenuItem = ({ to, icon, label, badge, isDark }) => (
         isActive
           ? "bg-[#163853] text-white shadow-md"
           : isDark
-            ? "text-gray-500 hover:bg-gray-800 hover:text-gray-300"
-            : "text-[#a0a8b1] hover:bg-gray-50 hover:text-[#94a3b8]"
+          ? "text-gray-500 hover:bg-gray-800 hover:text-gray-300"
+          : "text-[#bbd5e1] hover:bg-gray-50 hover:text-[#94a3b8]"
       }
     `}
   >
