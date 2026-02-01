@@ -32,7 +32,7 @@ const Sidebar = () => {
         if (!token) return;
 
         const decoded = jwtDecode(token);
-        const currentUserId = decoded.id  decoded.userId  decoded.user_id;
+        const currentUserId = decoded.id || decoded.userId || decoded.user_id;
 
         const [userRes, appRes] = await Promise.all([
           talentApi.getById(decoded.id),
@@ -43,12 +43,12 @@ const Sidebar = () => {
 
         const allApps = Array.isArray(appRes.data)
           ? appRes.data
-          : appRes.data?.data[];
+          : appRes.data?.data || [];
 
         if (currentUserId) {
           const myApps = allApps.filter(
             (app) =>
-              app.talentId === currentUserId  app.userId === currentUserId,
+              app.talentId === currentUserId || app.userId === currentUserId,
           );
           setAppCount(myApps.length);
         }
@@ -92,7 +92,7 @@ const Sidebar = () => {
           ) : (
             <>
               <img
-                src={user?.image  userPng}
+                src={user?.image || userPng}
               alt="avatar"
               onError={(e) => {
                 e.currentTarget.src = userPng;
@@ -110,7 +110,7 @@ const Sidebar = () => {
                 <p
                   className={`text-[12px] font-medium truncate ${isDark ? "text-gray-500" : "text-[#adb6c2]"}`}
                 >
-                  {user?.city  user?.location || "Uzbekistan"}
+                  {user?.city || user?.location || "Uzbekistan"}
                 </p>
               </div>
             </>
