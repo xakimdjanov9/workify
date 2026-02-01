@@ -399,18 +399,23 @@ export default function JobMatches() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap justify-between items-center mt-6 mb-4">
-                  <div className="flex items-center gap-3">
-                    <h2
-                      className={`text-2xl font-black ${
-                        isDark ? "text-white" : "text-slate-800"
-                      }`}
-                    >
-                      {job.occupation}
-                    </h2>
-                    {isMatch && (
-                      <span className="bg-blue-600 text-white text-[10px] px-3 py-1 rounded-full font-black uppercase shadow-lg shadow-blue-600/20">
-                        Best Match
+                  <p className={`text-sm font-medium leading-relaxed mb-6 line-clamp-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                    {job.description || "No description provided..."}
+                  </p>
+
+                  <div className="mb-8">
+                    <p className={`font-black text-sm mb-3 ${isDark ? "text-gray-300" : "text-gray-800"}`}>
+                      Required skills:
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <span
+                        className={`px-5 py-2.5 rounded-xl text-xs font-bold border ${
+                          isDark
+                            ? "bg-[#252525] text-gray-400 border-gray-700"
+                            : "bg-[#F1F3F6] text-gray-600 border-transparent"
+                        }`}
+                      >
+                        {job.skils}
                       </span>
                     )}
                   </div>

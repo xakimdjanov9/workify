@@ -17,6 +17,7 @@ const HomeTalents = () => {
         setTalents(res.data);
       } catch (error) {
         console.error(error);
+        setTalents([]);
       } finally {
         setLoading(false);
       }
@@ -24,165 +25,161 @@ const HomeTalents = () => {
     getAll();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-grow w-full bg-slate-50 flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 py-8 md:py-12">
-          <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-950 mb-4"></div>
-            <p className="text-gray-600 font-medium">Loading talents...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+      <div className="flex-grow w-full bg-slate-50 flex flex-col px-4 sm:px-8 md:px-12 lg:px-16 py-6 md:py-8">
+        <h1 className="text-lg md:text-xl text-gray-600 border-b-2 border-gray-300 font-semibold mb-2 md:mb-3">
+          {loading ? "Loading..." : `${talents.length} talents`}
+        </h1>
 
-      <main className="flex-grow w-full bg-slate-50">
-        <div className="px-4 xs:px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-6 md:py-8 lg:py-10">
-          <div className="mb-6 md:mb-8">
-            <h1 className="text-lg sm:text-xl md:text-2xl text-gray-600 border-b-2 border-gray-300 font-semibold pb-2 md:pb-3">
-              {talents.length} talents
-            </h1>
+        {loading ? (
+          <div className="w-full bg-white rounded-lg py-4 md:py-6 my-3 md:my-4 animate-pulse">
+            <div className="flex flex-col md:flex-row justify-between px-4 md:px-6 gap-4 md:gap-0">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-200" />
+                <div className="sm:max-w-xs md:max-w-md lg:max-w-lg w-full">
+                  <div className="h-5 w-56 bg-gray-200 rounded mb-2" />
+                  <div className="h-4 w-40 bg-gray-200 rounded" />
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row md:flex-col items-start sm:items-center md:items-end gap-2 sm:gap-4 md:gap-0">
+                <div className="h-4 w-32 bg-gray-200 rounded" />
+                <div className="h-6 w-20 bg-gray-200 rounded" />
+              </div>
+            </div>
+
+            <div className="py-4 md:py-6 border-b-2 px-4 md:px-6 space-y-2">
+              <div className="h-4 w-full bg-gray-200 rounded" />
+              <div className="h-4 w-11/12 bg-gray-200 rounded" />
+              <div className="h-4 w-9/12 bg-gray-200 rounded" />
+            </div>
+
+            <div className="px-4 md:px-6 py-4 md:py-6">
+              <div className="h-4 w-32 bg-gray-200 rounded mb-3" />
+              <div className="flex flex-wrap gap-2">
+                <div className="h-8 w-24 bg-gray-200 rounded-lg" />
+                <div className="h-8 w-28 bg-gray-200 rounded-lg" />
+                <div className="h-8 w-20 bg-gray-200 rounded-lg" />
+              </div>
+            </div>
+
+            <div className="flex justify-center sm:justify-end px-4 md:px-6">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+                <div className="h-10 w-full sm:w-36 bg-gray-200 rounded-lg" />
+                <div className="h-10 w-full sm:w-28 bg-gray-200 rounded-lg" />
+              </div>
+            </div>
           </div>
+        ) : talents.length === 0 ? (
+          <div className="w-full bg-white rounded-lg py-10 my-3 md:my-4 flex flex-col items-center justify-center text-center px-4">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-700">
+              Not found
+            </h2>
+            <p className="text-sm md:text-base text-gray-500 mt-2">
+              Hozircha talentlar mavjud emas.
+            </p>
+          </div>
+        ) : (
+          talents.map((item) => {
+            let parsedSkills = [];
+            if (item.skils) {
+              try {
+                parsedSkills = JSON.parse(item.skils);
+              } catch (e) {
+                parsedSkills = [];
+              }
+            }
 
-          <div className="space-y-4 sm:space-y-5 md:space-y-6">
-            {talents.map((item) => (
+            return (
               <div
                 key={item.id}
-                className="w-full bg-white rounded-lg sm:rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
+                className="w-full bg-white rounded-lg py-4 md:py-6 my-3 md:my-4"
               >
-                <div className="p-4 xs:p-5 sm:p-6 flex flex-col xs:flex-row justify-between gap-4 sm:gap-6">
-                  <div className="flex flex-col xs:flex-row items-start xs:items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                    <div className="flex-shrink-0">
-                      <img
-                        src={item.image || img}
-                        alt={`${item.first_name} ${item.last_name}`}
-                        className="w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-white shadow-md"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = img;
-                        }}
-                      />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base xs:text-lg sm:text-xl font-semibold text-gray-800 truncate xs:break-words">
+                <div className="flex flex-col md:flex-row justify-between px-4 md:px-6 gap-4 md:gap-0">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
+                    <img
+                      src={item.image || img}
+                      alt={item.first_name}
+                      className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = img;
+                      }}
+                    />
+                    <div className="sm:max-w-xs md:max-w-md lg:max-w-lg">
+                      <h3 className="text-lg sm:text-xl font-semibold break-words">
                         {item.specialty} {item.occupation}
                       </h3>
-                      <p className="text-gray-600 text-sm xs:text-base mt-1">
+                      <p className="text-gray-600">
                         {item.first_name} {item.last_name}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-col xs:items-end gap-2 xs:gap-3 flex-shrink-0">
-                    <div className="flex items-center text-gray-600 text-sm xs:text-base">
-                      <CiLocationOn className="inline-block mr-1.5 flex-shrink-0" />
-                      <span className="truncate max-w-[200px] xs:max-w-[150px] sm:max-w-none">
-                        {item.location}
-                      </span>
-                    </div>
-
-                    <div className="text-start xs:text-end">
-                      <h1 className="font-semibold text-lg xs:text-xl text-gray-800">
-                        ${item.minimum_salary}
-                      </h1>
-                      <p className="text-xs xs:text-sm text-gray-500 mt-0.5">
-                        minimum salary
-                      </p>
-                    </div>
+                  <div className="flex flex-col sm:flex-row md:flex-col items-start sm:items-center md:items-end gap-2 sm:gap-4 md:gap-0">
+                    <p className="flex items-center text-sm md:text-base">
+                      <CiLocationOn className="inline-block mr-1" />{" "}
+                      {item.location}
+                    </p>
+                    <h1 className="text-start sm:text-center md:text-end font-semibold text-lg md:text-xl">
+                      ${item.minimum_salary}
+                    </h1>
                   </div>
                 </div>
 
-                <div className="px-4 xs:px-5 sm:px-6 py-4 sm:py-5 border-t border-gray-100">
-                  <p className="text-sm xs:text-base text-gray-700 line-clamp-2 xs:line-clamp-3">
+                <div className="py-4 md:py-6 border-b-2 px-4 md:px-6">
+                  <p className="text-sm md:text-base text-gray-700 line-clamp-3 md:line-clamp-none">
                     {item.about}
                   </p>
                 </div>
 
-                <div className="px-4 xs:px-5 sm:px-6 py-4 sm:py-5 border-t border-gray-100">
-                  <h2 className="text-gray-500 pb-2 sm:pb-3 text-sm xs:text-base font-medium">
+                <div className="px-4 md:px-6 py-4 md:py-6">
+                  <h2 className="text-gray-500 pb-2 md:pb-3 text-sm md:text-base">
                     Required skills
                   </h2>
 
                   <div className="flex flex-wrap gap-2">
-                    {item.skills &&
-                      JSON.parse(item.skills).map((skill, index) => (
-                        <span
-                          key={index}
-                          className="px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs xs:text-sm bg-slate-50 text-gray-700 hover:bg-slate-100 transition-colors duration-200 break-words"
-                        >
-                          {skill.skill} ({skill.experience_years}y)
-                        </span>
-                      ))}
+                    {parsedSkills.map((skill, index) => (
+                      <span
+                        key={index}
+                        className="px-2 md:px-3 py-1 md:py-2 border rounded-lg text-xs md:text-sm bg-slate-100 text-gray-600 break-words"
+                      >
+                        {skill.skill} ({skill.experience_years})
+                      </span>
+                    ))}
                   </div>
                 </div>
 
-                <div className="px-4 xs:px-5 sm:px-6 py-4 sm:py-5 border-t border-gray-100 bg-gray-50">
-                  <div className="flex flex-col xs:flex-row justify-center xs:justify-end gap-3">
+                <div className="flex justify-center sm:justify-end px-4 md:px-6">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
                     <button
                       className="
-                        bg-blue-950 text-white rounded-lg px-6 xs:px-8 py-2.5 xs:py-3 
-                        font-semibold text-sm xs:text-base hover:scale-[1.02] 
-                        hover:shadow-lg hover:shadow-blue-950/30 active:scale-95 
-                        transition-all duration-300 w-full xs:w-auto
-                      "
+  bg-blue-950 text-white rounded-lg px-8 py-2 font-semibold 
+  hover:scale-105 hover:shadow-lg hover:shadow-blue-950/30 
+  active:scale-95 transition-all duration-300
+"
                     >
                       View profile
                     </button>
 
                     <button
                       className="
-                        bg-white text-blue-950 font-semibold border-2 border-blue-950 
-                        px-6 xs:px-8 py-2.5 xs:py-3 rounded-lg text-sm xs:text-base
-                        hover:bg-blue-50 hover:scale-[1.02] hover:shadow-md 
-                        active:scale-95 transition-all duration-300 w-full xs:w-auto
-                      "
+  bg-white text-blue-950 font-semibold border-2 border-blue-950 px-5 py-2 rounded-lg
+  hover:bg-blue-50 hover:scale-105 hover:shadow-md 
+  active:scale-95 transition-all duration-300
+"
                     >
                       Resume
                     </button>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {talents.length === 0 && !loading && (
-            <div className="text-center py-12 sm:py-16 md:py-20">
-              <div className="text-gray-400 mb-4">
-                <div className="inline-block p-4 bg-gray-100 rounded-full mb-4">
-                  <svg
-                    className="w-12 h-12"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-lg sm:text-xl font-medium text-gray-600 mb-2">
-                  No talents found
-                </h3>
-                <p className="text-gray-500 max-w-md mx-auto">
-                  Check back later for new talent listings.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </main>
-
+            );
+          })
+        )}
+      </div>
       <Footer />
     </div>
   );

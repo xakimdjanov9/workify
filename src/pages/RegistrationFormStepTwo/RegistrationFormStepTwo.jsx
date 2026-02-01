@@ -514,8 +514,9 @@ export default function RegistrationFormStepTwo() {
                 )}
               </div>
 
-              <div className="flex flex-col xs:flex-row gap-3 sm:gap-4 pt-6 sm:pt-8 md:pt-10">
-                <button
+              {/* Navigation Buttons */}
+              <div className="flex gap-3 sm:gap-4 pt-6 sm:pt-8 md:pt-10">
+                <button 
                   onClick={handleBack}
                   className="flex-1 py-3 xs:py-4 border-2 border-[#163D5C] text-[#163D5C] rounded-xl sm:rounded-2xl font-bold hover:bg-gray-50 transition-all text-sm xs:text-base"
                 >

@@ -479,7 +479,8 @@ export default function RegistrationForm() {
                 </div>
               </div>
 
-              <div className="pt-4 sm:pt-6 flex flex-col xs:flex-row gap-3 sm:gap-4 justify-center">
+              {/* Buttons */}
+              <div className="pt-4 sm:pt-6 flex gap-3 sm:gap-4 justify-center">
                 <button
                   type="button"
                   onClick={() => navigate("/")}
