@@ -13,7 +13,7 @@ import {
   HiOutlineUsers,
   HiOutlineLogout,
 } from "react-icons/hi";
-import userPng from '../../assets/user.png'
+import userPng from "../../assets/user.png";
 
 const Sidebar = () => {
   const { settings } = useTheme(); // Dark mode holatini olamiz
@@ -92,16 +92,16 @@ const Sidebar = () => {
             </div>
           ) : (
             <>
-                          <img
-              src={user?.image || userPng}
-              alt="avatar"
-              onError={(e) => {
-                e.currentTarget.src = userPng;
-              }}
-              className={`w-11 h-11 rounded-full object-cover border shadow-sm ${
-                isDark ? "border-gray-700" : "border-gray-100"
-              }`}
-            />
+              <img
+                src={user?.image || userPng}
+                alt="avatar"
+                onError={(e) => {
+                  e.currentTarget.src = userPng;
+                }}
+                className={`w-11 h-11 rounded-full object-cover border shadow-sm ${
+                  isDark ? "border-gray-700" : "border-gray-100"
+                }`}
+              />
 
               <div className="overflow-hidden text-ellipsis whitespace-nowrap">
                 <h3
@@ -110,7 +110,7 @@ const Sidebar = () => {
                   {user?.first_name} {user?.last_name?.charAt(0)}.
                 </h3>
                 <p
-                  className={`text-[12px] font-medium truncate ${isDark ? "text-gray-500" : "text-[#cbd5e1]"}`}
+                  className={`text-[12px] font-medium truncate ${isDark ? "text-gray-500" : "text-[#adb6c2]"}`}
                 >
                   {user?.city || user?.location || "Uzbekistan"}
                 </p>
@@ -198,7 +198,8 @@ const Sidebar = () => {
               Log out
             </h3>
             <p className={`mb-6 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              Are you sure you want to log out? You will need to log in again to access your account.
+              Are you sure you want to log out? You will need to log in again to
+              access your account.
             </p>
             <div className="flex gap-3">
               <button
@@ -239,7 +240,7 @@ const MenuItem = ({ to, icon, label, badge, isDark }) => (
           ? "bg-[#163853] text-white shadow-md"
           : isDark
             ? "text-gray-500 hover:bg-gray-800 hover:text-gray-300"
-            : "text-[#cbd5e1] hover:bg-gray-50 hover:text-[#94a3b8]"
+            : "text-[#a0a8b1] hover:bg-gray-50 hover:text-[#94a3b8]"
       }
     `}
   >
