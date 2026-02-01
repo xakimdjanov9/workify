@@ -200,8 +200,8 @@ const Sidebar = () => {
               <button
                 onClick={() => setIsModalOpen(false)}
                 className={`flex-1 py-3 px-4 rounded-xl font-bold transition-colors ${isDark
-                    ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
               >
                 No, cancel
@@ -219,3 +219,32 @@ const Sidebar = () => {
     </>
   );
 };
+
+const MenuItem = ({ to, icon, label, badge, isDark }) => (
+  <NavLink
+    to={to}
+    className={({ isActive }) => `
+      flex flex-col md:flex-row items-center gap-1 md:gap-4
+      px-2 md:px-6 py-2 md:py-[14px]
+      rounded-xl md:rounded-[14px] transition-all duration-200
+      text-[9px] md:text-[16px] font-bold
+      relative group flex-1 md:w-full
+      ${isActive
+        ? "bg-[#163853] text-white shadow-md"
+        : isDark
+          ? "text-gray-500 hover:bg-gray-800 hover:text-gray-300"
+          : "text-[#a0a8b1] hover:bg-gray-50 hover:text-[#94a3b8]"
+      }
+    `}
+  >
+    <span className="text-[22px] md:text-[24px]">{icon}</span>
+    <span className="whitespace-nowrap tracking-wide">{label}</span>
+    {badge && (
+      <span className="absolute top-1 right-1 md:right-4 md:top-1/2 md:-translate-y-1/2 bg-[#5cc992] text-white text-[8px] md:text-[11px] w-3.5 h-3.5 md:w-5 md:h-5 flex items-center justify-center rounded-full font-bold">
+        {badge}
+      </span>
+    )}
+  </NavLink>
+);
+
+export default Sidebar;
