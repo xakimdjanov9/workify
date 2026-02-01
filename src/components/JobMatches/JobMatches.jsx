@@ -20,7 +20,7 @@ export default function JobMatches() {
   const isDark = settings.darkMode;
 
   const [allJobs, setAllJobs] = useState([]);
-  const [userSkills, setUserSkills] = useState([]);
+  const [userskils, setUserskils] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -53,30 +53,30 @@ export default function JobMatches() {
         const decoded = jwtDecode(token);
 
         const userRes = await talentApi.getById(decoded.id);
-        const rawSkills = userRes.data?.skils || [];
+        const rawskils = userRes.data?.skils || [];
 
-        const parsedUserSkills = Array.isArray(rawSkills)
-          ? rawSkills
-          : String(rawSkills)
+        const parsedUserskils = Array.isArray(rawskils)
+          ? rawskils
+          : String(rawskils)
               .split(",")
               .map((s) => s.trim());
 
-        const lowerUserSkills = parsedUserSkills
+        const lowerUserskils = parsedUserskils
           .map((s) => (typeof s === "string" ? s.toLowerCase() : ""))
           .filter(Boolean);
 
-        setUserSkills(lowerUserSkills);
+        setUserskils(lowerUserskils);
 
         const jobRes = await jobApi.getAll();
         const jobs = jobRes.data || [];
 
         const sortedJobs = [...jobs].sort((a, b) => {
-          const aMatch = lowerUserSkills.some(
+          const aMatch = lowerUserskils.some(
             (s) =>
               a?.specialty?.toLowerCase?.().includes(s) ||
               a?.occupation?.toLowerCase?.().includes(s)
           );
-          const bMatch = lowerUserSkills.some(
+          const bMatch = lowerUserskils.some(
             (s) =>
               b?.specialty?.toLowerCase?.().includes(s) ||
               b?.occupation?.toLowerCase?.().includes(s)
@@ -312,208 +312,202 @@ export default function JobMatches() {
           </p>
 
           {filteredJobs.map((job) => {
-            const reaction = getReaction(job.id);
-            const isMatch =
-              userSkills.length > 0 &&
-              userSkills.some(
-                (s) =>
-                  job.specialty?.toLowerCase().includes(s) ||
-                  job.occupation?.toLowerCase().includes(s)
-              );
+  const reaction = getReaction(job.id);
 
-            return (
-              <div
-                key={job.id}
-                className={`rounded-[32px] p-5 md:p-8 border transition-all ${
-                  isMatch
-                    ? isDark
-                      ? "border-blue-900/50 bg-blue-900/10"
-                      : "border-blue-100 bg-blue-50/10"
-                    : isDark
-                    ? "bg-[#1E1E1E] border-gray-800"
-                    : "bg-white border-gray-50"
+  const isMatch =
+    userskils.length > 0 &&
+    userskils.some(
+      (s) =>
+        job.specialty?.toLowerCase().includes(s) ||
+        job.occupation?.toLowerCase().includes(s)
+    );
+
+  return (
+    <div
+      key={job.id}
+      className={`rounded-[32px] p-5 md:p-8 border transition-all ${
+        isMatch
+          ? isDark
+            ? "border-blue-900/50 bg-blue-900/10"
+            : "border-blue-100 bg-blue-50/10"
+          : isDark
+          ? "bg-[#1E1E1E] border-gray-800"
+          : "bg-white border-gray-50"
+      }`}
+    >
+      {/* TOP */}
+      <div className="flex flex-col md:flex-row justify-between gap-6 mb-6">
+        <div className="flex gap-5">
+          <div
+            className={`w-16 h-16 rounded-2xl flex items-center justify-center border p-2 shrink-0 shadow-sm ${
+              isDark
+                ? "bg-[#252525] border-gray-700"
+                : "bg-white border-gray-50"
+            }`}
+          >
+            <img
+              src={job.company?.profileimg_url || nonImg}
+              alt="logo"
+              className="w-full h-full object-contain"
+            />
+          </div>
+
+          <div>
+            <h3
+              className={`text-xl font-bold ${
+                isDark ? "text-gray-100" : "text-gray-800"
+              }`}
+            >
+              {job.company?.company_name}
+            </h3>
+
+            <p className="text-gray-400 text-sm font-bold">
+              {job.company?.city}
+            </p>
+
+            <div className="flex items-center gap-1 mt-1">
+              {[1, 2, 3, 4].map((i) => (
+                <span key={i} className="text-yellow-500 text-sm">
+                  ★
+                </span>
+              ))}
+              <span
+                className={`${
+                  isDark ? "text-gray-700" : "text-gray-200"
+                } text-sm`}
+              >
+                ★
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col md:items-end gap-2">
+          <div
+            className={`flex items-center gap-2 font-bold text-sm ${
+              isDark ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
+            <FaCity className="text-blue-400" />
+            {job.company?.city || "Uzbekistan"}
+          </div>
+
+          <span
+            className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+              isDark
+                ? "bg-blue-900/30 text-blue-400"
+                : "bg-[#E7F8F0] text-[#52D394]"
+            }`}
+          >
+            {job.workplace_type}
+          </span>
+        </div>
+      </div>
+
+      {/* DESCRIPTION */}
+      <p
+        className={`text-sm font-medium leading-relaxed mb-6 line-clamp-2 ${
+          isDark ? "text-gray-400" : "text-gray-500"
+        }`}
+      >
+        {job.description || "No description provided..."}
+      </p>
+
+      {/* skils */}
+      <div className="mb-8">
+        <p
+          className={`font-black text-sm mb-3 ${
+            isDark ? "text-gray-300" : "text-gray-800"
+          }`}
+        >
+          Required skils:
+        </p>
+
+        <div className="flex flex-wrap gap-2">
+          {(Array.isArray(job.skils) ? job.skils : [job.skils]).map(
+            (skill, index) => (
+              <span
+                key={index}
+                className={`px-5 py-2.5 rounded-xl text-xs font-bold border ${
+                  isDark
+                    ? "bg-[#252525] text-gray-400 border-gray-700"
+                    : "bg-[#F1F3F6] text-gray-600 border-transparent"
                 }`}
               >
-                <div className="flex flex-col md:flex-row justify-between gap-6">
-                  <div className="flex gap-5">
-                    <div
-                      className={`w-16 h-16 rounded-2xl flex items-center justify-center border p-2 shrink-0 shadow-sm ${
-                        isDark
-                          ? "bg-[#252525] border-gray-700"
-                          : "bg-white border-gray-50"
-                      }`}
-                    >
-                      <img
-                        src={job.company?.profileimg_url || nonImg}
-                        alt="logo"
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
+                {skill}
+              </span>
+            )
+          )}
+        </div>
+      </div>
 
-                    <div>
-                      <h3
-                        className={`text-xl font-bold ${
-                          isDark ? "text-gray-100" : "text-gray-800"
-                        }`}
-                      >
-                        {job.company?.company_name}
-                      </h3>
-                      <p className="text-gray-400 text-sm font-bold">
-                        {job.company?.city}
-                      </p>
-                      <div className="flex items-center gap-1 mt-1">
-                        {[1, 2, 3, 4].map((i) => (
-                          <span key={i} className="text-yellow-500 text-sm">
-                            ★
-                          </span>
-                        ))}
-                        <span
-                          className={`${
-                            isDark ? "text-gray-700" : "text-gray-200"
-                          } text-sm`}
-                        >
-                          ★
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+      {/* SALARY */}
+      <span
+        className={`text-2xl font-black block mb-6 ${
+          isDark ? "text-blue-400" : "text-slate-800"
+        }`}
+      >
+        ${job.salary_min} - {job.salary_max}
+      </span>
 
-                  <div className="flex flex-col md:items-end gap-2">
-                    <div
-                      className={`flex items-center gap-2 font-bold text-sm ${
-                        isDark ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      <FaCity className="text-blue-400" />
-                      {job.company?.city || "Uzbekistan"}
-                    </div>
-                    <span
-                      className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                        isDark
-                          ? "bg-blue-900/30 text-blue-400"
-                          : "bg-[#E7F8F0] text-[#52D394]"
-                      }`}
-                    >
-                      {job.workplace_type}
-                    </span>
-                  </div>
-                </div>
+      {/* ACTIONS */}
+      <div
+        className={`flex flex-col md:flex-row md:justify-between gap-4 md:gap-6 pt-6 border-t ${
+          isDark ? "border-gray-800" : "border-gray-50"
+        }`}
+      >
+        <div className="flex items-center gap-5 md:gap-6">
+          <button
+            onClick={() => handleLike(job.id)}
+            className={`transition-all ${
+              reaction === "like"
+                ? "text-green-500 scale-110"
+                : "text-gray-500 hover:text-green-400"
+            }`}
+          >
+            <FaThumbsUp size={22} />
+          </button>
 
-                  <p className={`text-sm font-medium leading-relaxed mb-6 line-clamp-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                    {job.description || "No description provided..."}
-                  </p>
+          <button
+            onClick={() => handleDislike(job.id)}
+            className={`transition-all ${
+              reaction === "dislike"
+                ? "text-red-500 scale-110"
+                : "text-gray-500 hover:text-red-400"
+            }`}
+          >
+            <FaThumbsDown size={22} />
+          </button>
+        </div>
 
-                  <div className="mb-8">
-                    <p className={`font-black text-sm mb-3 ${isDark ? "text-gray-300" : "text-gray-800"}`}>
-                      Required skills:
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      <span
-                        className={`px-5 py-2.5 rounded-xl text-xs font-bold border ${
-                          isDark
-                            ? "bg-[#252525] text-gray-400 border-gray-700"
-                            : "bg-[#F1F3F6] text-gray-600 border-transparent"
-                        }`}
-                      >
-                        {job.skils}
-                      </span>
-                    )}
-                  </div>
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <button
+            onClick={() => navigate(`/job-post/${job.id}`)}
+            className={`flex-1 sm:flex-none px-8 py-4 rounded-2xl font-black text-sm md:text-base transition-all shadow-lg ${
+              isDark
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-[#163D5C] hover:bg-[#0f2d45]"
+            } text-white`}
+          >
+            Quick apply
+          </button>
 
-                  <span
-                    className={`text-2xl font-black ${
-                      isDark ? "text-blue-400" : "text-slate-800"
-                    }`}
-                  >
-                    ${job.salary_min}-{job.salary_max}
-                  </span>
-                </div>
+          <button
+            onClick={() => navigate(`/job-details/${job.company_id}`)}
+            className={`flex-1 sm:flex-none px-8 py-4 border-2 rounded-2xl font-black text-sm md:text-base transition-all ${
+              isDark
+                ? "border-gray-700 text-gray-300 hover:bg-gray-800"
+                : "border-[#163D5C] text-[#163D5C] hover:bg-gray-50"
+            }`}
+          >
+            View job post
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+})}
 
-                <p
-                  className={`text-sm font-medium leading-relaxed mb-6 line-clamp-2 ${
-                    isDark ? "text-gray-400" : "text-gray-500"
-                  }`}
-                >
-                  {job.description || "No description provided..."}
-                </p>
-
-                <div className="mb-8">
-                  <p
-                    className={`font-black text-sm mb-3 ${
-                      isDark ? "text-gray-300" : "text-gray-800"
-                    }`}
-                  >
-                    Required skills:
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span
-                      className={`px-5 py-2.5 rounded-xl text-xs font-bold border ${
-                        isDark
-                          ? "bg-[#252525] text-gray-400 border-gray-700"
-                          : "bg-[#F1F3F6] text-gray-600 border-transparent"
-                      }`}
-                    >
-                      {job.skills}
-                    </span>
-                  </div>
-                </div>
-
-                <div
-                  className={`flex flex-col md:flex-row md:justify-between gap-4 md:gap-6 pt-6 border-t ${
-                    isDark ? "border-gray-800" : "border-gray-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-5 md:gap-6">
-                    <button
-                      onClick={() => handleLike(job.id)}
-                      className={`transition-all ${
-                        reaction === "like"
-                          ? "text-green-500 scale-110"
-                          : "text-gray-500 hover:text-green-400"
-                      }`}
-                      title="Like"
-                    >
-                      <FaThumbsUp size={22} />
-                    </button>
-                    <button
-                      onClick={() => handleDislike(job.id)}
-                      className={`transition-all ${
-                        reaction === "dislike"
-                          ? "text-red-500 scale-110"
-                          : "text-gray-500 hover:text-red-400"
-                      }`}
-                      title="Dislike"
-                    >
-                      <FaThumbsDown size={22} />
-                    </button>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                    <button
-                      onClick={() => navigate(`/job-post/${job.id}`)}
-                      className={`flex-1 sm:flex-none px-8 py-4 rounded-2xl font-black text-sm md:text-base transition-all shadow-lg ${
-                        isDark
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : "bg-[#163D5C] hover:bg-[#0f2d45]"
-                      } text-white`}
-                    >
-                      Quick apply
-                    </button>
-                    <button
-                      onClick={() => navigate(`/job-details/${job.company_id}`)}
-                      className={`flex-1 sm:flex-none px-8 py-4 border-2 rounded-2xl font-black text-sm md:text-base transition-all ${
-                        isDark
-                          ? "border-gray-700 text-gray-300 hover:bg-gray-800"
-                          : "border-[#163D5C] text-[#163D5C] hover:bg-gray-50"
-                      }`}
-                    >
-                      View job post
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
         </div>
       </div>
     </div>
