@@ -19,7 +19,6 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
 
-  // Scroll effekti
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
@@ -28,7 +27,6 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Ekran o'zgarganida mobil menyuni yopish
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 850) {
@@ -71,7 +69,6 @@ const Header = () => {
     navigate("/signin");
   };
 
-  // Mobile menyuni yopish
   const closeMobileMenu = () => {
     setOpen(false);
   };
@@ -84,45 +81,40 @@ const Header = () => {
         }`}
       >
         <div className="flex items-center justify-between">
-          {/* Logo - responsive font size */}
           <Link to="/" className="flex-shrink-0">
             <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">
               workify<span className="text-[#163D5C]">.</span>
             </h1>
           </Link>
 
-          {/* Desktop Navigation - 850px dan kattalarda */}
           <div className="hidden min-[850px]:flex items-center gap-6 lg:gap-8 text-sm font-semibold text-gray-500">
             <Link
               to="/talents"
               className="flex items-center gap-2 hover:text-[#163D5C] transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-50"
             >
-              <FiUser className="text-base" /> 
+              <FiUser className="text-base" />
               <span className="hidden sm:inline">Talents</span>
             </Link>
             <Link
               to="/jobs"
               className="flex items-center gap-2 hover:text-[#163D5C] transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-50"
             >
-              <FiBriefcase className="text-base" /> 
+              <FiBriefcase className="text-base" />
               <span className="hidden sm:inline">Jobs</span>
             </Link>
           </div>
 
-          {/* Right Side - responsive gaps va paddinglar */}
           <div className="flex items-center gap-2 sm:gap-3">
             {!loading && user ? (
               <div className="flex items-center gap-2 sm:gap-3">
-                {/* Dashboard link - 640px dan kattalarda */}
                 <Link
                   to="/dashboard"
                   className="hidden sm:flex items-center gap-2 text-sm font-bold text-gray-700 hover:text-[#163D5C] transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-50"
                 >
-                  <FiLayout className="text-base" /> 
+                  <FiLayout className="text-base" />
                   <span className="hidden sm:inline">Dashboard</span>
                 </Link>
-                
-                {/* Profile section - responsive padding va image size */}
+
                 <Link
                   to="/profile"
                   className="flex items-center gap-2 sm:gap-3 bg-gray-50 p-1 pr-2 sm:pr-4 rounded-full border border-gray-100 hover:shadow-md transition-all duration-200 hover:bg-white"
@@ -132,7 +124,6 @@ const Header = () => {
                     alt="profile"
                     className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border-2 border-white shadow-sm"
                   />
-                  {/* User info - 640px dan kattalarda */}
                   <div className="hidden sm:block text-left">
                     <p className="text-xs sm:text-[13px] font-bold text-slate-800 leading-none truncate max-w-[100px] lg:max-w-none">
                       {user.first_name}
@@ -145,14 +136,12 @@ const Header = () => {
               </div>
             ) : (
               <div className="flex items-center gap-2 sm:gap-3">
-                {/* Sign in link - 640px dan kattalarda */}
                 <Link
                   to="/signin"
                   className="hidden sm:block text-sm font-bold text-slate-700 hover:text-[#163D5C] transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-50"
                 >
                   Sign in
                 </Link>
-                {/* Join Now button - 850px dan kattalarda */}
                 <Link
                   to="/registration/step-1"
                   className="hidden min-[850px]:block px-4 sm:px-5 py-2 sm:py-2.5 bg-[#163D5C] text-white text-sm rounded-xl font-bold hover:opacity-90 transition-all duration-200 hover:shadow-md"
@@ -162,7 +151,6 @@ const Header = () => {
               </div>
             )}
 
-            {/* Mobile Join Now (kiritmagan foydalanuvchilar uchun) */}
             {!user && (
               <Link
                 to="/registration/step-1"
@@ -172,7 +160,6 @@ const Header = () => {
               </Link>
             )}
 
-            {/* Mobile menu button - 850px dan kichiklarda */}
             <button
               className="min-[850px]:hidden text-2xl text-slate-800 p-1 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200 ml-1"
               onClick={() => setOpen(true)}
@@ -184,7 +171,6 @@ const Header = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - responsive animation */}
       <div
         className={`fixed inset-0 z-[70] transition-all duration-300 ${
           open
@@ -234,7 +220,7 @@ const Header = () => {
                     onClick={closeMobileMenu}
                     className="flex items-center gap-3 sm:gap-4 text-base sm:text-lg font-bold text-slate-700 p-3 sm:p-4 rounded-xl hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <FiLayout className="text-[#163D5C] text-lg sm:text-xl" /> 
+                    <FiLayout className="text-[#163D5C] text-lg sm:text-xl" />
                     <span>Dashboard</span>
                   </Link>
                   <Link
@@ -242,7 +228,7 @@ const Header = () => {
                     onClick={closeMobileMenu}
                     className="flex items-center gap-3 sm:gap-4 text-base sm:text-lg font-bold text-slate-700 p-3 sm:p-4 rounded-xl hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <FiUser className="text-[#163D5C] text-lg sm:text-xl" /> 
+                    <FiUser className="text-[#163D5C] text-lg sm:text-xl" />
                     <span>My Profile</span>
                   </Link>
                   <Link
@@ -250,7 +236,7 @@ const Header = () => {
                     onClick={closeMobileMenu}
                     className="flex items-center gap-3 sm:gap-4 text-base sm:text-lg font-bold text-slate-700 p-3 sm:p-4 rounded-xl hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <FiUser className="text-[#163D5C] text-lg sm:text-xl" /> 
+                    <FiUser className="text-[#163D5C] text-lg sm:text-xl" />
                     <span>Talents</span>
                   </Link>
                   <Link
@@ -258,14 +244,14 @@ const Header = () => {
                     onClick={closeMobileMenu}
                     className="flex items-center gap-3 sm:gap-4 text-base sm:text-lg font-bold text-slate-700 p-3 sm:p-4 rounded-xl hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <FiBriefcase className="text-[#163D5C] text-lg sm:text-xl" /> 
+                    <FiBriefcase className="text-[#163D5C] text-lg sm:text-xl" />
                     <span>Jobs</span>
                   </Link>
                   <button
                     onClick={handleLogoutClick}
                     className="w-full flex items-center justify-center gap-2 p-3 sm:p-4 mt-4 text-red-500 font-bold border border-red-100 rounded-2xl bg-red-50 hover:bg-red-100 transition-colors duration-200"
                   >
-                    <FiLogOut /> 
+                    <FiLogOut />
                     <span>Log Out</span>
                   </button>
                 </div>
@@ -278,7 +264,7 @@ const Header = () => {
                     onClick={closeMobileMenu}
                     className="flex items-center gap-3 sm:gap-4 text-base sm:text-lg font-bold text-slate-700 p-3 sm:p-4 rounded-xl hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <FiUser className="text-[#163D5C] text-lg sm:text-xl" /> 
+                    <FiUser className="text-[#163D5C] text-lg sm:text-xl" />
                     <span>Talents</span>
                   </Link>
                   <Link
@@ -286,7 +272,7 @@ const Header = () => {
                     onClick={closeMobileMenu}
                     className="flex items-center gap-3 sm:gap-4 text-base sm:text-lg font-bold text-slate-700 p-3 sm:p-4 rounded-xl hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <FiBriefcase className="text-[#163D5C] text-lg sm:text-xl" /> 
+                    <FiBriefcase className="text-[#163D5C] text-lg sm:text-xl" />
                     <span>Jobs</span>
                   </Link>
                 </div>
@@ -312,7 +298,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Logout Modal - responsive padding va flex direction */}
       {showLogoutModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl p-5 sm:p-6 md:p-8 max-w-xs sm:max-w-sm w-full shadow-2xl">

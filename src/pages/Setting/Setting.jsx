@@ -7,7 +7,7 @@ import {
   TbLogout,
 } from "react-icons/tb";
 import { useTheme } from "../../Context/ThemeContext.jsx";
-import { useNavigate } from "react-router-dom"; // Homega o'tish uchun
+import { useNavigate } from "react-router-dom";
 import Theme from "../../components/Theme/Theme.jsx";
 
 const Setting = () => {
@@ -20,10 +20,9 @@ const Setting = () => {
   };
 
   const handleLogout = () => {
-    // Bu yerda localStorage yoki tokenni tozalash kodini yozishingiz mumkin
     localStorage.removeItem("token");
     setShowLogoutModal(false);
-    navigate("/"); // Home sahifasiga o'tkazish
+    navigate("/");
   };
 
   const CustomToggle = ({ isOn, onToggle }) => (
@@ -50,21 +49,27 @@ const Setting = () => {
       }`}
     >
       <div className="max-w-[900px] mx-auto relative">
-        {/* Header */}
         <div
-          className={`${settings.darkMode ? "bg-[#1E1E1E] border-gray-700" : "bg-white border-gray-100"} p-3 md:p-4 rounded-xl shadow-sm mb-6 border transition-colors`}
+          className={`${
+            settings.darkMode
+              ? "bg-[#1E1E1E] border-gray-700"
+              : "bg-white border-gray-100"
+          } p-3 md:p-4 rounded-xl shadow-sm mb-6 border transition-colors`}
         >
           <h1
-            className={`text-lg md:text-xl font-medium ${settings.darkMode ? "text-gray-200" : "text-gray-700"} ml-1`}
+            className={`text-xl md:text-2xl font-semibold ${
+              settings.darkMode ? "text-gray-200" : "text-{#505151}"
+            } ml-1`}
           >
             Settings
           </h1>
         </div>
 
-        {/* Notification Settings */}
         <div className="mb-8">
           <h2
-            className={`text-[16px] md:text-[18px] font-bold mb-4 ${settings.darkMode ? "text-gray-400" : "text-gray-600"}`}
+            className={`text-[16px] md:text-[18px] font-bold mb-4 ${
+              settings.darkMode ? "text-gray-400" : "text-gray-600"
+            }`}
           >
             Notification settings
           </h2>
@@ -99,77 +104,103 @@ const Setting = () => {
           </div>
         </div>
 
-        {/* Support Section */}
         <div className="mb-8">
           <h2
-            className={`text-[16px] md:text-[18px] font-bold mb-4 ${settings.darkMode ? "text-gray-400" : "text-gray-600"}`}
+            className={`text-[16px] md:text-[18px] font-bold mb-4 ${
+              settings.darkMode ? "text-gray-400" : "text-gray-600"
+            }`}
           >
             Support
           </h2>
           <div
             onClick={handleSupportClick}
-            className={`${settings.darkMode ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"} p-4 md:p-6 rounded-[22px] flex justify-between items-center shadow-sm border cursor-pointer group`}
+            className={`${
+              settings.darkMode
+                ? "bg-[#1E1E1E] border-gray-800"
+                : "bg-white border-gray-50"
+            } p-4 md:p-6 rounded-[22px] flex justify-between items-center shadow-sm border cursor-pointer group`}
           >
             <div className="flex items-start gap-4">
               <TbHeadset
-                className={`text-2xl mt-1 ${settings.darkMode ? "text-indigo-400" : "text-indigo-600"}`}
+                className={`text-2xl mt-1 ${
+                  settings.darkMode ? "text-indigo-400" : "text-indigo-600"
+                }`}
               />
               <div>
                 <h3
-                  className={`text-[15px] md:text-[17px] font-bold ${settings.darkMode ? "text-gray-200" : "text-gray-800"}`}
+                  className={`text-[15px] md:text-[17px] font-bold ${
+                    settings.darkMode ? "text-gray-200" : "text-gray-800"
+                  }`}
                 >
                   Connect with support
                 </h3>
                 <p
-                  className={`text-[11px] md:text-[14px] ${settings.darkMode ? "text-gray-400" : "text-gray-500"}`}
+                  className={`text-[11px] md:text-[14px] ${
+                    settings.darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
                 >
                   Our team is always ready to help you
                 </p>
               </div>
             </div>
             <div
-              className={`px-4 py-2 rounded-lg text-sm font-semibold ${settings.darkMode ? "bg-indigo-600/20 text-indigo-400" : "bg-indigo-50 text-indigo-600"}`}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold ${
+                settings.darkMode
+                  ? "bg-indigo-600/20 text-indigo-400"
+                  : "bg-indigo-50 text-indigo-600"
+              }`}
             >
               Chat
             </div>
           </div>
         </div>
 
-        {/* Log Out Section - FAQAT MOBILE (md dan kichik ekranda ko'rinadi) */}
         <div className="mb-8 md:hidden">
           <h2 className="text-[16px] font-bold mb-4 text-red-500">Account</h2>
           <div
             onClick={() => setShowLogoutModal(true)}
-            className={`${settings.darkMode ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"} p-4 rounded-[22px] flex items-center gap-4 shadow-sm border cursor-pointer active:bg-red-50 transition-colors`}
+            className={`${
+              settings.darkMode
+                ? "bg-[#1E1E1E] border-gray-800"
+                : "bg-white border-gray-50"
+            } p-4 rounded-[22px] flex items-center gap-4 shadow-sm border cursor-pointer active:bg-red-50 transition-colors`}
           >
             <TbLogout className="text-2xl text-red-500" />
             <span className="font-bold text-[15px] text-red-500">Log Out</span>
           </div>
         </div>
 
-        {/* Theme Settings */}
         <Theme CustomToggle={CustomToggle} SettingItem={SettingItem} />
 
-        {/* --- LOGOUT MODAL --- */}
         {showLogoutModal && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
             <div
-              className={`${settings.darkMode ? "bg-[#1E1E1E] border-gray-700" : "bg-white"} w-full max-w-sm rounded-[24px] p-6 shadow-2xl border animate-in zoom-in duration-200`}
+              className={`${
+                settings.darkMode ? "bg-[#1E1E1E] border-gray-700" : "bg-white"
+              } w-full max-w-sm rounded-[24px] p-6 shadow-2xl border animate-in zoom-in duration-200`}
             >
               <h3
-                className={`text-xl font-bold mb-2 text-center ${settings.darkMode ? "text-white" : "text-gray-900"}`}
+                className={`text-xl font-bold mb-2 text-center ${
+                  settings.darkMode ? "text-white" : "text-gray-900"
+                }`}
               >
                 Log Out?
               </h3>
               <p
-                className={`text-center mb-6 ${settings.darkMode ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-center mb-6 ${
+                  settings.darkMode ? "text-gray-400" : "text-gray-500"
+                }`}
               >
                 Are you sure you want to log out of your account?
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowLogoutModal(false)}
-                  className={`flex-1 py-3 rounded-xl font-semibold transition-colors ${settings.darkMode ? "bg-gray-800 text-gray-300 hover:bg-gray-700" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+                  className={`flex-1 py-3 rounded-xl font-semibold transition-colors ${
+                    settings.darkMode
+                      ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
                 >
                   No, stay
                 </button>
@@ -188,7 +219,6 @@ const Setting = () => {
   );
 };
 
-// SettingItem (O'zgarishsiz)
 const SettingItem = ({
   icon,
   title,
@@ -199,22 +229,30 @@ const SettingItem = ({
   isDark,
 }) => (
   <div
-    className={`${isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"} p-4 md:p-6 rounded-[22px] flex justify-between items-center shadow-sm border transition-all hover:shadow-md`}
+    className={`${
+      isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-50"
+    } p-4 md:p-6 rounded-[22px] flex justify-between items-center shadow-sm border transition-all hover:shadow-md`}
   >
     <div className="flex items-start gap-4">
       <div
-        className={`text-2xl mt-1 ${isDark ? "text-gray-500" : "text-gray-400"}`}
+        className={`text-2xl mt-1 ${
+          isDark ? "text-gray-500" : "text-gray-400"
+        }`}
       >
         {icon}
       </div>
       <div>
         <h3
-          className={`text-[15px] md:text-[17px] font-bold ${isDark ? "text-gray-200" : "text-gray-800"}`}
+          className={`text-[15px] md:text-[17px] font-bold ${
+            isDark ? "text-gray-200" : "text-gray-800"
+          }`}
         >
           {title}
         </h3>
         <p
-          className={`text-[11px] md:text-[14px] ${isDark ? "text-gray-400" : "text-gray-500"}`}
+          className={`text-[11px] md:text-[14px] ${
+            isDark ? "text-gray-400" : "text-gray-500"
+          }`}
         >
           {desc}
         </p>

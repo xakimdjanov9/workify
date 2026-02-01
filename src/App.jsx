@@ -35,7 +35,9 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen transition-colors duration-500 ${settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"}`}
+      className={`min-h-screen transition-colors duration-500 ${
+        settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"
+      }`}
     >
       <Routes>
         <Route path="/" element={<TalantHome />} />
@@ -50,10 +52,10 @@ function App() {
           element={<RegistrationFormStepThree />}
         />
         <Route path="/verify-account" element={<VerifyAccount />} />
-        <Route path="/forgot-password" element={<ForgotPassword/>}/>
-        <Route path="/jobs" element={<HomeJob/>}/>
-        <Route path="/talents" element={<HomeTalents/>}/>
-        
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/jobs" element={<HomeJob />} />
+        <Route path="/talents" element={<HomeTalents />} />
+
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />

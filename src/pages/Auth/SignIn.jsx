@@ -15,7 +15,6 @@ const SignIn = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  // rememberMe state qoladi, lekin biz uni login logikasida ishlatmaymiz
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({
     email: false,
@@ -49,8 +48,6 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Checkbox tekshiruvi umuman olib tashlandi.
-
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors({
@@ -67,9 +64,6 @@ const SignIn = () => {
       const { token } = res.data;
 
       if (token) {
-        // MUHIM O'ZGARISH:
-        // Remember me ga qaramasdan, har doim localStorage ga yozamiz.
-        // Bu sening Dashboardingga 100% kirishini ta'minlaydi.
         localStorage.setItem("token", token);
 
         toast.success("Successfully logged in!");
@@ -101,7 +95,6 @@ const SignIn = () => {
             onSubmit={handleSubmit}
             className="bg-white shadow-lg rounded-xl p-8 w-full max-w-sm border border-gray-200"
           >
-            {/* Email Input */}
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -111,13 +104,19 @@ const SignIn = () => {
               </label>
               <div className="relative">
                 <MdEmail
-                  className={`absolute left-3 top-1/2 -translate-y-1/2 text-xl ${errors.email ? "text-red-500" : "text-gray-400"}`}
+                  className={`absolute left-3 top-1/2 -translate-y-1/2 text-xl ${
+                    errors.email ? "text-red-500" : "text-gray-400"
+                  }`}
                 />
                 <input
                   type="email"
                   id="email"
                   placeholder="admin@gmail.com"
-                  className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none transition ${errors.email ? "border-red-500 focus:ring-red-300 bg-red-50" : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"}`}
+                  className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 outline-none transition ${
+                    errors.email
+                      ? "border-red-500 focus:ring-red-300 bg-red-50"
+                      : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -125,7 +124,6 @@ const SignIn = () => {
               </div>
             </div>
 
-            {/* Password Input */}
             <div className="mb-2">
               <label
                 htmlFor="password"
@@ -135,13 +133,19 @@ const SignIn = () => {
               </label>
               <div className="relative">
                 <IoMdLock
-                  className={`absolute left-3 top-1/2 -translate-y-1/2 text-xl ${errors.password ? "text-red-500" : "text-gray-400"}`}
+                  className={`absolute left-3 top-1/2 -translate-y-1/2 text-xl ${
+                    errors.password ? "text-red-500" : "text-gray-400"
+                  }`}
                 />
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
                   placeholder="••••••••"
-                  className={`w-full pl-10 pr-12 py-2 border rounded-lg focus:ring-2 outline-none transition ${errors.password ? "border-red-500 focus:ring-red-300 bg-red-50" : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"}`}
+                  className={`w-full pl-10 pr-12 py-2 border rounded-lg focus:ring-2 outline-none transition ${
+                    errors.password
+                      ? "border-red-500 focus:ring-red-300 bg-red-50"
+                      : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -160,7 +164,6 @@ const SignIn = () => {
               </div>
             </div>
 
-            {/* Remember Me & Forgot Password Section */}
             <div className="flex items-center justify-between mb-6">
               <label className="flex items-center text-sm text-gray-600 cursor-pointer">
                 <input
@@ -180,7 +183,6 @@ const SignIn = () => {
               </Link>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}

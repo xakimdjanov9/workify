@@ -16,7 +16,18 @@ const Dashboard2 = () => {
 
   const weekDays = ["M", "T", "W", "T", "F", "S", "S"];
   const monthNames = [
-    "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   const getThisMonday = () => {
@@ -101,7 +112,9 @@ const Dashboard2 = () => {
           const created = new Date(app.createdAt);
 
           if (created >= monday && created < weekEnd) {
-            const dayIndex = Math.floor((created - monday) / (1000 * 60 * 60 * 24));
+            const dayIndex = Math.floor(
+              (created - monday) / (1000 * 60 * 60 * 24)
+            );
             if (dayIndex >= 0 && dayIndex < 7) weekData[dayIndex]++;
           }
 
@@ -119,7 +132,9 @@ const Dashboard2 = () => {
         if (isMounted) {
           setStats({
             weekly: [45, 120, 85, 210, 180, 95, 60],
-            monthly: [120, 150, 180, 200, 220, 240, 260, 280, 250, 230, 210, 190],
+            monthly: [
+              120, 150, 180, 200, 220, 240, 260, 280, 250, 230, 210, 190,
+            ],
           });
         }
       } finally {
@@ -128,7 +143,9 @@ const Dashboard2 = () => {
     };
 
     fetchData();
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const activeStats = activeTab === "week" ? stats.weekly : stats.monthly;
@@ -174,7 +191,11 @@ const Dashboard2 = () => {
       const monday = getThisMonday();
       const sunday = new Date(monday);
       sunday.setDate(monday.getDate() + 6);
-      return `${monday.getDate()} ${monday.toLocaleDateString("en-GB", { month: "short" })} - ${sunday.getDate()} ${sunday.toLocaleDateString("en-GB", { month: "short" })} ${monday.getFullYear()}`;
+      return `${monday.getDate()} ${monday.toLocaleDateString("en-GB", {
+        month: "short",
+      })} - ${sunday.getDate()} ${sunday.toLocaleDateString("en-GB", {
+        month: "short",
+      })} ${monday.getFullYear()}`;
     }
     return `January - December ${getCurrentYear()}`;
   };
@@ -183,12 +204,9 @@ const Dashboard2 = () => {
     <div className="w-full mx-auto lg:max-w-none lg:w-auto lg:flex-1 pt-0 sm:pt-3 lg:pt-6">
       <div
         className={`rounded-xl shadow-md p-4 sm:p-5 lg:p-6 border ${
-          isDark
-            ? "bg-[#1E1E1E] border-gray-800"
-            : "bg-white border-gray-100"
+          isDark ? "bg-[#1E1E1E] border-gray-800" : "bg-white border-gray-100"
         }`}
       >
-        {/* Header */}
         <div className="text-center mb-4 sm:mb-5 lg:mb-6">
           <h2
             className={`text-lg sm:text-xl lg:text-2xl font-bold mb-1 ${
@@ -234,12 +252,15 @@ const Dashboard2 = () => {
             </button>
           </div>
 
-          <div className={`text-xs sm:text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+          <div
+            className={`text-xs sm:text-sm ${
+              isDark ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
             {getDisplayDate()}
           </div>
         </div>
 
-        {/* Chart */}
         <div className="relative">
           {loading ? (
             <div
@@ -260,7 +281,6 @@ const Dashboard2 = () => {
             </div>
           ) : (
             <div style={{ height: getContainerHeight() }} className="flex">
-              {/* Y axis */}
               <div
                 className={`w-8 sm:w-10 lg:w-12 flex flex-col justify-between text-[10px] sm:text-xs pr-1 sm:pr-2 text-right pb-2 ${
                   isDark ? "text-gray-500" : "text-gray-400"
@@ -284,14 +304,14 @@ const Dashboard2 = () => {
                   })}
               </div>
 
-              {/* Chart area */}
               <div className="flex-1 relative">
-                {/* Horizontal lines */}
                 <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
                   {[0, 1, 2].map((_, i) => (
                     <div
                       key={i}
-                      className={`border-t w-full ${isDark ? "border-gray-800" : "border-gray-100"}`}
+                      className={`border-t w-full ${
+                        isDark ? "border-gray-800" : "border-gray-100"
+                      }`}
                       style={{
                         position: "absolute",
                         top: getLineTop(i),
@@ -301,7 +321,6 @@ const Dashboard2 = () => {
                   ))}
                 </div>
 
-                {/* Bars */}
                 <div
                   className={`absolute inset-0 flex items-end justify-between px-1 sm:px-1.5 lg:px-2 pb-2 ${
                     activeTab === "month" ? "gap-0.5 sm:gap-1 lg:gap-1.5" : ""
@@ -333,7 +352,6 @@ const Dashboard2 = () => {
                             style={{ height: `${height}px`, minHeight: "2px" }}
                           />
 
-                          {/* Tooltip */}
                           <div className="absolute -top-6 sm:-top-7 lg:-top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition pointer-events-none z-10">
                             <div className="bg-gray-900 text-white text-[10px] sm:text-xs px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg whitespace-nowrap shadow-lg">
                               {value} view{value !== 1 ? "s" : ""}
@@ -342,7 +360,6 @@ const Dashboard2 = () => {
                           </div>
                         </div>
 
-                        {/* Labels */}
                         <div
                           className={`mt-1 sm:mt-1.5 lg:mt-2 font-medium ${
                             isDark ? "text-gray-400" : "text-gray-600"
