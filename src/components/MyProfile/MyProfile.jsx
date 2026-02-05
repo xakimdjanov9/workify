@@ -74,22 +74,24 @@ const ProfilePage = () => {
   }, []);
 
   const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
-    setImgUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append("image", file);
+  setImgUploading(true);
+  try {
+    const fd = new FormData();
+    fd.append("image", file);
 
-      await talentApi.update(user.id, fd);
-      await fetchProfile();
-    } catch (err) {
-      alert("Rasmni saqlashda xatolik yuz berdi");
-    } finally {
-      setImgUploading(false);
-    }
-  };
+    await talentApi.update(user.id, fd);
+
+    window.location.reload();
+  } catch (err) {
+    alert("Rasmni saqlashda xatolik yuz berdi");
+  } finally {
+    setImgUploading(false);
+  }
+};
+
 
   const handleUpdate = async (e) => {
     if (e) e.preventDefault();
@@ -308,7 +310,11 @@ const ProfilePage = () => {
                   isDark={isDark}
                 />
                 <InfoRow label="Phone" value={user?.phone} isDark={isDark} />
-                <InfoRow label="Email" value={formatEmail(user?.email, 13)} isDark={isDark} />
+                <InfoRow
+                  label="Email"
+                  value={formatEmail(user?.email, 13)}
+                  isDark={isDark}
+                />
                 <InfoRow
                   label="Workplace"
                   value={user?.workplace_type || "Remote"}
@@ -528,10 +534,11 @@ const ProfilePage = () => {
                 )}
 
                 {activeModal === "skils" && (
-                  <div className="space-y-6">
+                  <div className="space-y-8">
+                    {/* SKILLS */}
                     <div>
                       <div className="flex justify-between mb-4">
-                        <h4 className="font-bold">skils</h4>
+                        <h4 className="font-bold">Skills</h4>
                         <button
                           type="button"
                           onClick={addSkill}
@@ -540,6 +547,7 @@ const ProfilePage = () => {
                           <FiPlus /> Add
                         </button>
                       </div>
+
                       {formData.skils?.map((s, i) => (
                         <div key={i} className="flex gap-2 mb-2">
                           <input
@@ -548,19 +556,95 @@ const ProfilePage = () => {
                             onChange={(e) =>
                               updateSkill(i, "skill", e.target.value)
                             }
-                            className={`flex-1 p-3 rounded-xl border outline-none transition ${isDark ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500" : "bg-gray-50 border-gray-200 focus:border-emerald-500"}`}
+                            className={`flex-1 p-3 rounded-xl border outline-none transition ${
+                              isDark
+                                ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500"
+                                : "bg-gray-50 border-gray-200 focus:border-emerald-500"
+                            }`}
                           />
-                          <input
-                            placeholder="Years"
-                            value={s.experience_years}
+                          <select
+                            value={s.experience_years || ""}
                             onChange={(e) =>
                               updateSkill(i, "experience_years", e.target.value)
                             }
-                            className={`w-32 p-3 rounded-xl border outline-none transition ${isDark ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500" : "bg-gray-50 border-gray-200 focus:border-emerald-500"}`}
-                          />
+                            className={`w-32 p-3 rounded-xl border outline-none transition ${
+                              isDark
+                                ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500"
+                                : "bg-gray-50 border-gray-200 focus:border-emerald-500"
+                            }`}
+                          >
+                            <option value="" disabled>
+                              Years
+                            </option>
+                            <option value="1 year">1 year</option>
+                            <option value="2 years">2 years</option>
+                            <option value="3 years">3 years</option>
+                            <option value="4 years">4 years</option>
+                            <option value="5 years">5 years</option>
+                            <option value="6+ years">6+ years</option>
+                          </select>
+
                           <button
                             type="button"
                             onClick={() => removeSkill(i)}
+                            className="text-red-400 p-2 hover:text-red-600"
+                          >
+                            <FiTrash2 />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* LANGUAGES */}
+                    <div
+                      className={`pt-6 border-t ${isDark ? "border-gray-800" : "border-gray-100"}`}
+                    >
+                      <div className="flex justify-between mb-4">
+                        <h4 className="font-bold">Languages</h4>
+                        <button
+                          type="button"
+                          onClick={addLanguage}
+                          className="text-emerald-500 font-bold flex items-center gap-1"
+                        >
+                          <FiPlus /> Add
+                        </button>
+                      </div>
+
+                      {formData.language?.map((l, i) => (
+                        <div key={i} className="flex gap-2 mb-2">
+                          <input
+                            placeholder="Language"
+                            value={l.language}
+                            onChange={(e) =>
+                              updateLanguage(i, "language", e.target.value)
+                            }
+                            className={`flex-1 p-3 rounded-xl border outline-none transition ${
+                              isDark
+                                ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500"
+                                : "bg-gray-50 border-gray-200 focus:border-emerald-500"
+                            }`}
+                          />
+
+                          <select
+                            value={l.level}
+                            onChange={(e) =>
+                              updateLanguage(i, "level", e.target.value)
+                            }
+                            className={`w-40 p-3 rounded-xl border outline-none transition ${
+                              isDark
+                                ? "bg-[#252525] border-gray-700 text-white focus:border-emerald-500"
+                                : "bg-gray-50 border-gray-200 focus:border-emerald-500"
+                            }`}
+                          >
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                            <option value="Native">Native</option>
+                          </select>
+
+                          <button
+                            type="button"
+                            onClick={() => removeLanguage(i)}
                             className="text-red-400 p-2 hover:text-red-600"
                           >
                             <FiTrash2 />
